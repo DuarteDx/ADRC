@@ -1,4 +1,4 @@
-#include "../include/defs.h"
+#include "../include/table.h"
 
 struct tableEntry
 {
@@ -12,9 +12,9 @@ TableEntry initTable()
     return NULL;
 }
 
-int readTable(FILE* fp)
+TableEntry readTable(FILE* fp)
 {
-    TableEntry table_head = initTable();
+    TableEntry table_head = NULL;
 
     return table_head;
 }

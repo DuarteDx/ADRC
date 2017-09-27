@@ -1,4 +1,4 @@
-#include "../include/defs.h"
+#include "../include/tree.h"
 
 struct treenode
 {

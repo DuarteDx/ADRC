@@ -1,5 +1,9 @@
 #include <stdio.h>
-#include "tree.h"
-#include "table.h"
+#include <stdlib.h>
+#include <stdbool.h>
+
+#ifndef CHAR_BUFFER_SIZE
+#define  CHAR_BUFFER_SIZE 512
+#endif
 
 typedef void *Item;

@@ -1,3 +1,5 @@
+#include "defs.h"
+
 typedef struct treenode TreeNode;
 typedef struct treenode_2 TreeNode_2;
 
