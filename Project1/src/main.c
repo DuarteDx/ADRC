@@ -22,7 +22,8 @@ int main(int argc, char const *argv[]) {
             exit(EXIT_FAILURE);
         }
 
-        //table_head = readTable(fp);
+        table_head = readTable(fp);
+        printTable(table_head);
 
         while(true == keepRunning){
             choice = showMenu();
@@ -58,6 +59,9 @@ int main(int argc, char const *argv[]) {
                 }
             }
         }
+
+        freeTable(table_head);
+        fclose(fp);
 
     exit(EXIT_SUCCESS);
 }
