@@ -1,5 +1,5 @@
 typedef struct treenode TreeNode;
-struct treenode_2 TreeNode_2;
+typedef struct treenode_2 TreeNode_2;
 
 //Basic functions
 void PrefixTree();
