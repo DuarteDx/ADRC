@@ -1,4 +1,6 @@
 #include "../include/defs.h"
+#include "../include/table.h"
+#include "../include/tree.h"
 
 int showMenu(void)
 {
@@ -30,8 +32,14 @@ int showMenu(void)
 int main(int argc, char const *argv[]) {
 
     int choice = 0;
+    FILE* fp = NULL;
+    TableEntry table_head = NULL;
 
-    choice = showMenu();
+        fp = fopen("table.txt", "r");
+
+        table_head = readTable(fp);
+
+        choice = showMenu();
 
     switch(choice){
         case 1:{
