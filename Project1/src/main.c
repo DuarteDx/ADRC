@@ -1,4 +1,4 @@
-#include "defs.h"
+#include "../include/defs.h"
 
 int main(int argc, char const *argv[]) {
   /* code */
