@@ -6,7 +6,7 @@ int main(int argc, char const *argv[]) {
 
     int choice = 0;
     FILE* fp = NULL;
-    TableEntry table_head = NULL;
+    TableEntry* table_head = NULL;
     bool keepRunning = true;
 
         // Check for correct number of arguments
