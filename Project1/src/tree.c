@@ -1,42 +1,42 @@
 #include "../include/tree.h"
 
-struct treeNode
+struct treeNode_
 {
     int nextHop;
-    struct treeNode * zero;
-    struct treeNode * one;
+    TreeNode *zero;
+    TreeNode *one;
 };
 
-struct treeNode_2
+struct treeNode_2_
 {
     int nextHop;
-    struct treenode_2 * zero;
-    struct treenode_2 * one;
-    struct treenode_2 * two;
-    struct treenode_2 * three;
+    TreeNode_2 *zero;
+    TreeNode_2 *one;
+    TreeNode_2 *two;
+    TreeNode_2 *three;
 };
 
 
-int TreeNode_getNextHop(TreeNode treeNode)
+int TreeNode_getNextHop(TreeNode *treeNode)
 {
     return treeNode->nextHop;
 }
 
-TreeNode TreeNode_getZero(TreeNode treeNode)
+TreeNode* TreeNode_getZero(TreeNode *treeNode)
 {
     return treeNode->zero;
 }
 
-TreeNode TreeNode_getOne(TreeNode treeNode)
+TreeNode* TreeNode_getOne(TreeNode *treeNode)
 {
     return treeNode->one;
 }
 
 //Basic functions
-TreeNode PrefixTree(TableEntry table_head){
+TreeNode* PrefixTree(TableEntry *table_head){
 
-    TreeNode tree_root = NULL;
-    TableEntry aux = NULL;
+    TreeNode *tree_root = NULL;
+    TableEntry *aux = NULL;
     int i = 0;
 
         for(aux = table_head; aux != NULL; aux = TableEntry_getNextTableEntry(aux)) {

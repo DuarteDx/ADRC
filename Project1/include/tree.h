@@ -1,11 +1,11 @@
 #include "defs.h"
 #include "../include/table.h"
 
-typedef struct treeNode * TreeNode;
-typedef struct treeNode_2 * TreeNode_2;
+typedef struct treeNode_ TreeNode;
+typedef struct treeNode_2_ TreeNode_2;
 
 //Basic functions
-TreeNode PrefixTree(TableEntry table_head);
+TreeNode* PrefixTree(TableEntry *table_head);
 void PrintTable();
 int LookUp();
 int InsertPrefix();
