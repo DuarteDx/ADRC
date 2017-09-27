@@ -1,0 +1,13 @@
+src/main.c: In function ‘main’:
+src/main.c:3:14: warning: unused parameter ‘argc’ [-Wunused-parameter]
+ int main(int argc, char const *argv[]) {
+              ^
+src/main.c:3:32: warning: unused parameter ‘argv’ [-Wunused-parameter]
+ int main(int argc, char const *argv[]) {
+                                ^
+In file included from include/defs.h:2:0,
+                 from src/main.c:1:
+src/main.c: At top level:
+include/tree.h:2:19: error: storage size of ‘TreeNode_2’ isn’t known
+ struct treenode_2 TreeNode_2;
+                   ^
