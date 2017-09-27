@@ -39,6 +39,9 @@ run: all
 run_dbg: all
 	bin/debug/$(EXEC_NAME_DBG)  $(DEFAULT_TEST_FILE)
 
+run_valgrind: all
+	valgrind -v --leak-check=full --show-leak-kinds=all --track-origins=yes --log-file=valgrind_output.val bin/release/$(EXEC_NAME_REL)  $(DEFAULT_TEST_FILE)
+
 all: prefix_tree prefix_tree_dbg
 
 debug: prefix_tree_dbg
