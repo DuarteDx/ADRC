@@ -1,0 +1,8 @@
+src/main.c: In function ‘main’:
+src/main.c:9:16: warning: unused variable ‘table_head’ [-Wunused-variable]
+     TableEntry table_head = NULL;
+                ^
+src/tree.c: In function ‘PrefixTree’:
+src/tree.c:40:9: warning: unused variable ‘i’ [-Wunused-variable]
+     int i = 0;
+         ^
