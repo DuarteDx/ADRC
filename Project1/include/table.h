@@ -1,12 +1,5 @@
 #include "defs.h"
 
-/* PREFIX_SIZE
- * Description: IPv6 addresses are 128 bits in length, so prefixes will never exceed 128 bits
- */
-#ifndef PREFIX_SIZE
-#define PREFIX_SIZE 128
-#endif
-
 typedef struct tableEntry_ TableEntry;
 
 /* readTable
