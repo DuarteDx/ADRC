@@ -1,4 +1,0 @@
-src/tree.c: In function 'PrefixTree':
-src/tree.c:40:9: warning: unused variable 'i' [-Wunused-variable]
-     int i = 0;
-         ^

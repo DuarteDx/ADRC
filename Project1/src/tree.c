@@ -36,29 +36,247 @@ TreeNode* TreeNode_getOne(TreeNode *treeNode)
 TreeNode* PrefixTree(TableEntry *table_head){
 
     TreeNode *tree_root = NULL;
+    TreeNode *tree_aux = NULL;
+    TreeNode *tree_aux2 = NULL;
     TableEntry *aux = NULL;
-    int i = 0;
+    unsigned long int i = 0;
+    char prefix[PREFIX_SIZE];
+    int nextHop = 0;
 
-        for(aux = table_head; aux != NULL; aux = TableEntry_getNextTableEntry(aux)) {
+        //If the table is not empty we create a tree_root, otherwise we keep it NULL
+        if (table_head != NULL)
+        {
+            tree_root = (TreeNode*)malloc(sizeof(TreeNode));
+        }
+
+        for(aux = table_head; aux != NULL; aux = TableEntry_getNextTableEntry(aux))
+        {
+
+            //If the prefix is e (the rest) we update the tree_root next_hop
             if(strncmp(TableEntry_getPrefix(aux), "e", PREFIX_SIZE) == 0){
+                tree_root->nextHop = TableEntry_getNextHop(aux);
+            }
+            //If the prefix is not "e" we create as many nodes as we need to match the prefix
+            else
+            {
+                prefix = TableEntry_getPrefix(aux);
+                nextHop = TableEntry_getNextHop(aux);
+
+                //Start tree_aux as tree_root
+                tree_aux = tree_root;
+
+                for(i = 0; i < strnlen(prefix, PREFIX_SIZE); i++)
+                {
+                    //Create a new node and add it
+                    tree_aux2 = (TreeNode*)malloc(sizeof(TreeNode));
+
+                    //Default next_hop is -1 (no hop)
+                    tree_aux2->nextHop = -1;
+
+                    if(prefix[i] == '0')
+                    {
+                        tree_aux->zero = tree_aux2;
+                    }
+                    else if(prefix[i] == '1')
+                    {
+                        tree_aux->one = tree_aux2;
+                    }
+                    else
+                    {
+                        printf("Error reading prefix\n");
+                    }
+
+                    //Get the next node
+                    tree_aux = tree_aux2;
+                }
+
+                //Set next_hop in the last tree node
+                tree_aux->nextHop = nextHop;
             }
         }
 
     return tree_root;
 }
 
-void PrintTable(){
+//Recusive function, needs to be called with the tree_root and an empty string
+void PrintTable(TreeNode *tree_node, char *address){
+
+    if(tree_node->nextHop != -1)
+    {
+        //Special case for the tree root
+        if(address == NULL)
+        {
+            printf("e   %d", tree_node->nextHop);
+        }
+        else
+        {
+            printf("%s   %d", address, tree_node->nextHop);
+        }
+    }
+
+    if(tree_node->zero != NULL)
+    {
+        PrintTable(tree_node->zero, strncat(address, "0", 1));
+    }
+    if(tree_node->one != NULL)
+    {
+        PrintTable(tree_node->zero, strncat(address, "1", 1));
+    }
+
+    return;
+}
+
+int LookUp(TreeNode *tree_root, char *address){
+
+    int next_hop = -1;
+    TreeNode *tree_aux = tree_root;
+    unsigned long int i = 0;
+
+    //Save the best next_hop if it exists on this node
+    if(tree_root->nextHop != -1)
+    {
+        next_hop = tree_aux->nextHop;
+    }
+
+    for(i = 0; i < strnlen(address, PREFIX_SIZE); i++)
+    {
+        //Go to the next node
+        if(address[i] == '0')
+        {
+            tree_aux =tree_aux->zero;
+        }
+        else if(address[i] == '1')
+        {
+            tree_aux = tree_aux->one;
+        }
+
+        //Save the best next_hop if it exists on this node
+        if(tree_aux->nextHop != -1)
+        {
+            next_hop = tree_aux->nextHop;
+        }
+    }
+
+    return next_hop;
+}
+
+TreeNode* InsertPrefix(TreeNode *tree_root, char *address, int next_hop){
+
+    int i = 0;
+    TreeNode* tree_aux = tree_root;
+
+    //In case the user is changing the  root of the three
+    if(address[0] == 'e')
+    {
+        tree_root->nextHop = next_hop;
+
+        return tree_root;
+    }
+
+    for(i = 0; (size_t)i<strnlen(address, PREFIX_SIZE); i++)
+    {
+        //Go to the next node
+        if(address[i] == '0')
+        {
+            if(tree_aux->zero != NULL)
+            {
+                tree_aux = tree_aux->zero;
+            }
+            else
+            {
+                tree_aux->zero = (TreeNode*)malloc(sizeof(TreeNode));
+                tree_aux = tree_aux->zero;
+            }
+        }
+        else if(address[i] == '1')
+        {
+            if(tree_aux->one != NULL)
+            {
+                tree_aux = tree_aux->one;
+            }
+            else
+            {
+                tree_aux->one = (TreeNode*)malloc(sizeof(TreeNode));
+                tree_aux = tree_aux->one;
+            }
+        }
+    }
+
+    //Give a value to the inserted node next_hop
+    tree_aux->nextHop = next_hop;
+
+return tree_root;
 
 }
 
-int LookUp(){
+TreeNode* DeletePrefix(TreeNode* tree_root, char* prefix){
 
-  return 0;
-}
+    int i = 0;
+    TreeNode* tree_aux = tree_root;
+    TreeNode* tree_previous_aux = NULL;
 
-int DeletePrefix(){
+    //0 for left 1 for right
+    int oneZeroFlag = -1;
 
-  return 0;
+    for(i = 0; (size_t)i<strnlen(prefix, PREFIX_SIZE); i++)
+    {
+        //Go to the next node
+        if(prefix[i] == '0')
+        {
+            if(tree_aux->zero != NULL)
+            {
+                tree_previous_aux = tree_aux;
+                oneZeroFlag = 0;
+                tree_aux = tree_aux->zero;
+            }
+            else
+            {
+                printf("Non exixting prefix. No changes were made.\n");
+
+                break;
+            }
+        }
+        else if(prefix[i] == '1')
+        {
+            if(tree_aux->one != NULL)
+            {
+                tree_previous_aux = tree_aux;
+                oneZeroFlag = 1;
+                tree_aux = tree_aux->one;
+            }
+            else
+            {
+                printf("Non exixting prefix. No changes were made.\n");
+
+                break;
+            }
+        }
+    }
+
+    //Delete the next hop
+    if(tree_aux->nextHop != -1)
+    {
+        tree_aux->nextHop = -1;
+    }
+
+    //Free memory if the node is not necessary anymore
+    if(tree_aux->zero == NULL && tree_aux->one == NULL)
+    {
+        if(oneZeroFlag == 0)
+        {
+            tree_previous_aux->zero = NULL;
+        }
+        else if(oneZeroFlag == 1)
+        {
+            tree_previous_aux->one = NULL;
+        }
+
+        free(tree_aux);
+    }
+
+
+
+    return tree_root;
 }
 
 //Extra functions
