@@ -70,7 +70,6 @@ TreeNode* PrefixTree(TableEntry *table_head){
 
     TreeNode *tree_root = NULL;
     TreeNode *tree_aux = NULL;
-    TreeNode *tree_aux2 = NULL;
     TableEntry *aux = NULL;
     unsigned long int i = 0;
     char prefix[PREFIX_SIZE];
@@ -100,24 +99,32 @@ TreeNode* PrefixTree(TableEntry *table_head){
 
                 for(i = 0; i < strnlen(prefix, PREFIX_SIZE); i++)
                 {
-                    //Create a new node and add it
-                    tree_aux2 = newTreeNode();
-
                     if(prefix[i] == '0')
                     {
-                        tree_aux->zero = tree_aux2;
+                        if(tree_aux->zero == NULL)
+                        {
+                            //Create a new node and add it
+                            tree_aux->zero = newTreeNode();
+                        }
+
+                        //Get the next node
+                        tree_aux = tree_aux->zero;
                     }
                     else if(prefix[i] == '1')
                     {
-                        tree_aux->one = tree_aux2;
+                        if(tree_aux->one == NULL)
+                        {
+                            //Create a new node and add it
+                            tree_aux->one = newTreeNode();
+                        }
+
+                        //Get the next node
+                        tree_aux = tree_aux->one;
                     }
                     else
                     {
                         fprintf(stdout, "Error reading prefix\n");
                     }
-
-                    //Get the next node
-                    tree_aux = tree_aux2;
                 }
 
                 //Set next_hop in the last tree node
@@ -134,13 +141,13 @@ void PrintTable(TreeNode *tree_node, char address[PREFIX_SIZE]){
     if(tree_node->nextHop != -1)
     {
         //Special case for the tree root
-        if(address == NULL)
+        if(address[0] == '\0')
         {
-            printf("e   %d", tree_node->nextHop);
+            printf("e   %d\n", tree_node->nextHop);
         }
         else
         {
-            printf("%s   %d", address, tree_node->nextHop);
+            printf("%s   %d\n", address, tree_node->nextHop);
         }
     }
 
@@ -152,6 +159,9 @@ void PrintTable(TreeNode *tree_node, char address[PREFIX_SIZE]){
     {
         PrintTable(tree_node->one, strncat(address, "1", 1));
     }
+
+    //delete the last char from the path string
+    address[strlen(address) - 1] = '\0';
 
     return;
 }
