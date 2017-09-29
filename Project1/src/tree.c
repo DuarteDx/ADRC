@@ -218,27 +218,23 @@ TreeNode* InsertPrefix(TreeNode *tree_root, char *address, int next_hop){
         //Go to the next node
         if(address[i] == '0')
         {
-            if(tree_aux->zero != NULL)
+            if(tree_aux->zero == NULL)
             {
-                tree_aux = tree_aux->zero;
-            }
-            else
-            {
+                //Create a new node and add it
                 tree_aux->zero = newTreeNode();
-                tree_aux = tree_aux->zero;
             }
+
+            //Get the next node
+            tree_aux = tree_aux->zero;
         }
         else if(address[i] == '1')
         {
-            if(tree_aux->one != NULL)
-            {
-                tree_aux = tree_aux->one;
-            }
-            else
+            if(tree_aux->one == NULL)
             {
                 tree_aux->one = newTreeNode();
-                tree_aux = tree_aux->one;
             }
+
+            tree_aux = tree_aux->one;
         }
     }
 
