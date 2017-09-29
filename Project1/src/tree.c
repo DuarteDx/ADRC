@@ -147,7 +147,7 @@ void PrintTable(TreeNode *tree_node, char address[PREFIX_SIZE]){
         }
         else
         {
-            printf("%s   %d\n", address, tree_node->nextHop);
+            printf("Prefix: %s | Next hop: %d\n", address, tree_node->nextHop);
         }
     }
 
@@ -160,7 +160,7 @@ void PrintTable(TreeNode *tree_node, char address[PREFIX_SIZE]){
         PrintTable(tree_node->one, strncat(address, "1", 1));
     }
 
-    //delete the last char from the path string
+    //delete the lasr char from the path string
     address[strlen(address) - 1] = '\0';
 
     return;
