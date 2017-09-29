@@ -1,0 +1,4 @@
+src/main.c: In function ‘main’:
+src/main.c:13:9: warning: unused variable ‘i’ [-Wunused-variable]
+     int i = 0;
+         ^
