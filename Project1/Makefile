@@ -31,7 +31,7 @@ EXEC_NAME_REL=prefix_tree
 EXEC_NAME_DBG=prefix_tree_dbg
 
 # default test file
-DEFAULT_TEST_FILE=test_files/tabela_enunciado.txt
+DEFAULT_TEST_FILE=test_files/testfile2.txt
 
 run: all
 	bin/release/$(EXEC_NAME_REL)  $(DEFAULT_TEST_FILE)
