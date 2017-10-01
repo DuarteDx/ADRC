@@ -135,7 +135,7 @@ TreeNode* PrefixTree(TableEntry *table_head){
     return tree_root;
 }
 
-//Recusive function, needs to be called with the tree_root and an empty string
+//Recursive function, needs to be called with the tree_root and an empty string
 void PrintTable(TreeNode *tree_node, char address[PREFIX_SIZE]){
 
     if(tree_node->nextHop != -1)
@@ -205,7 +205,7 @@ TreeNode* InsertPrefix(TreeNode *tree_root, char *address, int next_hop){
     int i = 0;
     TreeNode* tree_aux = tree_root;
 
-    //In case the user is changing the  root of the three
+    //In case the user is changing the root of the tree
     if(address[0] == 'e')
     {
         tree_root->nextHop = next_hop;
@@ -316,9 +316,12 @@ TreeNode* DeletePrefix(TreeNode* tree_root, char* prefix){
 }
 
 //Extra functions
-int BinaryToTwoBit(){
+TreeNode* BinaryToTwoBit(TreeNode *tree_root, TreeNode *tree_root2){
 
-  return 0;
+  TreeNode* tree_aux = tree_root;
+  TreeNode_2* tree2_aux = tree_root2;
+
+  return tree_root;
 }
 
 void PrintTableEven(){
