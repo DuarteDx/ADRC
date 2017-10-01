@@ -16,5 +16,11 @@ void TreeNode_setNextHop(TreeNode *treeNode, int nextHop);
 TreeNode* newTreeNode(void);
 
 //Extra functions for extra point
+void TreeNode_2_setZero(TreeNode_2 *, TreeNode_2 *);
+void TreeNode_2_setOne(TreeNode_2 *, TreeNode_2 *);
+void TreeNode_2_setTwo(TreeNode_2 *, TreeNode_2 *);
+void TreeNode_2_setThree(TreeNode_2 *, TreeNode_2 *);
+void TreeNode_2_setNextHop(TreeNode_2 *, int);
+
 TreeNode* BinaryToTwoBit(TreeNode *, TreeNode *);
 void PrintTableEven();
