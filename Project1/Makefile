@@ -10,16 +10,16 @@ CFLAGS=-Wall \
 CFLAGSDBG_1=-Wall \
           -Wextra \
           -g \
-		  -fno-omit-frame-pointer \
+          -fno-omit-frame-pointer \
           -fsanitize=leak \
-		  -fsanitize=address \
-		  -fsanitize=undefined \
+          -fsanitize=address \
+          -fsanitize=undefined \
 
 # compiler flags for main program (debug with valgrind)
 CFLAGSDBG_2=-Wall \
           -Wextra \
           -g \
-		  -fno-omit-frame-pointer \
+          -fno-omit-frame-pointer \
 
 CFILES=src/main.c src/functions.c src/table.c src/tree.c
 
