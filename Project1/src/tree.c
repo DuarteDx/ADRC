@@ -88,7 +88,7 @@ void TreeNode_2_setNextHop(TreeNode_2 *treeNode, int nextHop)
     return;
 }
 
-TreeNode* newTreeNode(void)
+TreeNode * newTreeNode(void)
 {
     TreeNode *tree_node = NULL;
 
@@ -115,7 +115,7 @@ TreeNode_2* newTreeNode_2(void)
 }
 
 //Basic functions
-TreeNode* PrefixTree(TableEntry *table_head){
+TreeNode * PrefixTree(TableEntry *table_head){
 
     TreeNode *tree_root = NULL;
     TreeNode *tree_aux = NULL;
@@ -380,17 +380,17 @@ TreeNode * DeletePrefix(TreeNode *tree_root, char* prefix){
 }
 
 // TODO: implement this function
-void freeTree(TreeNode * tree_root)
+void freeTree(TreeNode *tree_root)
 {
     return;
 }
 
 
 //Extra functions
-TreeNode* BinaryToTwoBit(TreeNode *tree_root, TreeNode *tree_root2){
+TreeNode * BinaryToTwoBit(TreeNode *tree_root, TreeNode *tree_root2){
 
-  TreeNode* tree_aux = tree_root;
-  TreeNode_2* tree2_aux = tree_root2;
+  TreeNode *tree_aux = tree_root;
+  TreeNode_2 *tree2_aux = tree_root2;
 
   return tree_root;
 }

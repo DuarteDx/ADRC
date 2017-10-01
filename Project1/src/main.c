@@ -5,9 +5,9 @@
 int main(int argc, char const *argv[]) {
 
     int choice = 0;
-    FILE* fp = NULL;
-    TableEntry* table_head = NULL;
-    TreeNode* tree_root = NULL;
+    FILE *fp = NULL;
+    TableEntry *table_head = NULL;
+    TreeNode *tree_root = NULL;
     bool keepRunning = true;
     char address[PREFIX_SIZE];
     char lookupPrefix[PREFIX_SIZE];
@@ -21,7 +21,7 @@ int main(int argc, char const *argv[]) {
     int i = 0;
 
         // static array initilization
-        for (i = 0; i < PREFIX_SIZE; i += 1)
+        for(i = 0; i < PREFIX_SIZE; i += 1)
         {
             address[i] = '\0';
             lookupPrefix[i] = '\0';
