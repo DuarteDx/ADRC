@@ -7,13 +7,19 @@ CFLAGS=-Wall \
        -O2 \
 
 # compiler flags for main program (debug)
-CFLAGSDBG=-Wall \
+CFLAGSDBG_1=-Wall \
           -Wextra \
           -g \
 		  -fno-omit-frame-pointer \
+          -fsanitize=leak \
 		  -fsanitize=address \
-		  -fsanitize=leak \
 		  -fsanitize=undefined \
+
+# compiler flags for main program (debug with valgrind)
+CFLAGSDBG_2=-Wall \
+          -Wextra \
+          -g \
+		  -fno-omit-frame-pointer \
 
 CFILES=src/main.c src/functions.c src/table.c src/tree.c
 
@@ -28,7 +34,8 @@ IFILES=$(IDIR)defs.h \
 
 # executable name
 EXEC_NAME_REL=prefix_tree
-EXEC_NAME_DBG=prefix_tree_dbg
+EXEC_NAME_DBG_1=prefix_tree_dbg_1
+EXEC_NAME_DBG_2=prefix_tree_dbg_2
 
 # default test file
 DEFAULT_TEST_FILE=test_files/testfile2.txt
@@ -37,28 +44,34 @@ run: all
 	bin/release/$(EXEC_NAME_REL)  $(DEFAULT_TEST_FILE)
 
 run_dbg: all
-	bin/debug/$(EXEC_NAME_DBG)  $(DEFAULT_TEST_FILE)
+	bin/debug1/$(EXEC_NAME_DBG_1)  $(DEFAULT_TEST_FILE)
 
 run_valgrind: all
-	valgrind -v --leak-check=full --show-leak-kinds=all --track-origins=yes --log-file=valgrind_output.val bin/release/$(EXEC_NAME_REL)  $(DEFAULT_TEST_FILE)
+	valgrind -v --leak-check=full --show-leak-kinds=all --track-origins=yes --log-file=valgrind_output.val bin/debug2/$(EXEC_NAME_DBG_2)  $(DEFAULT_TEST_FILE)
 
-all: prefix_tree prefix_tree_dbg
+all: prefix_tree prefix_tree_dbg_1 prefix_tree_dbg_2
 
-debug: prefix_tree_dbg
+debug1: prefix_tree_dbg_1
+
+debug2: prefix_tree_dbg_2
 
 release: prefix_tree
 
 prefix_tree: $(CFILES) $(IFILES)
 	$(CC) $(CFLAGS) -I$(IDIR) $(CFILES) -o bin/release/$(EXEC_NAME_REL) 2> build/release/$(EXEC_NAME_REL)_compile.log
 
-prefix_tree_dbg: $(CFILES) $(IFILES)
-	$(CC) $(CFLAGSDBG) -I$(IDIR) $(CFILES) -o bin/debug/$(EXEC_NAME_DBG) 2> build/debug/$(EXEC_NAME_DBG)_compile.log
+prefix_tree_dbg_1: $(CFILES) $(IFILES)
+	$(CC) $(CFLAGSDBG_1) -I$(IDIR) $(CFILES) -o bin/debug1/$(EXEC_NAME_DBG_1) 2> build/debug1/$(EXEC_NAME_DBG_1)_compile.log
 
+prefix_tree_dbg_2: $(CFILES) $(IFILES)
+	$(CC) $(CFLAGSDBG_2) -I$(IDIR) $(CFILES) -o bin/debug2/$(EXEC_NAME_DBG_2) 2> build/debug2/$(EXEC_NAME_DBG_2)_compile.log
 
 .PHONY: clean
 clean:
 	rm -f \
     bin/release/* \
-    bin/debug/* \
+    bin/debug1/* \
+    bin/debug2/* \
     build/release/* \
-    build/debug/*
+    build/debug1/* \
+    build/debug2/*
