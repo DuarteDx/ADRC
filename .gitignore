@@ -1,2 +1,9 @@
 # Mac OS X
 *.DS_Store
+
+# Build products
+bin/
+build/
+
+# Valgrind outputs
+valgrind_output.val

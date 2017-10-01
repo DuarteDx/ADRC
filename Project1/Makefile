@@ -57,14 +57,18 @@ debug2: prefix_tree_dbg_2
 
 release: prefix_tree
 
-prefix_tree: $(CFILES) $(IFILES)
+prefix_tree: $(CFILES) $(IFILES) directory_structure
 	$(CC) $(CFLAGS) -I$(IDIR) $(CFILES) -o bin/release/$(EXEC_NAME_REL) 2> build/release/$(EXEC_NAME_REL)_compile.log
 
-prefix_tree_dbg_1: $(CFILES) $(IFILES)
+prefix_tree_dbg_1: $(CFILES) $(IFILES) directory_structure
 	$(CC) $(CFLAGSDBG_1) -I$(IDIR) $(CFILES) -o bin/debug1/$(EXEC_NAME_DBG_1) 2> build/debug1/$(EXEC_NAME_DBG_1)_compile.log
 
-prefix_tree_dbg_2: $(CFILES) $(IFILES)
+prefix_tree_dbg_2: $(CFILES) $(IFILES) directory_structure
 	$(CC) $(CFLAGSDBG_2) -I$(IDIR) $(CFILES) -o bin/debug2/$(EXEC_NAME_DBG_2) 2> build/debug2/$(EXEC_NAME_DBG_2)_compile.log
+
+.PHONY: directory_structure
+directory_structure:
+	mkdir -p ./bin/debug1 ./bin/debug2 ./bin/release ./build/debug1 ./build/debug2 ./build/release
 
 .PHONY: clean
 clean:
