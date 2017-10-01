@@ -1,4 +1,0 @@
-src/tree.c: In function ‘freeTree’:
-src/tree.c:333:26: warning: unused parameter ‘tree_root’ [-Wunused-parameter]
- void freeTree(TreeNode * tree_root)
-                          ^
