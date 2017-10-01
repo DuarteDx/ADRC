@@ -218,7 +218,6 @@ void PrintTable(TreeNode *tree_head, char address[PREFIX_SIZE]){
     return;
 }
 
-// TODO: has bugs (does not work well)
 int LookUp(TreeNode *tree_root, char *address){
 
     int next_hop = -1;
@@ -230,7 +229,7 @@ int LookUp(TreeNode *tree_root, char *address){
         //Save the best next_hop if it exists on this node
         if(-1 != tree_root->nextHop)
         {
-            next_hop = tree_aux->nextHop;
+            next_hop = tree_root->nextHop;
         }
 
         for(i = 0; i < strnlen(address, PREFIX_SIZE); i += 1)
@@ -248,11 +247,21 @@ int LookUp(TreeNode *tree_root, char *address){
                 fprintf(stdout, "Lookup error: malformed address: contains characters other thant '0' or '1'\n");
                 return -1;
             }
-
+            
+            //Test if we arrived at a dead end
             if(NULL == tree_aux)
             {
-                fprintf(stdout, "No nexthop found for this prefix\n");
-                return -1;
+                //We have found a next hop
+                if(next_hop != -1)
+                {
+                    return next_hop;
+                }
+                //We haven't found a next hp along the way
+                else
+                {
+                    fprintf(stdout, "No nexthop found for this prefix\n");
+                    return -1;
+                }
             }
 
             //Save the best next_hop if it exists on this node
