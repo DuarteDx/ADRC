@@ -365,12 +365,69 @@ TreeNode* DeletePrefix(TreeNode* tree_root, char* prefix){
 }
 
 //Extra functions
-TreeNode* BinaryToTwoBit(TreeNode *tree_root, TreeNode *tree_root2){
+TreeNode_2* BinaryToTwoBit(TreeNode *tree_root){
 
   TreeNode* tree_aux = tree_root;
+  char* adress = (char*)malloc(PREFIX_SIZE*sizeof(char));
+  int i;
+  for(i = 0; i<PREFIX_SIZE; i++){
+    adress[i] = 'x';}
+  TreeNode_2* tree_root2 = newTreeNode_2();
   TreeNode_2* tree2_aux = tree_root2;
 
-  return tree_root;
+  tree_root2->nextHop = tree_root->nextHop;
+
+  Recursive2BitPrefixTree(tree_aux, tree2_aux, adress);
+
+  return tree_root2;
+}
+
+void Recursive2BitPrefixTree(TreeNode *tree_node, TreeNode_2* tree_node2, char* adress)
+{
+  if(tree_node->nextHop != -1)
+  {
+    Insert2BitPrefix(tree_node2, adress, tree_node->nextHop);
+  }
+
+  if(tree_node->zero != NULL)
+  {
+      if(adress[0]=='x'){adress[0] = '0';}
+      for(int i = 0; adress[i] == 'x'; i++)
+      {
+        if(adress[i+1] == 'x'){adress[i+1] = '0';}
+      }
+      Recursive2BitPrefixTree(tree_node->zero, tree_node2, adress);
+      for(int i = 0; adress[i] == 'x'; i++)
+      {
+        if(adress[i+1] == 'x'){adress[i] = 'x';}
+      }
+
+  }
+
+  if(tree_node->nextHop != -1)
+  {
+    Insert2BitPrefix(tree_node2, adress, tree_node->nextHop);
+  }
+
+  if(tree_node->one != NULL)
+  {
+    if(adress[0]=='x'){adress[0] = '0';}
+    for(int i = 0; adress[i] == 'x'; i++)
+    {
+      if(adress[i+1] == 'x'){adress[i+1] = '0';}
+    }
+      Recursive2BitPrefixTree(tree_node->one, tree_node2, adress);
+      for(int i = 0; adress[i] == 'x'; i++)
+      {
+        if(adress[i+1] == 'x'){adress[i] = 'x';}
+      }
+  }
+
+}
+
+void Insert2BitPrefix(TreeNode_2* tree_node2, char* adress, int nextHop)
+{
+
 }
 
 void PrintTableEven(){

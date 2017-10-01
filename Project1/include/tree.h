@@ -22,6 +22,7 @@ void TreeNode_2_setTwo(TreeNode_2 *, TreeNode_2 *);
 void TreeNode_2_setThree(TreeNode_2 *, TreeNode_2 *);
 void TreeNode_2_setNextHop(TreeNode_2 *, int);
 TreeNode_2* newTreeNode_2(void);
-
-TreeNode* BinaryToTwoBit(TreeNode *, TreeNode *);
+void Recursive2BitPrefixTree(TreeNode *,TreeNode_2 *, char *);
+void Insert2BitPrefix(TreeNode_2 *root, char *, int);
+TreeNode_2* BinaryToTwoBit(TreeNode *);
 void PrintTableEven();
