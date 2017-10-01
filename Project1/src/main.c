@@ -10,109 +10,185 @@ int main(int argc, char const *argv[]) {
     TreeNode* tree_root = NULL;
     bool keepRunning = true;
     char address[PREFIX_SIZE];
-    int i = 0;
     char lookupPrefix[PREFIX_SIZE];
     char insertPrefix[PREFIX_SIZE];
     char deletePrefix[PREFIX_SIZE];
     int lookUpResult = 0;
     int insertNextHop = -1;
+    char *char_buffer = NULL;
+    char *ret_val_fgets = NULL;
+    int ret_val_sscanf = 0;
+    int i = 0;
 
-    // Check for correct number of arguments
-    if(argc != 2){
-        fprintf(stdout, "\nUSAGE: %s <filename>\n\n", argv[0]);
-        exit(EXIT_FAILURE);
-    }
+        // static array initilization
+        for (i = 0; i < PREFIX_SIZE; i += 1)
+        {
+            address[i] = '\0';
+            lookupPrefix[i] = '\0';
+            insertPrefix[i] = '\0';
+            deletePrefix[i] = '\0';
+        }
 
-    // Open the file; abort if unsuccessful
-    fp = fopen(argv[1], "r");
-    if(fp == NULL){
-        fprintf(stdout, "Error opening %s\n", argv[1]);
-        exit(EXIT_FAILURE);
-    }
+        // Check for correct number of arguments
+        if(argc != 2)
+        {
+            fprintf(stdout, "\nUSAGE: %s <filename>\n\n", argv[0]);
+            exit(EXIT_FAILURE);
+        }
 
-    while(true == keepRunning){
-        choice = showMenu();
-        switch(choice){
-            case 1:
+        // Open the file; abort if unsuccessful
+        fp = fopen(argv[1], "r");
+        if(NULL == fp)
+        {
+            fprintf(stdout, "Error opening %s\n", argv[1]);
+            exit(EXIT_FAILURE);
+        }
+
+        char_buffer = (char *)malloc(CHAR_BUFFER_SIZE * sizeof(char));
+
+        while(true == keepRunning)
+        {
+            choice = showMenu();
+            switch(choice)
             {
-                table_head = readTable(fp);
-                //printTable(table_head);
-                tree_root = PrefixTree(table_head);
-                break;
-            }
-            case 2:
-            {
-                if(NULL == tree_root){
-                    fprintf(stdout, "No tree to print!\n");
-                }
-                PrintTable(tree_root, address);
-                break;
-            }
-            case 3:
-            {
-                if(NULL == tree_root)
+                case 1:
                 {
-                    fprintf(stdout, "No tree to lookup!\n");
+                    table_head = readTable(fp);
+                    //printTable(table_head);
+                    tree_root = PrefixTree(table_head);
+                    break;
                 }
-                else
+                case 2:
                 {
-                    //Need to fgets the lookup address
-                    strcpy(lookupPrefix, "111");
-                    lookUpResult = LookUp(tree_root, lookupPrefix);
-
-                    printf("Next-Hop: %d\n", lookUpResult);
+                    if(NULL == tree_root)
+                    {
+                        fprintf(stdout, "No tree to print!\n");
+                    }
+                    else
+                    {
+                        PrintTable(tree_root, address);
+                    }
+                    break;
                 }
-                break;
-            }
-            case 4:
-            {
-                if(NULL == tree_root)
+                case 3:
                 {
-                    fprintf(stdout, "No tree to insert prefix in!\n");
+                    if(NULL == tree_root)
+                    {
+                        fprintf(stdout, "No tree to lookup!\n");
+                    }
+                    else
+                    {
+                        fprintf(stdout, "Insert address for which to retrieve the next hop:\n");
+                        ret_val_fgets = fgets(char_buffer, PREFIX_SIZE, stdin);
+                        if(NULL == ret_val_fgets)
+                        {
+                            fprintf(stdout, "Error reading input, try again.\n");
+                        }
+                        ret_val_sscanf = sscanf(char_buffer, "%s\n", lookupPrefix);
+                        if(ret_val_sscanf != 1)
+                        {
+                            fprintf(stdout, "Error reading option, try again.\n");
+                        }
+
+                        lookUpResult = LookUp(tree_root, lookupPrefix);
+
+                        fprintf(stdout, "Next-Hop: %d\n", lookUpResult);
+                    }
+                    break;
                 }
-                else
+                case 4:
                 {
-                    //Need to fgets the insertPrefix and insertNextHop
-                    strcpy(insertPrefix, "0001");
-                    insertNextHop = 11;
+                    if(NULL == tree_root)
+                    {
+                        fprintf(stdout, "No tree to insert prefix in!\n");
+                    }
+                    else
+                    {
+                        fprintf(stdout, "Insert the new address:\n");
+                        ret_val_fgets = fgets(char_buffer, PREFIX_SIZE, stdin);
+                        if(NULL == ret_val_fgets)
+                        {
+                            fprintf(stdout, "Error reading input, try again.\n");
+                        }
+                        ret_val_sscanf = sscanf(char_buffer, "%s\n", insertPrefix);
+                        if(ret_val_sscanf != 1)
+                        {
+                            fprintf(stdout, "Error reading input, try again.\n");
+                        }
 
-                    tree_root = InsertPrefix(tree_root, insertPrefix, insertNextHop);
+                        fprintf(stdout, "Insert the next hop associated with the new address:\n");
+                        ret_val_fgets = fgets(char_buffer, PREFIX_SIZE, stdin);
+                        if(NULL == ret_val_fgets)
+                        {
+                            fprintf(stdout, "Error reading input, try again.\n");
+                        }
+                        ret_val_sscanf = sscanf(char_buffer, "%d\n", &insertNextHop);
+                        if(ret_val_sscanf != 1)
+                        {
+                            fprintf(stdout, "Error reading input, try again.\n");
+                        }
 
-                    printf("New Prefix added!\n");
+                        tree_root = InsertPrefix(tree_root, insertPrefix, insertNextHop);
+
+                        fprintf(stdout, "New Prefix added!\n");
+                    }
+                    break;
                 }
-                break;
-            }
-            case 5:
-            {
-                if(NULL == tree_root)
+                case 5:
                 {
-                    fprintf(stdout, "No tree to delete prefix from!\n");
+                    if(NULL == tree_root)
+                    {
+                        fprintf(stdout, "No tree to delete prefix from!\n");
+                    }
+                    else
+                    {
+                        fprintf(stdout, "Insert prefix to delete from tree:\n");
+                        ret_val_fgets = fgets(char_buffer, PREFIX_SIZE, stdin);
+                        if(NULL == ret_val_fgets)
+                        {
+                            fprintf(stdout, "Error reading input, try again.\n");
+                        }
+                        ret_val_sscanf = sscanf(char_buffer, "%s\n", deletePrefix);
+                        if(ret_val_sscanf != 1)
+                        {
+                            fprintf(stdout, "Error reading option, try again.\n");
+                        }
+
+                        tree_root = DeletePrefix(tree_root, deletePrefix);
+
+                        fprintf(stdout, "Delete operation completed!\n");
+                    }
+                    break;
                 }
-                else
+                case 6:
                 {
-                    //Need to fgets the deletePrefix
-                    strcpy(deletePrefix, "0001");
-
-                    tree_root = DeletePrefix(tree_root, deletePrefix);
-
-                    printf("Delete operation completed!\n");
+                    fprintf(stdout, "This functionality is not implemented yet.\n");
+                    break;
                 }
-                break;
-            }
-            case 6:
-            {
-                break;
-            }
-            default:
-            {
-                keepRunning = false;
-                break;
+                case 7:
+                {
+                    fprintf(stdout, "This functionality is not implemented yet.\n");
+                    break;
+                }
+                default:
+                {
+                    keepRunning = false;
+                    break;
+                }
             }
         }
-    }
 
-    freeTable(table_head);
-    fclose(fp);
+        free(char_buffer);
+        if(NULL != table_head)
+        {
+            freeTable(table_head);
+        }
+        if(NULL != tree_root)
+        {
+            freeTree(tree_root);
+        }
+
+        fclose(fp);
 
     exit(EXIT_SUCCESS);
 }
