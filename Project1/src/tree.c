@@ -46,6 +46,34 @@ void TreeNode_setOne(TreeNode *treeNode, TreeNode *nextOne)
     return;
 }
 
+void TreeNode_2_setZero(TreeNode_2 *treeNode, TreeNode_2 *nextZero)
+{
+    treeNode->zero = nextZero;
+
+    return;
+}
+
+void TreeNode_2_setOne(TreeNode_2 *treeNode, TreeNode_2 *nextOne)
+{
+    treeNode->one = nextOne;
+
+    return;
+}
+
+void TreeNode_2_setTwo(TreeNode_2 *treeNode, TreeNode_2 *nextTwo)
+{
+    treeNode->two = nextTwo;
+
+    return;
+}
+
+void TreeNode_2_setThree(TreeNode_2 *treeNode, TreeNode_2 *nextThree)
+{
+    treeNode->three = nextThree;
+
+    return;
+}
+
 void TreeNode_setNextHop(TreeNode *treeNode, int nextHop)
 {
     treeNode->nextHop = nextHop;
@@ -53,7 +81,14 @@ void TreeNode_setNextHop(TreeNode *treeNode, int nextHop)
     return;
 }
 
-TreeNode * newTreeNode(void)
+void TreeNode_2_setNextHop(TreeNode_2 *treeNode, int nextHop)
+{
+    treeNode->nextHop = nextHop;
+
+    return;
+}
+
+TreeNode* newTreeNode(void)
 {
     TreeNode *tree_node = NULL;
 
@@ -65,7 +100,22 @@ TreeNode * newTreeNode(void)
     return tree_node;
 }
 
-TreeNode * PrefixTree(TableEntry *table_head){
+TreeNode_2* newTreeNode_2(void)
+{
+  TreeNode_2 *tree_node_2 = NULL;
+
+    tree_node_2 = (TreeNode_2*)malloc(sizeof(TreeNode_2));
+    TreeNode_2_setZero(tree_node_2, NULL);
+    TreeNode_2_setOne(tree_node_2, NULL);
+    TreeNode_2_setTwo(tree_node_2, NULL);
+    TreeNode_2_setThree(tree_node_2, NULL);
+    TreeNode_2_setNextHop(tree_node_2, -1);
+
+    return tree_node_2;
+}
+
+//Basic functions
+TreeNode* PrefixTree(TableEntry *table_head){
 
     TreeNode *tree_root = NULL;
     TreeNode *tree_aux = NULL;
@@ -337,8 +387,12 @@ void freeTree(TreeNode * tree_root)
 
 
 //Extra functions
-void BinaryToTwoBit(){
-    return;
+TreeNode* BinaryToTwoBit(TreeNode *tree_root, TreeNode *tree_root2){
+
+  TreeNode* tree_aux = tree_root;
+  TreeNode_2* tree2_aux = tree_root2;
+
+  return tree_root;
 }
 
 void PrintTableEven(){
