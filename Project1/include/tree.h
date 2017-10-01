@@ -21,6 +21,7 @@ void TreeNode_2_setOne(TreeNode_2 *, TreeNode_2 *);
 void TreeNode_2_setTwo(TreeNode_2 *, TreeNode_2 *);
 void TreeNode_2_setThree(TreeNode_2 *, TreeNode_2 *);
 void TreeNode_2_setNextHop(TreeNode_2 *, int);
+TreeNode_2* newTreeNode_2(void);
 
 TreeNode* BinaryToTwoBit(TreeNode *, TreeNode *);
 void PrintTableEven();
