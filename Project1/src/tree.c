@@ -46,7 +46,42 @@ void TreeNode_setOne(TreeNode *treeNode, TreeNode *nextOne)
     return;
 }
 
+void TreeNode_2_setZero(TreeNode_2 *treeNode, TreeNode_2 *nextZero)
+{
+    treeNode->zero = nextZero;
+
+    return;
+}
+
+void TreeNode_2_setOne(TreeNode_2 *treeNode, TreeNode_2 *nextOne)
+{
+    treeNode->one = nextOne;
+
+    return;
+}
+
+void TreeNode_2_setTwo(TreeNode_2 *treeNode, TreeNode_2 *nextTwo)
+{
+    treeNode->two = nextTwo;
+
+    return;
+}
+
+void TreeNode_2_setThree(TreeNode_2 *treeNode, TreeNode_2 *nextThree)
+{
+    treeNode->three = nextThree;
+
+    return;
+}
+
 void TreeNode_setNextHop(TreeNode *treeNode, int nextHop)
+{
+    treeNode->nextHop = nextHop;
+
+    return;
+}
+
+void TreeNode_2_setNextHop(TreeNode_2 *treeNode, int nextHop)
 {
     treeNode->nextHop = nextHop;
 
@@ -63,6 +98,20 @@ TreeNode* newTreeNode(void)
         TreeNode_setNextHop(tree_node, -1);
 
     return tree_node;
+}
+
+TreeNode_2* newTreeNode_2(void)
+{
+  TreeNode_2 *tree_node_2 = NULL;
+
+    tree_node_2 = (TreeNode_2*)malloc(sizeof(TreeNode_2));
+    TreeNode_2_setZero(tree_node_2, NULL);
+    TreeNode_2_setOne(tree_node_2, NULL);
+    TreeNode_2_setTwo(tree_node_2, NULL);
+    TreeNode_2_setThree(tree_node_2, NULL);
+    TreeNode_2_setNextHop(tree_node_2, -1);
+
+    return tree_node_2;
 }
 
 //Basic functions
