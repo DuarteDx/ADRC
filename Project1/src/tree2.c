@@ -158,7 +158,12 @@ void Insert2BitPrefix(TreeNode_2* tree_node2, char* address, int nextHop)
       if(tree_aux->one == NULL){
         tree_aux->one = newTreeNode_2();
       }
-      //if( )
+      if(address[i+1] == 'x'){
+        if(tree_aux->zero->nextHop == -1){tree_aux->zero->nextHop = nextHop;}
+        else if(tree_aux->one->nextHop == -1){tree_aux->one->nextHop = nextHop;}
+      }
+      if(address[i+1] == '0'){tree_aux = tree_aux->zero;}
+      if(address[i+1] == '1'){tree_aux = tree_aux->one;}
     }
 
     if(address[i] == '1')
@@ -169,6 +174,12 @@ void Insert2BitPrefix(TreeNode_2* tree_node2, char* address, int nextHop)
       if(tree_aux->three == NULL){
         tree_aux->three = newTreeNode_2();
       }
+      if(address[i+1] == 'x'){
+        if(tree_aux->two->nextHop == -1){tree_aux->two->nextHop = nextHop;}
+        else if(tree_aux->three->nextHop == -1){tree_aux->three->nextHop = nextHop;}
+      }
+      if(address[i+1] == '0'){tree_aux = tree_aux->two;}
+      if(address[i+1] == '1'){tree_aux = tree_aux->three;}
     }
   }
 }
