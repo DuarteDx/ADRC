@@ -21,7 +21,7 @@ CFLAGSDBG_2=-Wall \
           -g \
           -fno-omit-frame-pointer \
 
-CFILES=src/main.c src/functions.c src/table.c src/tree.c
+CFILES=src/main.c src/functions.c src/table.c src/tree.c src/tree2.c
 
 # include directoryy
 IDIR=include/
@@ -30,7 +30,8 @@ IDIR=include/
 IFILES=$(IDIR)defs.h \
        $(IDIR)tree.h \
        $(IDIR)functions.h \
-       $(IDIR)tree.h
+       $(IDIR)tree.h \
+       $(IDIR)tree2.h
 
 # executable name
 EXEC_NAME_REL=prefix_tree
