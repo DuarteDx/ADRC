@@ -144,9 +144,33 @@ void Recursive2BitPrefixTree(TreeNode *tree_node, TreeNode_2* tree_node2, char* 
 }
 
 //Inserts a NextHop to a 2BitPrefixTree by knowing the address
-void Insert2BitPrefix(TreeNode_2* tree_node2, char* adress, int nextHop)
-{
 
+void Insert2BitPrefix(TreeNode_2* tree_node2, char* address, int nextHop)
+{
+  TreeNode_2* tree_aux = tree_node2;
+  for(int i = 0; address[i] != 'x'; i++)
+  {
+    if(address[i] == '0')
+    {
+      if(tree_aux->zero == NULL){
+        tree_aux->zero = newTreeNode_2();
+      }
+      if(tree_aux->one == NULL){
+        tree_aux->one = newTreeNode_2();
+      }
+      //if( )
+    }
+
+    if(address[i] == '1')
+    {
+      if(tree_aux->two == NULL){
+        tree_aux->two = newTreeNode_2();
+      }
+      if(tree_aux->three == NULL){
+        tree_aux->three = newTreeNode_2();
+      }
+    }
+  }
 }
 
 void PrintTableEven(){
