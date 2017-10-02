@@ -267,68 +267,73 @@ TreeNode * InsertPrefix(TreeNode *tree_root, char address[PREFIX_SIZE], int next
 TreeNode * DeletePrefix(TreeNode *tree_root, char prefix[PREFIX_SIZE]){
 
     unsigned long int i = 0;
-    TreeNode *tree_aux = NULL;
-    TreeNode *tree_previous_aux = NULL;
-    int oneZeroFlag = -1; //0 for left 1 for right
-
-        tree_aux = tree_root;
-
-        for(i = 0; i < strnlen(prefix, PREFIX_SIZE); i += 1)
+    TreeNode *tree_aux = tree_root;
+    TreeNode *delete_after = NULL;
+    int delete_direction = -1;
+    int save_direction = 0;
+    
+    for(i = 0; i < strnlen(prefix, PREFIX_SIZE); i += 1)
+    {
+        //Reset save direction flag
+        save_direction = 0;
+        
+        if(tree_aux != NULL)
         {
+            //Save this node if it has two children or has a next_hop
+            if(((tree_aux->zero != NULL) && (tree_aux->one != NULL)) || (tree_aux->nextHop != -1))
+            {
+                delete_after = tree_aux;
+                save_direction = 1;
+            }
+            
             //Go to the next node
             if('0' == prefix[i])
             {
-                if(NULL != tree_aux->zero)
+                //Save the direction in which we have to delete from
+                if(save_direction)
                 {
-                    tree_previous_aux = tree_aux;
-                    oneZeroFlag = 0;
-                    tree_aux = tree_aux->zero;
+                    delete_direction = 0;
                 }
-                else
-                {
-                    fprintf(stdout, "Non exixting prefix. No changes were made.\n");
-
-                    break;
-                }
+                
+                tree_aux = tree_aux->zero;
             }
             else if('1' == prefix[i])
             {
-                if(NULL != tree_aux->one)
+                //Save the direction in which we have to delete from
+                if(save_direction)
                 {
-                    tree_previous_aux = tree_aux;
-                    oneZeroFlag = 1;
-                    tree_aux = tree_aux->one;
+                    delete_direction = 1;
                 }
-                else
-                {
-                    fprintf(stdout, "Non exixting prefix. No changes were made.\n");
-
-                    break;
-                }
+                
+                tree_aux = tree_aux->one;
             }
-        }
-
-        //Delete the next hop
-        if(-1 != tree_aux->nextHop)
-        {
-            tree_aux->nextHop = -1;
-        }
-
-        //Free memory if the node is not necessary anymore.
-        if((NULL == tree_aux->zero) && (NULL == tree_aux->one))
-        {
-            if(0 == oneZeroFlag)
+            else
             {
-                tree_previous_aux->zero = NULL;
-            }
-            else if(1 == oneZeroFlag)
-            {
-                tree_previous_aux->one = NULL;
+                fprintf(stdout, "Prefix does not exist\n");
+                return tree_root;
             }
 
-            free(tree_aux);
         }
-
+        else
+        {
+            fprintf(stdout, "Prefix does not exist\n");
+            return tree_root;
+        }
+    }
+    
+    if(delete_direction == 0)
+    {
+        //Free nodes from delete_after downwards
+        freeTree(delete_after->zero);
+        delete_after->zero = NULL;
+    }
+    else if (delete_direction == 1)
+    {
+        //Free nodes from delete_after downwards
+        freeTree(delete_after->one);
+        delete_after->one = NULL;
+    }
+    
     return tree_root;
 }
 
