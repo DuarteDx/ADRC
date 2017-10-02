@@ -53,9 +53,15 @@ int main(int argc, char const *argv[]) {
             {
                 case 1:
                 {
-                    table_head = readTable(fp);
-                    //printTable(table_head);
-                    tree_root = PrefixTree(table_head);
+                    if(NULL == table_head)
+                    {
+                        table_head = readTable(fp);
+                        tree_root = PrefixTree(table_head);
+                    }
+                    else
+                    {
+                        fprintf(stdout, "The file was already read and the tree is in memory!\n");
+                    }
                     break;
                 }
                 case 2:
