@@ -332,8 +332,17 @@ TreeNode * DeletePrefix(TreeNode *tree_root, char prefix[PREFIX_SIZE]){
     return tree_root;
 }
 
-// TODO: implement this function
 void freeTree(TreeNode *tree_root)
 {
+    if(NULL == tree_root)
+    {
+        return;
+    }
+
+    freeTree(TreeNode_getZero(tree_root));
+    freeTree(TreeNode_getOne(tree_root));
+
+    free(tree_root);
+
     return;
 }
