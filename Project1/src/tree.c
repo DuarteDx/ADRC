@@ -314,7 +314,7 @@ TreeNode * DeletePrefix(TreeNode *tree_root, char prefix[PREFIX_SIZE]){
             tree_aux->nextHop = -1;
         }
 
-        //Free memory if the node is not necessary anymore
+        //Free memory if the node is not necessary anymore.
         if((NULL == tree_aux->zero) && (NULL == tree_aux->one))
         {
             if(0 == oneZeroFlag)
