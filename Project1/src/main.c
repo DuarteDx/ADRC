@@ -1,6 +1,7 @@
 #include "../include/table.h"
 #include "../include/tree.h"
 #include "../include/functions.h"
+#include "../include/tree2.h"
 
 int main(int argc, char const *argv[]) {
 
@@ -19,6 +20,9 @@ int main(int argc, char const *argv[]) {
     char *ret_val_fgets = NULL;
     int ret_val_sscanf = 0;
     int i = 0;
+
+    //Extra functions
+    TreeNode_2 *tree_root_2 = NULL;
 
         // static array initilization
         for(i = 0; i < PREFIX_SIZE; i += 1)
@@ -168,7 +172,15 @@ int main(int argc, char const *argv[]) {
                 }
                 case 6:
                 {
-                    fprintf(stdout, "This functionality is not implemented yet.\n");
+                    if(NULL == tree_root)
+                    {
+                        fprintf(stdout, "No prefix tree to convert, run '1'!\n");
+                    }
+                    else
+                    {
+                        tree_root_2 = BinaryToTwoBit(tree_root);
+                        fprintf(stdout, "Convertion complete!.\n");
+                    }
                     break;
                 }
                 case 7:
