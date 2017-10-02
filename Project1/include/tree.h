@@ -1,29 +1,35 @@
+#ifndef _TREE_H_
+#define _TREE_H_
 #include "defs.h"
 #include "../include/table.h"
 
-typedef struct treeNode_ TreeNode;
-typedef struct treeNode_2_ TreeNode_2;
+// TODO: Document all the functions in this header file.
 
-//Basic functions
-TreeNode * PrefixTree(TableEntry *);
-void PrintTable(TreeNode *, char address[PREFIX_SIZE]);
-int LookUp(TreeNode *, char *);
-TreeNode * InsertPrefix(TreeNode *, char *, int);
-TreeNode * DeletePrefix(TreeNode *, char *);
+typedef struct treeNode_ TreeNode;
+
+/* Support functions */
+
+// Constructor / initializer
+TreeNode * newTreeNode(void);
+
+// Getters
+int TreeNode_getNextHop(TreeNode *treeNode);
+TreeNode * TreeNode_getZero(TreeNode *treeNode);
+TreeNode * TreeNode_getOne(TreeNode *treeNode);
+
+// Setters
+void TreeNode_setNextHop(TreeNode *treeNode, int nextHop);
 void TreeNode_setZero(TreeNode *treeNode, TreeNode *nextZero);
 void TreeNode_setOne(TreeNode *treeNode, TreeNode *nextOne);
-void TreeNode_setNextHop(TreeNode *treeNode, int nextHop);
-TreeNode * newTreeNode(void);
-void freeTree(TreeNode * tree_root);
 
-//Extra functions for extra point
-void TreeNode_2_setZero(TreeNode_2 *, TreeNode_2 *);
-void TreeNode_2_setOne(TreeNode_2 *, TreeNode_2 *);
-void TreeNode_2_setTwo(TreeNode_2 *, TreeNode_2 *);
-void TreeNode_2_setThree(TreeNode_2 *, TreeNode_2 *);
-void TreeNode_2_setNextHop(TreeNode_2 *, int);
-TreeNode_2* newTreeNode_2(void);
-void Recursive2BitPrefixTree(TreeNode *,TreeNode_2 *, char *);
-void Insert2BitPrefix(TreeNode_2 *root, char *, int);
-TreeNode_2* BinaryToTwoBit(TreeNode *);
-void PrintTableEven();
+// Destructor
+void freeTree(TreeNode *tree_root);
+
+/* Basic functionality functions */
+TreeNode * PrefixTree(TableEntry *tree_root);
+void PrintTable(TreeNode *tree_root, char address[PREFIX_SIZE]);
+int LookUp(TreeNode *tree_root, char address[PREFIX_SIZE]);
+TreeNode * InsertPrefix(TreeNode *tree_root, char address[PREFIX_SIZE], int nextHop);
+TreeNode * DeletePrefix(TreeNode *tree_root, char prefix[PREFIX_SIZE]);
+
+#endif

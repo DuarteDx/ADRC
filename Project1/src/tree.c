@@ -1,4 +1,6 @@
+#ifndef _TREE_H_
 #include "../include/tree.h"
+#endif
 
 struct treeNode_
 {
@@ -6,16 +8,6 @@ struct treeNode_
     TreeNode *zero;
     TreeNode *one;
 };
-
-struct treeNode_2_
-{
-    int nextHop;
-    TreeNode_2 *zero;
-    TreeNode_2 *one;
-    TreeNode_2 *two;
-    TreeNode_2 *three;
-};
-
 
 int TreeNode_getNextHop(TreeNode *treeNode)
 {
@@ -46,42 +38,7 @@ void TreeNode_setOne(TreeNode *treeNode, TreeNode *nextOne)
     return;
 }
 
-void TreeNode_2_setZero(TreeNode_2 *treeNode, TreeNode_2 *nextZero)
-{
-    treeNode->zero = nextZero;
-
-    return;
-}
-
-void TreeNode_2_setOne(TreeNode_2 *treeNode, TreeNode_2 *nextOne)
-{
-    treeNode->one = nextOne;
-
-    return;
-}
-
-void TreeNode_2_setTwo(TreeNode_2 *treeNode, TreeNode_2 *nextTwo)
-{
-    treeNode->two = nextTwo;
-
-    return;
-}
-
-void TreeNode_2_setThree(TreeNode_2 *treeNode, TreeNode_2 *nextThree)
-{
-    treeNode->three = nextThree;
-
-    return;
-}
-
 void TreeNode_setNextHop(TreeNode *treeNode, int nextHop)
-{
-    treeNode->nextHop = nextHop;
-
-    return;
-}
-
-void TreeNode_2_setNextHop(TreeNode_2 *treeNode, int nextHop)
 {
     treeNode->nextHop = nextHop;
 
@@ -98,20 +55,6 @@ TreeNode * newTreeNode(void)
         TreeNode_setNextHop(tree_node, -1);
 
     return tree_node;
-}
-
-TreeNode_2* newTreeNode_2(void)
-{
-  TreeNode_2 *tree_node_2 = NULL;
-
-    tree_node_2 = (TreeNode_2*)malloc(sizeof(TreeNode_2));
-    TreeNode_2_setZero(tree_node_2, NULL);
-    TreeNode_2_setOne(tree_node_2, NULL);
-    TreeNode_2_setTwo(tree_node_2, NULL);
-    TreeNode_2_setThree(tree_node_2, NULL);
-    TreeNode_2_setNextHop(tree_node_2, -1);
-
-    return tree_node_2;
 }
 
 //Basic functions
@@ -218,7 +161,7 @@ void PrintTable(TreeNode *tree_head, char address[PREFIX_SIZE]){
     return;
 }
 
-int LookUp(TreeNode *tree_root, char *address){
+int LookUp(TreeNode *tree_root, char address[PREFIX_SIZE]){
 
     int next_hop = -1;
     TreeNode *tree_aux = NULL;
@@ -242,12 +185,13 @@ int LookUp(TreeNode *tree_root, char *address){
             else if('1' == address[i])
             {
                 tree_aux = tree_aux->one;
-            }else
+            }
+            else
             {
                 fprintf(stdout, "Lookup error: malformed address: contains characters other thant '0' or '1'\n");
                 return -1;
             }
-            
+
             //Test if we arrived at a dead end
             if(NULL == tree_aux)
             {
@@ -274,7 +218,7 @@ int LookUp(TreeNode *tree_root, char *address){
     return next_hop;
 }
 
-TreeNode * InsertPrefix(TreeNode *tree_root, char *address, int next_hop){
+TreeNode * InsertPrefix(TreeNode *tree_root, char address[PREFIX_SIZE], int next_hop){
 
     unsigned long int i = 0;
     TreeNode *tree_aux = NULL;
@@ -320,7 +264,7 @@ TreeNode * InsertPrefix(TreeNode *tree_root, char *address, int next_hop){
     return tree_root;
 }
 
-TreeNode * DeletePrefix(TreeNode *tree_root, char* prefix){
+TreeNode * DeletePrefix(TreeNode *tree_root, char prefix[PREFIX_SIZE]){
 
     unsigned long int i = 0;
     TreeNode *tree_aux = NULL;
@@ -391,78 +335,5 @@ TreeNode * DeletePrefix(TreeNode *tree_root, char* prefix){
 // TODO: implement this function
 void freeTree(TreeNode *tree_root)
 {
-    return;
-}
-
-
-//Extra functions
-TreeNode_2* BinaryToTwoBit(TreeNode *tree_root){
-
-  TreeNode* tree_aux = tree_root;
-  char* adress = (char*)malloc(PREFIX_SIZE*sizeof(char));
-  int i;
-  for(i = 0; i<PREFIX_SIZE; i++){
-    adress[i] = 'x';}
-  TreeNode_2* tree_root2 = newTreeNode_2();
-  TreeNode_2* tree2_aux = tree_root2;
-
-  tree_root2->nextHop = tree_root->nextHop;
-
-  Recursive2BitPrefixTree(tree_aux, tree2_aux, adress);
-
-  return tree_root2;
-}
-
-//Iterates over all of the PrefixTree
-void Recursive2BitPrefixTree(TreeNode *tree_node, TreeNode_2* tree_node2, char* adress)
-{
-  if(tree_node->nextHop != -1)
-  {
-    Insert2BitPrefix(tree_node2, adress, tree_node->nextHop);
-  }
-
-  if(tree_node->zero != NULL)
-  {
-      if(adress[0]=='x'){adress[0] = '0';}
-      for(int i = 0; adress[i] == 'x'; i++)
-      {
-        if(adress[i+1] == 'x'){adress[i+1] = '0';}
-      }
-      Recursive2BitPrefixTree(tree_node->zero, tree_node2, adress);
-      for(int i = 0; adress[i] == 'x'; i++)
-      {
-        if(adress[i+1] == 'x'){adress[i] = 'x';}
-      }
-
-  }
-
-  if(tree_node->nextHop != -1)
-  {
-    Insert2BitPrefix(tree_node2, adress, tree_node->nextHop);
-  }
-
-  if(tree_node->one != NULL)
-  {
-    if(adress[0]=='x'){adress[0] = '0';}
-    for(int i = 0; adress[i] == 'x'; i++)
-    {
-      if(adress[i+1] == 'x'){adress[i+1] = '0';}
-    }
-      Recursive2BitPrefixTree(tree_node->one, tree_node2, adress);
-      for(int i = 0; adress[i] == 'x'; i++)
-      {
-        if(adress[i+1] == 'x'){adress[i] = 'x';}
-      }
-  }
-
-}
-
-//Inserts a NextHop to a 2BitPrefixTree by knowing the address
-void Insert2BitPrefix(TreeNode_2* tree_node2, char* adress, int nextHop)
-{
-
-}
-
-void PrintTableEven(){
     return;
 }
