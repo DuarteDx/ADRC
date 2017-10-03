@@ -184,7 +184,48 @@ void Insert2BitPrefix(TreeNode_2* tree_node2, char* address, int nextHop)
   }
 }
 
-void PrintTableEven(){
+void PrintTableEven(TreeNode_2 * tree_root_2, char address[PREFIX_SIZE])
+{
+    if(NO_HOP != tree_root_2->nextHop)
+    {
+        //Special case for the tree root
+        if('\0' == address[0])
+        {
+            fprintf(stdout, "Prefix: e | Next hop: %d\n", tree_root_2->nextHop);
+        }
+        else
+        {
+            fprintf(stdout, "Prefix: %s | Next hop: %d\n", address, tree_root_2->nextHop);
+        }
+    }
+
+    if(NULL != tree_root_2->zero)
+    {
+        PrintTableEven(tree_root_2->zero, strncat(address, "00", 2));
+    }
+    if(NULL != tree_root_2->one)
+    {
+        PrintTableEven(tree_root_2->one, strncat(address, "01", 2));
+    }
+    if(NULL != tree_root_2->two)
+    {
+        PrintTableEven(tree_root_2->two, strncat(address, "10", 2));
+    }
+    if(NULL != tree_root_2->three)
+    {
+        PrintTableEven(tree_root_2->three, strncat(address, "11", 2));
+    }
+
+    //delete the last chars from the path string
+    if(((long int)strnlen(address, PREFIX_SIZE) - 1) >= 0)
+    {
+        address[strnlen(address, PREFIX_SIZE) - 1] = '\0';
+    }
+    if(((long int)strnlen(address, PREFIX_SIZE) - 2) >= 0)
+    {
+        address[strnlen(address, PREFIX_SIZE) - 2] = '\0';
+    }
+
     return;
 }
 
