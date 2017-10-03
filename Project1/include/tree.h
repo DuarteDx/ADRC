@@ -3,6 +3,18 @@
 #include "defs.h"
 #include "../include/table.h"
 
+#ifndef LEFT
+#define LEFT 0
+#endif
+
+#ifndef RIGHT
+#define RIGHT 1
+#endif
+
+#ifndef NO_HOP
+#define NO_HOP -1
+#endif
+
 typedef struct treeNode_ TreeNode;
 
 /* Support functions */

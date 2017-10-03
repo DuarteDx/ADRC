@@ -2,6 +2,7 @@
 #include "../include/tree.h"
 #endif
 
+// The left child is zero, the right child is one
 struct treeNode_
 {
     int nextHop;
@@ -50,9 +51,9 @@ TreeNode * newTreeNode(void)
     TreeNode *tree_node = NULL;
 
         tree_node = (TreeNode *)malloc(sizeof(TreeNode));
-        TreeNode_setZero(tree_node, NULL);
-        TreeNode_setOne(tree_node, NULL);
-        TreeNode_setNextHop(tree_node, -1);
+        tree_node->zero = NULL;
+        tree_node->one = NULL;
+        tree_node->nextHop = NO_HOP;
 
     return tree_node;
 }
@@ -130,7 +131,7 @@ TreeNode * PrefixTree(TableEntry *table_head){
 //Recusive function, needs to be called with the tree_root and an empty string
 void PrintTable(TreeNode *tree_head, char address[PREFIX_SIZE]){
 
-    if(-1 != tree_head->nextHop)
+    if(NO_HOP != tree_head->nextHop)
     {
         //Special case for the tree root
         if('\0' == address[0])
@@ -163,14 +164,14 @@ void PrintTable(TreeNode *tree_head, char address[PREFIX_SIZE]){
 
 int LookUp(TreeNode *tree_root, char address[PREFIX_SIZE]){
 
-    int next_hop = -1;
+    int next_hop = NO_HOP;
     TreeNode *tree_aux = NULL;
     unsigned long int i = 0;
 
         tree_aux = tree_root;
 
         //Save the best next_hop if it exists on this node
-        if(-1 != tree_root->nextHop)
+        if(NO_HOP != tree_root->nextHop)
         {
             next_hop = tree_root->nextHop;
         }
@@ -189,14 +190,14 @@ int LookUp(TreeNode *tree_root, char address[PREFIX_SIZE]){
             else
             {
                 fprintf(stdout, "Lookup error: malformed address: contains characters other thant '0' or '1'\n");
-                return -1;
+                return NO_HOP;
             }
 
             //Test if we arrived at a dead end
             if(NULL == tree_aux)
             {
                 //We have found a next hop
-                if(next_hop != -1)
+                if(next_hop != NO_HOP)
                 {
                     return next_hop;
                 }
@@ -204,12 +205,12 @@ int LookUp(TreeNode *tree_root, char address[PREFIX_SIZE]){
                 else
                 {
                     fprintf(stdout, "No nexthop found for this prefix\n");
-                    return -1;
+                    return NO_HOP;
                 }
             }
 
             //Save the best next_hop if it exists on this node
-            if(-1 != tree_aux->nextHop)
+            if(NO_HOP != tree_aux->nextHop)
             {
                 next_hop = tree_aux->nextHop;
             }
@@ -268,34 +269,33 @@ TreeNode * DeletePrefix(TreeNode *tree_root, char prefix[PREFIX_SIZE]){
 
     unsigned long int i = 0;
     TreeNode *tree_aux = tree_root;
-    TreeNode *tree_aux_previous = NULL;
     TreeNode *delete_after = NULL;
     int delete_direction = -1;
     int save_direction = 0;
-    
+
     for(i = 0; i < strnlen(prefix, PREFIX_SIZE); i += 1)
     {
         //Reset save direction flag
         save_direction = 0;
-        
+
         if(tree_aux != NULL)
         {
             //Save this node if it has two children or has a next_hop
-            if(((tree_aux->zero != NULL) && (tree_aux->one != NULL)) || (tree_aux->nextHop != -1))
+            if(((tree_aux->zero != NULL) && (tree_aux->one != NULL)) || (tree_aux->nextHop != NO_HOP))
             {
                 save_direction = 1;
+                delete_after = tree_aux;
             }
-            
+
             //Go to the next node
             if('0' == prefix[i])
             {
                 //Save the direction in which we have to delete from
                 if(save_direction)
                 {
-                    delete_direction = 0;
+                    delete_direction = LEFT;
                 }
-                
-                tree_aux_previous = tree_aux;
+
                 tree_aux = tree_aux->zero;
             }
             else if('1' == prefix[i])
@@ -303,9 +303,9 @@ TreeNode * DeletePrefix(TreeNode *tree_root, char prefix[PREFIX_SIZE]){
                 //Save the direction in which we have to delete from
                 if(save_direction)
                 {
-                    delete_direction = 1;
+                    delete_direction = RIGHT;
                 }
-                
+
                 tree_aux = tree_aux->one;
             }
             else
@@ -321,30 +321,29 @@ TreeNode * DeletePrefix(TreeNode *tree_root, char prefix[PREFIX_SIZE]){
             return tree_root;
         }
     }
-    
+
     //If the node we found is not a leaf we just delete the next-hop
     if((tree_aux->zero != NULL) || (tree_aux->one != NULL))
     {
         //Reset the next hop
-        tree_aux->nextHop = -1;
+        tree_aux->nextHop = NO_HOP;
     }
-    //If it's a leaf we need to delete eveything node that has no purpose in the tree anymore
-    else
+    else //If it's a leaf we need to delete eveything node that has no purpose in the tree anymore
     {
-        if(delete_direction == 0)
+        if(delete_direction == LEFT)
         {
             //Free nodes from delete_after downwards
             freeTree(delete_after->zero);
             delete_after->zero = NULL;
         }
-        else if (delete_direction == 1)
+        else if(delete_direction == RIGHT)
         {
             //Free nodes from delete_after downwards
             freeTree(delete_after->one);
             delete_after->one = NULL;
         }
     }
-    
+
     return tree_root;
 }
 
@@ -355,8 +354,8 @@ void freeTree(TreeNode *tree_root)
         return;
     }
 
-    freeTree(TreeNode_getZero(tree_root));
-    freeTree(TreeNode_getOne(tree_root));
+    freeTree(tree_root->zero);
+    freeTree(tree_root->one);
 
     free(tree_root);
 
