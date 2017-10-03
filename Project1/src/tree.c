@@ -268,6 +268,7 @@ TreeNode * DeletePrefix(TreeNode *tree_root, char prefix[PREFIX_SIZE]){
 
     unsigned long int i = 0;
     TreeNode *tree_aux = tree_root;
+    TreeNode *tree_aux_previous = NULL;
     TreeNode *delete_after = NULL;
     int delete_direction = -1;
     int save_direction = 0;
@@ -282,7 +283,6 @@ TreeNode * DeletePrefix(TreeNode *tree_root, char prefix[PREFIX_SIZE]){
             //Save this node if it has two children or has a next_hop
             if(((tree_aux->zero != NULL) && (tree_aux->one != NULL)) || (tree_aux->nextHop != -1))
             {
-                delete_after = tree_aux;
                 save_direction = 1;
             }
             
@@ -295,6 +295,7 @@ TreeNode * DeletePrefix(TreeNode *tree_root, char prefix[PREFIX_SIZE]){
                     delete_direction = 0;
                 }
                 
+                tree_aux_previous = tree_aux;
                 tree_aux = tree_aux->zero;
             }
             else if('1' == prefix[i])
@@ -321,17 +322,27 @@ TreeNode * DeletePrefix(TreeNode *tree_root, char prefix[PREFIX_SIZE]){
         }
     }
     
-    if(delete_direction == 0)
+    //If the node we found is not a leaf we just delete the next-hop
+    if((tree_aux->zero != NULL) || (tree_aux->one != NULL))
     {
-        //Free nodes from delete_after downwards
-        freeTree(delete_after->zero);
-        delete_after->zero = NULL;
+        //Reset the next hop
+        tree_aux->nextHop = -1;
     }
-    else if (delete_direction == 1)
+    //If it's a leaf we need to delete eveything node that has no purpose in the tree anymore
+    else
     {
-        //Free nodes from delete_after downwards
-        freeTree(delete_after->one);
-        delete_after->one = NULL;
+        if(delete_direction == 0)
+        {
+            //Free nodes from delete_after downwards
+            freeTree(delete_after->zero);
+            delete_after->zero = NULL;
+        }
+        else if (delete_direction == 1)
+        {
+            //Free nodes from delete_after downwards
+            freeTree(delete_after->one);
+            delete_after->one = NULL;
+        }
     }
     
     return tree_root;
