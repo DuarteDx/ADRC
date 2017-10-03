@@ -231,5 +231,17 @@ void PrintTableEven(TreeNode_2 * tree_root_2, char address[PREFIX_SIZE])
 
 void freeTree2(TreeNode_2 *tree_root_2)
 {
+    if(NULL == tree_root_2)
+    {
+        return;
+    }
+
+    freeTree2(tree_root_2->zero);
+    freeTree2(tree_root_2->one);
+    freeTree2(tree_root_2->two);
+    freeTree2(tree_root_2->three);
+
+    free(tree_root_2);
+
     return;
 }
