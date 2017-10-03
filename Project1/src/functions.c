@@ -40,7 +40,7 @@ bool checkValidPrefix(char prefix[PREFIX_SIZE])
 
         for(i = 0; i < PREFIX_SIZE; i += 1)
         {
-            if((prefix[i] != '0') && (prefix[i] != '1'))
+            if((prefix[i] != '0') && (prefix[i] != '1') && (prefix[i] != '\0'))
             {
                 // reset the array before we return
                 for(i = 0; i < PREFIX_SIZE; i += 1)
