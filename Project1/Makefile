@@ -50,6 +50,9 @@ run_dbg: all
 run_valgrind: all
 	valgrind -v --leak-check=full --show-leak-kinds=all --track-origins=yes --log-file=valgrind_output.val bin/debug2/$(EXEC_NAME_DBG_2)  $(DEFAULT_TEST_FILE)
 
+run_ddd: all
+	ddd --args bin/debug2/$(EXEC_NAME_DBG_2) $(DEFAULT_TEST_FILE)
+
 all: prefix_tree prefix_tree_dbg_1 prefix_tree_dbg_2
 
 debug1: prefix_tree_dbg_1
