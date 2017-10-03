@@ -9,5 +9,6 @@
  * Return value: int - the selection number
 */
 int showMenu(void);
+bool checkValidPrefix(char prefix[PREFIX_SIZE]);
 
 #endif

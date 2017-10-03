@@ -187,3 +187,8 @@ void Insert2BitPrefix(TreeNode_2* tree_node2, char* address, int nextHop)
 void PrintTableEven(){
     return;
 }
+
+void freeTree2(TreeNode_2 *tree_root_2)
+{
+    return;
+}
