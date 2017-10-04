@@ -80,7 +80,7 @@ TreeNode_2* BinaryToTwoBit(TreeNode *tree_root){
     return tree_root2;
 }
 
-//Iterates over all of the PrefixTree
+//Iterates over all of the PrefixTree and calls Insert2BitPrefix()
 void Recursive2BitPrefixTree(TreeNode *tree_node, TreeNode_2* tree_node2, char* adress)
 {
     if(-1 != TreeNode_getNextHop(tree_node))
