@@ -10,7 +10,7 @@ int main(int argc, char const *argv[]) {
     TableEntry *table_head = NULL;
     TreeNode *tree_root = NULL;
     bool keepRunning = true;
-    char address[PREFIX_SIZE];
+    char address[PREFIX_SIZE], address2[PREFIX_SIZE];
     char lookupPrefix[PREFIX_SIZE];
     char insertPrefix[PREFIX_SIZE];
     char deletePrefix[PREFIX_SIZE];
@@ -28,6 +28,7 @@ int main(int argc, char const *argv[]) {
         for(i = 0; i < PREFIX_SIZE; i += 1)
         {
             address[i] = '\0';
+            address2[i] = '\0';
             lookupPrefix[i] = '\0';
             insertPrefix[i] = '\0';
             deletePrefix[i] = '\0';
@@ -185,7 +186,7 @@ int main(int argc, char const *argv[]) {
                 }
                 case 7:
                 {
-                    fprintf(stdout, "This functionality is not implemented yet.\n");
+                    PrintTableEven(tree_root_2, address2);
                     break;
                 }
                 default:
