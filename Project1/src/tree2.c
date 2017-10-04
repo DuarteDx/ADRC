@@ -184,6 +184,42 @@ void Insert2BitPrefix(TreeNode_2* tree_node2, char* address, int nextHop)
   }
 }
 
-void PrintTableEven(){
+void PrintTableEven(TreeNode_2 *tree_node2, char address[512]){
+
+    if(-1 != tree_node2->nextHop)
+    {
+        if('\0' == address[0])
+        {
+            fprintf(stdout, "e   %d\n", tree_node2->nextHop);
+        }
+        else
+        {
+            fprintf(stdout, "Prefix: %s | Next hop: %d\n", address, tree_node2->nextHop);
+        }
+    }
+
+    if(NULL != tree_node2->zero)
+    {
+        PrintTableEven(tree_node2->zero, strncat(address, "00", 2));
+    }
+    if(NULL != tree_node2->one)
+    {
+        PrintTableEven(tree_node2->one, strncat(address, "01", 2));
+    }
+    if(NULL != tree_node2->two)
+    {
+        PrintTableEven(tree_node2->two, strncat(address, "10", 2));
+    }
+    if(NULL != tree_node2->three)
+    {
+        PrintTableEven(tree_node2->three, strncat(address, "11", 2));
+    }
+
+    //delete the last char from the path string
+    if(((long int)strnlen(address, 512) - 2) >= 0)
+    {
+        address[strnlen(address, 512) - 2] = '\0';
+    }
+
     return;
 }
