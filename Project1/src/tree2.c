@@ -228,3 +228,8 @@ void PrintTableEven(TreeNode_2 *tree_node2, char address[PREFIX_SIZE]){
 
     return;
 }
+
+void freeTree2(TreeNode_2 *tree_root_2)
+{
+    return;
+}

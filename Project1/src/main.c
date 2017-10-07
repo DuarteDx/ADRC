@@ -73,7 +73,7 @@ int main(int argc, char const *argv[]) {
                 {
                     if(NULL == tree_root)
                     {
-                        fprintf(stdout, "No tree to print!\n");
+                        fprintf(stdout, "No tree to print! Use option 1 first.\n");
                     }
                     else
                     {
@@ -85,7 +85,7 @@ int main(int argc, char const *argv[]) {
                 {
                     if(NULL == tree_root)
                     {
-                        fprintf(stdout, "No tree to lookup!\n");
+                        fprintf(stdout, "No tree to lookup! Use option 1 first.\n");
                     }
                     else
                     {
@@ -94,11 +94,18 @@ int main(int argc, char const *argv[]) {
                         if(NULL == ret_val_fgets)
                         {
                             fprintf(stdout, "Error reading input, try again.\n");
+                            break;
                         }
                         ret_val_sscanf = sscanf(char_buffer, "%s\n", lookupPrefix);
                         if(ret_val_sscanf != 1)
                         {
                             fprintf(stdout, "Error reading option, try again.\n");
+                            break;
+                        }
+                        if(!checkValidPrefix(lookupPrefix))
+                        {
+                            fprintf(stdout, "Wrong type of prefix. Must be a string of 0 and 1.\n");
+                            break;
                         }
 
                         lookUpResult = LookUp(tree_root, lookupPrefix);
@@ -111,7 +118,7 @@ int main(int argc, char const *argv[]) {
                 {
                     if(NULL == tree_root)
                     {
-                        fprintf(stdout, "No tree to insert prefix in!\n");
+                        fprintf(stdout, "No tree to insert prefix in! Use option 1 first.\n");
                     }
                     else
                     {
@@ -120,11 +127,18 @@ int main(int argc, char const *argv[]) {
                         if(NULL == ret_val_fgets)
                         {
                             fprintf(stdout, "Error reading input, try again.\n");
+                            break;
                         }
                         ret_val_sscanf = sscanf(char_buffer, "%s\n", insertPrefix);
                         if(ret_val_sscanf != 1)
                         {
                             fprintf(stdout, "Error reading input, try again.\n");
+                            break;
+                        }
+                        if(!checkValidPrefix(insertPrefix))
+                        {
+                            fprintf(stdout, "Wrong type of prefix. Must be a string of 0 and 1.\n");
+                            break;
                         }
 
                         fprintf(stdout, "Insert the next hop associated with the new address:\n");
@@ -132,11 +146,13 @@ int main(int argc, char const *argv[]) {
                         if(NULL == ret_val_fgets)
                         {
                             fprintf(stdout, "Error reading input, try again.\n");
+                            break;
                         }
                         ret_val_sscanf = sscanf(char_buffer, "%d\n", &insertNextHop);
                         if(ret_val_sscanf != 1)
                         {
                             fprintf(stdout, "Error reading input, try again.\n");
+                            break;
                         }
 
                         tree_root = InsertPrefix(tree_root, insertPrefix, insertNextHop);
@@ -149,7 +165,7 @@ int main(int argc, char const *argv[]) {
                 {
                     if(NULL == tree_root)
                     {
-                        fprintf(stdout, "No tree to delete prefix from!\n");
+                        fprintf(stdout, "No tree to delete prefix from! Use option 1 first.\n");
                     }
                     else
                     {
@@ -158,11 +174,18 @@ int main(int argc, char const *argv[]) {
                         if(NULL == ret_val_fgets)
                         {
                             fprintf(stdout, "Error reading input, try again.\n");
+                            break;
                         }
                         ret_val_sscanf = sscanf(char_buffer, "%s\n", deletePrefix);
                         if(ret_val_sscanf != 1)
                         {
                             fprintf(stdout, "Error reading option, try again.\n");
+                            break;
+                        }
+                        if(!checkValidPrefix(deletePrefix))
+                        {
+                            fprintf(stdout, "Wrong type of prefix. Must be a string of 0 and 1.\n");
+                            break;
                         }
 
                         tree_root = DeletePrefix(tree_root, deletePrefix);
@@ -175,7 +198,7 @@ int main(int argc, char const *argv[]) {
                 {
                     if(NULL == tree_root)
                     {
-                        fprintf(stdout, "No prefix tree to convert, run '1'!\n");
+                        fprintf(stdout, "No prefix tree to convert! Use option 1 first.\n");
                     }
                     else
                     {
@@ -205,6 +228,10 @@ int main(int argc, char const *argv[]) {
         if(NULL != tree_root)
         {
             freeTree(tree_root);
+        }
+        if(NULL != tree_root_2)
+        {
+            freeTree2(tree_root_2);
         }
 
         fclose(fp);

@@ -22,7 +22,7 @@ void TreeNode_2_setThree(TreeNode_2 *, TreeNode_2 *);
 void TreeNode_2_setNextHop(TreeNode_2 *, int);
 
 // Destructor TODO
-
+void freeTree2(TreeNode_2 * tree_root_2);
 
 /* Extra functionality functions */
 

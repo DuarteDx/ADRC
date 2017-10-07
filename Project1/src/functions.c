@@ -33,3 +33,23 @@ int showMenu(void)
 
     return option;
 }
+
+bool checkValidPrefix(char prefix[PREFIX_SIZE])
+{
+    int i = 0;
+
+        for(i = 0; i < PREFIX_SIZE; i += 1)
+        {
+            if((prefix[i] != '0') && (prefix[i] != '1') && (prefix[i] != '\0'))
+            {
+                // reset the array before we return
+                for(i = 0; i < PREFIX_SIZE; i += 1)
+                {
+                    prefix[i] = '\0';
+                }
+                return false;
+            }
+        }
+
+    return true;
+}
