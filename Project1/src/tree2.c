@@ -147,8 +147,9 @@ void Recursive2BitPrefixTree(TreeNode *tree_node, TreeNode_2* tree_node2, char* 
 //address example: "01100"
 void Insert2BitPrefix(TreeNode_2* tree_node2, char* address, int nextHop)
 {
+  int end=0;
   TreeNode_2* tree_aux = tree_node2;
-  for(int i = 0; address[i] != '\0' || address[i+1] == '\0'; i++)
+  for(int i = 0; end != 1; i++)
   {
     if(address[i] == '0')
     {
@@ -161,9 +162,10 @@ void Insert2BitPrefix(TreeNode_2* tree_node2, char* address, int nextHop)
       if(address[i+1] == '\0' || address[i+2] == '\0'){
         if(tree_aux->zero->nextHop == -1 && address[i+1] != '1'){tree_aux->zero->nextHop = nextHop;}
         else if(tree_aux->one->nextHop == -1){tree_aux->one->nextHop = nextHop;}
+        end=1;
       }
       if(address[i+1] == '0'){tree_aux = tree_aux->zero;}
-      if(address[i+1] == '1'){tree_aux = tree_aux->one;}
+      else if(address[i+1] == '1'){tree_aux = tree_aux->one;}
       i+=1;
     }
 
@@ -178,9 +180,10 @@ void Insert2BitPrefix(TreeNode_2* tree_node2, char* address, int nextHop)
       if(address[i+1] == '\0' || address[i+2] == '\0'){
         if(tree_aux->two->nextHop == -1 && address[i+1] != '1'){tree_aux->two->nextHop = nextHop;}
         else if(tree_aux->three->nextHop == -1){tree_aux->three->nextHop = nextHop;}
+        end=1;
       }
       if(address[i+1] == '0'){tree_aux = tree_aux->two;}
-      if(address[i+1] == '1'){tree_aux = tree_aux->three;}
+      else if(address[i+1] == '1'){tree_aux = tree_aux->three;}
       i+=1;
     }
   }
