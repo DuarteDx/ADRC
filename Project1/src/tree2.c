@@ -146,7 +146,6 @@ void BinaryToTwoBit_recursive(TreeNode *tree_root, TreeNode_2 **tree_root_2, cha
         }
         BinaryToTwoBit_recursive(TreeNode_getOne(tree_root), tree_root_2, address);
 
-        // TODO: special case for root?
         // do stuff here for each node, going from bottom to top, left to right
         // first, get the address of this node, if it has a next hop
         if(NO_HOP != TreeNode_getNextHop(tree_root))
@@ -329,14 +328,11 @@ void PrintTableEven(TreeNode_2 * tree_root_2, char address[PREFIX_SIZE])
         PrintTableEven(tree_root_2->three, strncat(address, "11", 2));
     }
 
-    //delete the last chars from the path string
-    if(((long int)strnlen(address, PREFIX_SIZE) - 1) >= 0)
-    {
-        address[strnlen(address, PREFIX_SIZE) - 1] = '\0';
-    }
     if(((long int)strnlen(address, PREFIX_SIZE) - 2) >= 0)
     {
-        address[strnlen(address, PREFIX_SIZE) - 2] = '\0';
+        int real_length = strnlen(address, PREFIX_SIZE);
+        address[real_length-2] = '\0';
+        address[real_length-1] = '\0';
     }
 
     return;
