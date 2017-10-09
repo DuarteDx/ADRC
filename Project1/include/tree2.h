@@ -27,6 +27,10 @@ void freeTree2(TreeNode_2 * tree_root_2);
 /* Extra functionality functions */
 
 TreeNode_2 * BinaryToTwoBit(TreeNode *);
+// support for BinaryToTwoBit
+void BinaryToTwoBit_recursive(TreeNode *tree_root, TreeNode_2 **tree_root_2, char** address);
+void TreeNode_2_buildNode(TreeNode_2 **tree_root_2, char two_bit_address[PREFIX_SIZE], int nextHop);
+
 void PrintTableEven();
 
 #endif

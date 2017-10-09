@@ -60,231 +60,237 @@ TreeNode_2* newTreeNode_2(void)
     return tree_node_2;
 }
 
-//Extra functions
-void BinaryToTwoBit_recursive(TreeNode *tree_root, TreeNode_2 **tree_root_2)
+void TreeNode_2_buildNode(TreeNode_2 **tree_root_2, char two_bit_address[PREFIX_SIZE], int nextHop)
 {
-    TreeNode *son0 = NULL;
-    TreeNode *son1 = NULL;
-    TreeNode *grandson00 = NULL;
-    TreeNode *grandson01 = NULL;
-    TreeNode *grandson10 = NULL;
-    TreeNode *grandson11 = NULL;
+    unsigned long int i = 0;
+    unsigned long int address_legth = 0;
+    unsigned long int even_odd = 0;
+    unsigned long int for_control = 0;
+    TreeNode_2 **aux = NULL;
 
+        aux = tree_root_2;
+
+        address_legth = strnlen(two_bit_address, PREFIX_SIZE);
+        even_odd = address_legth/2 + 1;
+        if((even_odd % 2) == 0) // even
+        {
+            for_control = even_odd + 1;
+        }
+        else
+        {
+            for_control = even_odd;
+        }
+
+        for(i = 0; i < for_control; i += 2)
+        {
+            if((two_bit_address[i] == '0') && (two_bit_address[i+1] == '0'))
+            {
+                if(((*(aux))->zero) == NULL)
+                {
+                    (*(aux))->zero = newTreeNode_2();
+                }
+                aux = &((*(aux))->zero);
+            }
+            else if((two_bit_address[i] == '0') && (two_bit_address[i+1] == '1'))
+            {
+                if(((*(aux))->one) == NULL)
+                {
+                    (*(aux))->one = newTreeNode_2();
+                }
+                aux = &((*(aux))->one);
+            }
+            else if((two_bit_address[i] == '1') && (two_bit_address[i+1] == '0'))
+            {
+                if(((*(aux))->two) == NULL)
+                {
+                    (*(aux))->two = newTreeNode_2();
+                }
+                aux = &((*(aux))->two);
+            }
+            else if((two_bit_address[i] == '1') && (two_bit_address[i+1] == '1'))
+            {
+                if(((*(aux))->three) == NULL)
+                {
+                    (*(aux))->three = newTreeNode_2();
+                }
+                aux = &((*(aux))->three);
+            }
+        }
+
+        TreeNode_2_setNextHop(*aux, nextHop);
+
+    return;
+}
+
+//Extra functions
+void BinaryToTwoBit_recursive(TreeNode *tree_root, TreeNode_2 **tree_root_2, char** address)
+{
+    unsigned long int address_legth = 0;
+    char* new_address = NULL;
+    bool add_to_tree2 = false;
+
+        // traverse left then right to the bottom
         if(NULL == tree_root)
         {
             return;
         }
 
-        //TODO: encapsulate all of this in an if checking for NO_HOP in tree root
+        if(TreeNode_getZero(tree_root) != NULL)
+        {
+            strncat(*address, "0", 1);
+        }
+        BinaryToTwoBit_recursive(TreeNode_getZero(tree_root), tree_root_2, address);
+        if(TreeNode_getOne(tree_root) != NULL)
+        {
+            strncat(*address, "1", 1);
+        }
+        BinaryToTwoBit_recursive(TreeNode_getOne(tree_root), tree_root_2, address);
 
-        son0 = TreeNode_getZero(tree_root);
-        son1 = TreeNode_getOne(tree_root);
-
-            if(NULL != son0)
+        // TODO: special case for root?
+        // do stuff here for each node, going from bottom to top, left to right
+        // first, get the address of this node, if it has a next hop
+        if(NO_HOP != TreeNode_getNextHop(tree_root))
+        {
+            new_address = malloc(PREFIX_SIZE * sizeof(char));
+            memset(new_address, 0, PREFIX_SIZE * sizeof(char));
+            // 2 - check if number of digits is even or odd
+            address_legth = strnlen(*address, PREFIX_SIZE);
+            if(0 == (address_legth % 2)) // even
             {
-                grandson00 = TreeNode_getZero(son0);
-                grandson01 = TreeNode_getOne(son0);
-
-                if(NO_HOP != TreeNode_getNextHop(son0))
+                // check children to see if it is relevant
+                add_to_tree2 = true;
+                if((TreeNode_getZero(tree_root) != NULL) && (TreeNode_getOne(tree_root) != NULL))
                 {
-                    if((NULL != grandson00) && (NULL != grandson01))
+                    if((TreeNode_getNextHop(TreeNode_getZero(tree_root)) != NO_HOP) && (TreeNode_getNextHop(TreeNode_getOne(tree_root)) != NO_HOP))
                     {
-                        if((NO_HOP != TreeNode_getNextHop(grandson00)) && (NO_HOP != TreeNode_getNextHop(grandson01)))
-                        {
-                            (*tree_root_2)->zero = newTreeNode_2();
-                            (*tree_root_2)->zero->nextHop = TreeNode_getNextHop(grandson00);
-                            (*tree_root_2)->one = newTreeNode_2();
-                            (*tree_root_2)->one->nextHop = TreeNode_getNextHop(grandson01);
-
-                            // TODO: are these ifs necessary? I think not, if first arg is NULL, recursion should return anyway.
-                            if(NULL != TreeNode_getZero(grandson00))
-                            {
-                                BinaryToTwoBit_recursive(TreeNode_getZero(grandson00), &((*tree_root_2)->zero));
-                            }
-                            else if(NULL != TreeNode_getOne(grandson00))
-                            {
-                                BinaryToTwoBit_recursive(TreeNode_getOne(grandson00), &((*tree_root_2)->zero));
-                            }
-                            else if(NULL != TreeNode_getZero(grandson01))
-                            {
-                                BinaryToTwoBit_recursive(TreeNode_getZero(grandson01), &((*tree_root_2)->one));
-                            }
-                            else if(NULL != TreeNode_getOne(grandson01))
-                            {
-                                BinaryToTwoBit_recursive(TreeNode_getOne(grandson01), &((*tree_root_2)->one));
-                            }
-                        }
-                        else if((NO_HOP != TreeNode_getNextHop(grandson00)) && (NO_HOP == TreeNode_getNextHop(grandson01)))
-                        {
-                            (*tree_root_2)->zero = newTreeNode_2();
-                            (*tree_root_2)->zero->nextHop = TreeNode_getNextHop(grandson00);
-                            (*tree_root_2)->one = newTreeNode_2();
-                            (*tree_root_2)->one->nextHop = TreeNode_getNextHop(son0);
-
-                            // TODO: are these ifs necessary? I think not, if first arg is NULL, recursion should return anyway.
-                            if(NULL != TreeNode_getZero(grandson00))
-                            {
-                                BinaryToTwoBit_recursive(TreeNode_getZero(grandson00), &((*tree_root_2)->zero));
-                            }
-                            else if(NULL != TreeNode_getOne(grandson00))
-                            {
-                                BinaryToTwoBit_recursive(TreeNode_getOne(grandson00), &((*tree_root_2)->zero));
-                            }
-                            else if(NULL != TreeNode_getZero(grandson01))
-                            {
-                                BinaryToTwoBit_recursive(TreeNode_getZero(grandson01), &((*tree_root_2)->one));
-                            }
-                            else if(NULL != TreeNode_getOne(grandson01))
-                            {
-                                BinaryToTwoBit_recursive(TreeNode_getOne(grandson01), &((*tree_root_2)->one));
-                            }
-                        }
-                        else if((NO_HOP == TreeNode_getNextHop(grandson00)) && (NO_HOP != TreeNode_getNextHop(grandson01)))
-                        {
-                            // only grandson01 has next hop
-                        }
-                        else // Both grandsons NO_HOP
-                        {
-                            // code
-                        }
-                    }
-                    else if((NULL != grandson00) && (NULL == grandson01))
-                    {
-                        if(NO_HOP != TreeNode_getNextHop(grandson00))
-                        {
-                            // grandson00 has nexthop
-                            (*tree_root_2)->zero = newTreeNode_2();
-                            (*tree_root_2)->zero->nextHop = TreeNode_getNextHop(grandson00);
-                            (*tree_root_2)->one = newTreeNode_2();
-                            (*tree_root_2)->one->nextHop = TreeNode_getNextHop(son0);
-
-                            if(NULL != TreeNode_getZero(grandson00))
-                            {
-                                BinaryToTwoBit_recursive(TreeNode_getZero(grandson00), &((*tree_root_2)->zero));
-                            }
-                            else if(NULL != TreeNode_getOne(grandson00))
-                            {
-                                BinaryToTwoBit_recursive(TreeNode_getOne(grandson00), &((*tree_root_2)->zero));
-                            }
-                        }
-                        else
-                        {
-                            // No hop
-                        }
-                    }
-                    else if((NULL == grandson00) && (NULL != grandson01))
-                    {
-                        if(NO_HOP != TreeNode_getNextHop(grandson01))
-                        {
-                            // grandson01 has nexthop
-                            (*tree_root_2)->zero = newTreeNode_2();
-                            (*tree_root_2)->zero->nextHop = TreeNode_getNextHop(son0);
-                            (*tree_root_2)->one = newTreeNode_2();
-                            (*tree_root_2)->one->nextHop = TreeNode_getNextHop(grandson01);
-
-                            if(NULL != TreeNode_getZero(grandson01))
-                            {
-                                BinaryToTwoBit_recursive(TreeNode_getZero(grandson01), &((*tree_root_2)->one));
-                            }
-                            else if(NULL != TreeNode_getOne(grandson01))
-                            {
-                                BinaryToTwoBit_recursive(TreeNode_getOne(grandson01), &((*tree_root_2)->one));
-                            }
-                        }
-                        else
-                        {
-                            // No hop
-                        }
-                    }
-                    else // both grandsons NULL
-                    {
-                        (*tree_root_2)->zero = newTreeNode_2();
-                        (*tree_root_2)->zero->nextHop = TreeNode_getNextHop(son0);
-                    }
-
-                }
-                else // son0 NO_HOP
-                {
-                    if((NULL != grandson00) && (NULL != grandson01))
-                    {
-                        if((NO_HOP != TreeNode_getNextHop(grandson00)) && (NO_HOP != TreeNode_getNextHop(grandson01)))
-                        {
-                            // both have nexthop
-                        }
-                        else if((NO_HOP != TreeNode_getNextHop(grandson00)) && (NO_HOP == TreeNode_getNextHop(grandson01)))
-                        {
-                            // only grandson00 has nexthop
-                        }
-                        else if((NO_HOP == TreeNode_getNextHop(grandson00)) && (NO_HOP != TreeNode_getNextHop(grandson01)))
-                        {
-                            // only grandson01 has next hop
-                        }
-                        else // Both grandsons NO_HOP
-                        {
-                            // code
-                        }
-                    }
-                    else if((NULL != grandson00) && (NULL == grandson01))
-                    {
-                        if(NO_HOP != TreeNode_getNextHop(grandson00))
-                        {
-                            // grandson00 has nexthop
-                        }
-                        else
-                        {
-                            // No hop
-                        }
-                    }
-                    else if((NULL == grandson00) && (NULL != grandson01))
-                    {
-                        if(NO_HOP != TreeNode_getNextHop(grandson01))
-                        {
-                            // grandson01 has nexthop
-                        }
-                        else
-                        {
-                            // No hop
-                        }
-                    }
-                    else // both grandsons NULL
-                    {
-                        // what happens?
+                        add_to_tree2 = false;
                     }
                 }
-            }
-            else // son0 is NULL
-            {
-                // what happens?
-            }
 
-
-            if(NULL != son1)
-            {
-                grandson10 = TreeNode_getZero(son1);
-                grandson11 = TreeNode_getOne(son1);
-
-                if(NO_HOP != TreeNode_getNextHop(son1))
+                if(true == add_to_tree2)
                 {
-                    // code
-                }
-                else
-                {
+                    strncpy(new_address, *address, PREFIX_SIZE);
+                    TreeNode_2_buildNode(tree_root_2, new_address, TreeNode_getNextHop(tree_root));
 
                 }
             }
+            else // odd
+            {
+                add_to_tree2 = true;
+                // check children to see if it is relevant
+                if((TreeNode_getZero(tree_root) == NULL) && (TreeNode_getOne(tree_root) == NULL)) //leaf
+                {
+                    // add xxx0 to tree
+                    strncpy(new_address, *address, PREFIX_SIZE);
+                    strncat(new_address, "0", 1);
+                    TreeNode_2_buildNode(tree_root_2, new_address, TreeNode_getNextHop(tree_root));
+
+                    //add xxx1 to tree
+                    strncpy(new_address, *address, PREFIX_SIZE);
+                    strncat(new_address, "1", 1);
+                    TreeNode_2_buildNode(tree_root_2, new_address, TreeNode_getNextHop(tree_root));
+
+                }
+                else if((TreeNode_getZero(tree_root) == NULL) && (TreeNode_getOne(tree_root) != NULL)) // right child is not NULL
+                {
+                    // add prefix as xxx0
+                    strncpy(new_address, *address, PREFIX_SIZE);
+                    strncat(new_address, "0", 1);
+                    TreeNode_2_buildNode(tree_root_2, new_address, TreeNode_getNextHop(tree_root));
+
+                    if(TreeNode_getNextHop(TreeNode_getOne(tree_root)) == NO_HOP) // add prefix as xxx0
+                    {
+                        strncpy(new_address, *address, PREFIX_SIZE);
+                        strncat(new_address, "1", 1);
+                        TreeNode_2_buildNode(tree_root_2, new_address, TreeNode_getNextHop(tree_root));
+                    }
+                    else
+                    {
+                        strncpy(new_address, *address, PREFIX_SIZE); // add prefix as xxx1
+                        strncat(new_address, "0", 1);
+                        TreeNode_2_buildNode(tree_root_2, new_address, TreeNode_getNextHop(tree_root));
+                    }
+
+                }
+                else if((TreeNode_getZero(tree_root) != NULL) && (TreeNode_getOne(tree_root) == NULL)) // left child is not NULL
+                {
+                    // add prefix as xxx1 or xxx0
+                    // check if left child has next hop
+                    if(TreeNode_getNextHop(TreeNode_getZero(tree_root)) == NO_HOP) // add prefix as xxx0
+                    {
+                        strncpy(new_address, *address, PREFIX_SIZE);
+                        strncat(new_address, "0", 1);
+                        TreeNode_2_buildNode(tree_root_2, new_address, TreeNode_getNextHop(tree_root));
+                    }
+                    else
+                    {
+                        strncpy(new_address, *address, PREFIX_SIZE); // add prefix as xxx1
+                        strncat(new_address, "1", 1);
+                        TreeNode_2_buildNode(tree_root_2, new_address, TreeNode_getNextHop(tree_root));
+                    }
+                }
+                else if((TreeNode_getZero(tree_root) != NULL) && (TreeNode_getOne(tree_root) != NULL)) // both children not NULL
+                {
+                    if((TreeNode_getNextHop(TreeNode_getZero(tree_root)) != NO_HOP) && (TreeNode_getNextHop(TreeNode_getOne(tree_root)) != NO_HOP)) // both children have hop
+                    {
+                        // do nothing
+                    }
+                    else if((TreeNode_getNextHop(TreeNode_getZero(tree_root)) == NO_HOP) && (TreeNode_getNextHop(TreeNode_getOne(tree_root)) != NO_HOP)) //right child has hop
+                    {
+                        // add prefix as xxx0
+                        strncpy(new_address, *address, PREFIX_SIZE);
+                        strncat(new_address, "0", PREFIX_SIZE);
+                        TreeNode_2_buildNode(tree_root_2, new_address, TreeNode_getNextHop(tree_root));
+
+                    }
+                    else if((TreeNode_getNextHop(TreeNode_getZero(tree_root)) != NO_HOP) && (TreeNode_getNextHop(TreeNode_getOne(tree_root)) == NO_HOP)) //left child has hop
+                    {
+                        // add prefix as xxx1
+                        strncpy(new_address, *address, PREFIX_SIZE);
+                        strncat(new_address, "1", PREFIX_SIZE);
+                        TreeNode_2_buildNode(tree_root_2, new_address, TreeNode_getNextHop(tree_root));
+
+                    }
+                    else // no child has hop
+                    {
+                        // add xxx0 to tree
+                        strncpy(new_address, *address, PREFIX_SIZE);
+                        strncat(new_address, "0", PREFIX_SIZE);
+                        TreeNode_2_buildNode(tree_root_2, new_address, TreeNode_getNextHop(tree_root));
+
+                        //add xxx1 to tree
+                        strncpy(new_address, *address, PREFIX_SIZE);
+                        strncat(new_address, "1", PREFIX_SIZE);
+                        TreeNode_2_buildNode(tree_root_2, new_address, TreeNode_getNextHop(tree_root));
+
+                    }
+                }
+            }
+            free(new_address);
+        }
+        address_legth = strnlen(*address, PREFIX_SIZE);
+        if(address_legth > 0){
+            (*address)[address_legth - 1] = '\0';
+        }
 
     return;
 }
 
-TreeNode_2* BinaryToTwoBit_(TreeNode *tree_root)
+TreeNode_2* BinaryToTwoBit(TreeNode *tree_root)
 {
     TreeNode_2* tree_root2 = NULL;
+    char* address = NULL;
+
+        address = malloc(PREFIX_SIZE * sizeof(char));
+        memset(address, 0, PREFIX_SIZE * sizeof(char));
 
         tree_root2 = newTreeNode_2();
 
         tree_root2->nextHop = TreeNode_getNextHop(tree_root);
 
-        BinaryToTwoBit_recursive(tree_root, &tree_root2);
+        BinaryToTwoBit_recursive(tree_root, &tree_root2, &address);
+
+        free(address);
 
     return tree_root2;
 }

@@ -202,7 +202,7 @@ int main(int argc, char const *argv[]) {
                     else
                     {
                         tree_root_2 = BinaryToTwoBit(tree_root);
-                        fprintf(stdout, "Convertion complete!.\n");
+                        fprintf(stdout, "Convertion complete!\n");
                     }
                     break;
                 }
@@ -212,8 +212,7 @@ int main(int argc, char const *argv[]) {
                     {
                         fprintf(stdout, "No tree to print! Use option 6 first.\n");
                     }else{
-                        fprintf(stdout, "This functionality is not implemented yet.\n");
-                        // PrintTableEven
+                        PrintTableEven(tree_root_2, address);
                     }
                     break;
                 }
