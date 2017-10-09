@@ -21,14 +21,16 @@ void TreeNode_2_setTwo(TreeNode_2 *, TreeNode_2 *);
 void TreeNode_2_setThree(TreeNode_2 *, TreeNode_2 *);
 void TreeNode_2_setNextHop(TreeNode_2 *, int);
 
-// Destructor TODO
+// Destructor
 void freeTree2(TreeNode_2 * tree_root_2);
 
 /* Extra functionality functions */
 
-void Recursive2BitPrefixTree(TreeNode *,TreeNode_2 *, char *);
-void Insert2BitPrefix(TreeNode_2 *root, char *, int);
 TreeNode_2 * BinaryToTwoBit(TreeNode *);
+// support for BinaryToTwoBit
+void BinaryToTwoBit_recursive(TreeNode *tree_root, TreeNode_2 **tree_root_2, char** address);
+void TreeNode_2_buildNode(TreeNode_2 **tree_root_2, char two_bit_address[PREFIX_SIZE], int nextHop);
+
 void PrintTableEven();
 
 #endif
