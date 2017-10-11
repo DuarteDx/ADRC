@@ -1,10 +1,11 @@
 #include "../include/table.h"
 
-/* struct tableEntry
- * Description: a row of the prefix table. The whole prefix table is a linked list of tableEntry elements
+/* struct tableEntry_
+ * Alias: TableEntry;
+ * Description: a row of the prefix table. The whole prefix table is a linked list of tableEntry_ elements
  * Fields: char prefix[PREFIX_SIZE]: string representation of a prefix
  *         int nextHop: the nextHop corresponding to the prefix
- *         struct tableEntry *next: pointer to the next row (also a struct ableEntry)
+ *         struct tableEntry_ *next: pointer to the next row
 */
 struct tableEntry_
 {
@@ -13,14 +14,25 @@ struct tableEntry_
     TableEntry *next;
 };
 
+TableEntry * newTableEntry()
+{
+    TableEntry *tableEntry = NULL;
+
+        tableEntry = (TableEntry *)malloc(sizeof(TableEntry));
+        tableEntry->nextHop = NO_HOP;
+        tableEntry->next = NULL;
+
+    return tableEntry;
+}
+
+char * TableEntry_getPrefix(TableEntry *tableEntry)
+{
+    return tableEntry->prefix;
+}
+
 int TableEntry_getNextHop(TableEntry *tableEntry)
 {
     return tableEntry->nextHop;
-}
-
-char* TableEntry_getPrefix(TableEntry *tableEntry)
-{
-    return tableEntry->prefix;
 }
 
 TableEntry * TableEntry_getNextTableEntry(TableEntry *tableEntry)
@@ -42,22 +54,27 @@ void TableEntry_setNextHop(TableEntry *tableEntry, int nextHop)
     return;
 }
 
-void TableEntry_insertLast(TableEntry *current, TableEntry *next)
+void TableEntry_setNextTableEntry(TableEntry *current, TableEntry *next)
 {
     current->next = next;
 
     return;
 }
 
-TableEntry * newTableEntry()
+void freeTable(TableEntry *table_head)
 {
-    TableEntry *tableEntry = NULL;
+    TableEntry *aux_table_entry = NULL;
 
-        tableEntry = (TableEntry *)malloc(sizeof(TableEntry));
-        tableEntry->nextHop = -1;
-        tableEntry->next = NULL;
+        aux_table_entry = table_head;
 
-    return tableEntry;
+        while(NULL != aux_table_entry)
+        {
+            table_head = TableEntry_getNextTableEntry(table_head);
+            free(aux_table_entry);
+            aux_table_entry = table_head;
+        }
+
+    return;
 }
 
 TableEntry * readTable(FILE *fp)
@@ -82,11 +99,11 @@ TableEntry * readTable(FILE *fp)
                 continue;
             }
 
-            TableEntry_setNextHop(aux_table_entry, nextHop);
+            aux_table_entry->nextHop = nextHop;
             TableEntry_setPrefix(aux_table_entry, prefix);
 
             aux_table_entry2 = newTableEntry();
-            TableEntry_insertLast(aux_table_entry, aux_table_entry2);
+            aux_table_entry->next = aux_table_entry2;
             aux_table_entry3 = aux_table_entry;
             aux_table_entry = aux_table_entry2;
         }
@@ -100,26 +117,11 @@ TableEntry * readTable(FILE *fp)
 void printTable(TableEntry *table_head)
 {
     TableEntry *aux_table_entry = NULL;
-    long int i = 0;
+    int i = 0;
 
-        for(aux_table_entry = table_head, i = 0; aux_table_entry != NULL; aux_table_entry = TableEntry_getNextTableEntry(aux_table_entry), i += 1)
+        for(aux_table_entry = table_head, i = 0; aux_table_entry != NULL; aux_table_entry = aux_table_entry->next, i += 1)
         {
-            fprintf(stdout, "Entry %ld: Prefix: %s | Next hop: %d\n", i, TableEntry_getPrefix(aux_table_entry), TableEntry_getNextHop(aux_table_entry));
-        }
-
-    return;
-}
-
-void freeTable(TableEntry *table_head)
-{
-    TableEntry *aux_table_entry = NULL;
-
-        aux_table_entry = table_head;
-
-        while(NULL != aux_table_entry) {
-            table_head = TableEntry_getNextTableEntry(table_head);
-            free(aux_table_entry);
-            aux_table_entry = table_head;
+            fprintf(stdout, "Entry %d: Prefix: %s | Next hop: %d\n", i, aux_table_entry->prefix, aux_table_entry->nextHop);
         }
 
     return;

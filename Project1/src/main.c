@@ -1,14 +1,16 @@
+#include "../include/functions.h"
 #include "../include/table.h"
 #include "../include/tree.h"
-#include "../include/functions.h"
 #include "../include/tree2.h"
 
-int main(int argc, char const *argv[]) {
+int main(int argc, char const *argv[])
+{
 
     int choice = 0;
     FILE *fp = NULL;
     TableEntry *table_head = NULL;
     TreeNode *tree_root = NULL;
+    TreeNode_2 *tree_root_2 = NULL;
     bool keepRunning = true;
     char address[PREFIX_SIZE];
     char lookupPrefix[PREFIX_SIZE];
@@ -19,19 +21,12 @@ int main(int argc, char const *argv[]) {
     char *char_buffer = NULL;
     char *ret_val_fgets = NULL;
     int ret_val_sscanf = 0;
-    int i = 0;
-
-    //Extra functions
-    TreeNode_2 *tree_root_2 = NULL;
 
         // static array initilization
-        for(i = 0; i < PREFIX_SIZE; i += 1)
-        {
-            address[i] = '\0';
-            lookupPrefix[i] = '\0';
-            insertPrefix[i] = '\0';
-            deletePrefix[i] = '\0';
-        }
+        memset(address, 0, PREFIX_SIZE * sizeof(char));
+        memset(lookupPrefix, 0, PREFIX_SIZE * sizeof(char));
+        memset(insertPrefix, 0, PREFIX_SIZE * sizeof(char));
+        memset(deletePrefix, 0, PREFIX_SIZE * sizeof(char));
 
         // Check for correct number of arguments
         if(argc != 2)

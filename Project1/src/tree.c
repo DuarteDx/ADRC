@@ -2,13 +2,32 @@
 #include "../include/tree.h"
 #endif
 
-// The left child is zero, the right child is one
+/* struct treeNode_
+ * Alias: TreeNode;
+ * Description: a node of a (binary) tree.
+ * For visualization purposes, we suppose the "left" child is 'zero', the "right" child is 'one'
+ * Fields: int nextHop: the nextHop corresponding to a prefix
+ *         struct treeNode_ *zero: pointer to the "left" child
+ *         struct treeNode_ *one: pointer to the "right" child
+*/
 struct treeNode_
 {
     int nextHop;
     TreeNode *zero;
     TreeNode *one;
 };
+
+TreeNode * newTreeNode(void)
+{
+    TreeNode *tree_node = NULL;
+
+        tree_node = (TreeNode *)malloc(sizeof(TreeNode));
+        tree_node->nextHop = NO_HOP;
+        tree_node->zero = NULL;
+        tree_node->one = NULL;
+
+    return tree_node;
+}
 
 int TreeNode_getNextHop(TreeNode *treeNode)
 {
@@ -25,6 +44,13 @@ TreeNode * TreeNode_getOne(TreeNode *treeNode)
     return treeNode->one;
 }
 
+void TreeNode_setNextHop(TreeNode *treeNode, int nextHop)
+{
+    treeNode->nextHop = nextHop;
+
+    return;
+}
+
 void TreeNode_setZero(TreeNode *treeNode, TreeNode *nextZero)
 {
     treeNode->zero = nextZero;
@@ -39,28 +65,23 @@ void TreeNode_setOne(TreeNode *treeNode, TreeNode *nextOne)
     return;
 }
 
-void TreeNode_setNextHop(TreeNode *treeNode, int nextHop)
+void freeTree(TreeNode *tree_root)
 {
-    treeNode->nextHop = nextHop;
+    if(NULL == tree_root)
+    {
+        return;
+    }
+
+    freeTree(tree_root->zero);
+    freeTree(tree_root->one);
+
+    free(tree_root);
 
     return;
 }
 
-TreeNode * newTreeNode(void)
+TreeNode * PrefixTree(TableEntry *table_head)
 {
-    TreeNode *tree_node = NULL;
-
-        tree_node = (TreeNode *)malloc(sizeof(TreeNode));
-        tree_node->zero = NULL;
-        tree_node->one = NULL;
-        tree_node->nextHop = NO_HOP;
-
-    return tree_node;
-}
-
-//Basic functions
-TreeNode * PrefixTree(TableEntry *table_head){
-
     TreeNode *tree_root = NULL;
     TreeNode *tree_aux = NULL;
     TableEntry *aux = NULL;
@@ -78,7 +99,8 @@ TreeNode * PrefixTree(TableEntry *table_head){
         {
 
             //If the prefix is e (the rest) we update the tree_root next_hop
-            if(strncmp(TableEntry_getPrefix(aux), "e", PREFIX_SIZE) == 0){
+            if(strncmp(TableEntry_getPrefix(aux), "e", PREFIX_SIZE) == 0)
+            {
                 tree_root->nextHop = TableEntry_getNextHop(aux);
             }
             else //If the prefix is not "e" we create as many nodes as we need to match the prefix
@@ -128,9 +150,8 @@ TreeNode * PrefixTree(TableEntry *table_head){
     return tree_root;
 }
 
-//Recusive function, needs to be called with the tree_root and an empty string
-void PrintTable(TreeNode *tree_head, char address[PREFIX_SIZE]){
-
+void PrintTable(TreeNode *tree_head, char address[PREFIX_SIZE])
+{
     if(NO_HOP != tree_head->nextHop)
     {
         //Special case for the tree root
@@ -162,8 +183,8 @@ void PrintTable(TreeNode *tree_head, char address[PREFIX_SIZE]){
     return;
 }
 
-int LookUp(TreeNode *tree_root, char address[PREFIX_SIZE]){
-
+int LookUp(TreeNode *tree_root, char address[PREFIX_SIZE])
+{
     int next_hop = NO_HOP;
     TreeNode *tree_aux = NULL;
     unsigned long int i = 0;
@@ -219,8 +240,8 @@ int LookUp(TreeNode *tree_root, char address[PREFIX_SIZE]){
     return next_hop;
 }
 
-TreeNode * InsertPrefix(TreeNode *tree_root, char address[PREFIX_SIZE], int next_hop){
-
+TreeNode * InsertPrefix(TreeNode *tree_root, char address[PREFIX_SIZE], int next_hop)
+{
     unsigned long int i = 0;
     TreeNode *tree_aux = NULL;
 
@@ -265,99 +286,84 @@ TreeNode * InsertPrefix(TreeNode *tree_root, char address[PREFIX_SIZE], int next
     return tree_root;
 }
 
-TreeNode * DeletePrefix(TreeNode *tree_root, char prefix[PREFIX_SIZE]){
-
+TreeNode * DeletePrefix(TreeNode *tree_root, char prefix[PREFIX_SIZE])
+{
     unsigned long int i = 0;
     TreeNode *tree_aux = tree_root;
     TreeNode *delete_after = NULL;
     int delete_direction = -1;
     int save_direction = 0;
 
-    for(i = 0; i < strnlen(prefix, PREFIX_SIZE); i += 1)
-    {
-        //Reset save direction flag
-        save_direction = 0;
-
-        if(tree_aux != NULL)
+        for(i = 0; i < strnlen(prefix, PREFIX_SIZE); i += 1)
         {
-            //Save this node if it has two children or has a next_hop
-            if(((tree_aux->zero != NULL) && (tree_aux->one != NULL)) || (tree_aux->nextHop != NO_HOP))
-            {
-                save_direction = 1;
-                delete_after = tree_aux;
-            }
+            //Reset save direction flag
+            save_direction = 0;
 
-            //Go to the next node
-            if('0' == prefix[i])
+            if(tree_aux != NULL)
             {
-                //Save the direction in which we have to delete from
-                if(save_direction)
+                //Save this node if it has two children or has a next_hop
+                if(((tree_aux->zero != NULL) && (tree_aux->one != NULL)) || (tree_aux->nextHop != NO_HOP))
                 {
-                    delete_direction = LEFT;
+                    save_direction = 1;
+                    delete_after = tree_aux;
                 }
 
-                tree_aux = tree_aux->zero;
-            }
-            else if('1' == prefix[i])
-            {
-                //Save the direction in which we have to delete from
-                if(save_direction)
+                //Go to the next node
+                if('0' == prefix[i])
                 {
-                    delete_direction = RIGHT;
+                    //Save the direction in which we have to delete from
+                    if(save_direction)
+                    {
+                        delete_direction = LEFT;
+                    }
+
+                    tree_aux = tree_aux->zero;
+                }
+                else if('1' == prefix[i])
+                {
+                    //Save the direction in which we have to delete from
+                    if(save_direction)
+                    {
+                        delete_direction = RIGHT;
+                    }
+
+                    tree_aux = tree_aux->one;
+                }
+                else
+                {
+                    fprintf(stdout, "Prefix does not exist\n");
+                    return tree_root;
                 }
 
-                tree_aux = tree_aux->one;
             }
             else
             {
                 fprintf(stdout, "Prefix does not exist\n");
                 return tree_root;
             }
+        }
 
-        }
-        else
+        //If the node we found is not a leaf we just delete the next-hop
+        if((tree_aux->zero != NULL) || (tree_aux->one != NULL))
         {
-            fprintf(stdout, "Prefix does not exist\n");
-            return tree_root;
+            //Reset the next hop
+            tree_aux->nextHop = NO_HOP;
         }
-    }
-
-    //If the node we found is not a leaf we just delete the next-hop
-    if((tree_aux->zero != NULL) || (tree_aux->one != NULL))
-    {
-        //Reset the next hop
-        tree_aux->nextHop = NO_HOP;
-    }
-    else //If it's a leaf we need to delete eveything node that has no purpose in the tree anymore
-    {
-        if(delete_direction == LEFT)
+        else //If it's a leaf we need to delete eveything node that has no purpose in the tree anymore
         {
-            //Free nodes from delete_after downwards
-            freeTree(delete_after->zero);
-            delete_after->zero = NULL;
+            if(delete_direction == LEFT)
+            {
+                //Free nodes from delete_after downwards
+                freeTree(delete_after->zero);
+                delete_after->zero = NULL;
+            }
+            else if(delete_direction == RIGHT)
+            {
+                //Free nodes from delete_after downwards
+                freeTree(delete_after->one);
+                delete_after->one = NULL;
+            }
         }
-        else if(delete_direction == RIGHT)
-        {
-            //Free nodes from delete_after downwards
-            freeTree(delete_after->one);
-            delete_after->one = NULL;
-        }
-    }
 
     return tree_root;
-}
-
-void freeTree(TreeNode *tree_root)
-{
-    if(NULL == tree_root)
-    {
-        return;
-    }
-
-    freeTree(tree_root->zero);
-    freeTree(tree_root->one);
-
-    free(tree_root);
-
-    return;
 }
