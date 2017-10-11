@@ -1,3 +1,6 @@
+#ifndef _DEFS_H_
+#define _DEFS_H_
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -15,4 +18,6 @@
  */
 #ifndef PREFIX_SIZE
 #define PREFIX_SIZE 128
+#endif
+
 #endif

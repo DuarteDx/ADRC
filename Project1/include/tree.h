@@ -1,5 +1,6 @@
 #ifndef _TREE_H_
 #define _TREE_H_
+
 #include "defs.h"
 #include "../include/table.h"
 
@@ -11,10 +12,6 @@
 #define RIGHT 1
 #endif
 
-#ifndef NO_HOP
-#define NO_HOP -1
-#endif
-
 typedef struct treeNode_ TreeNode;
 
 /* Support functions */
@@ -22,7 +19,7 @@ typedef struct treeNode_ TreeNode;
 // Constructors / initializers
 
 /* newTreeNode
- * Description: Allocates memory for a new tree node element and initializes its fields
+ * Description: Allocates memory for a new binary tree node element and initializes its fields
  * Arguments: void
  * Return value: TreeNode * - pointer to the alocated TreeNode element
 */
@@ -38,14 +35,14 @@ TreeNode * newTreeNode(void);
 int TreeNode_getNextHop(TreeNode *treeNode);
 
 /* TreeNode_getZero
- * Description: getter for the zero field of a TreeNode (a pointer to the "left" child)
+ * Description: getter for the 'zero' field of a TreeNode (a pointer to the "left" child)
  * Arguments: TreeNode *treeNode - pointer to the node from which we want the pointer to its "left" child
  * Return value: TreeNode * - pointer to the "left" child of the parent we called the function on
 */
 TreeNode * TreeNode_getZero(TreeNode *treeNode);
 
 /* TreeNode_getOne
- * Description: getter for the one field of a TreeNode (a pointer to the "right" child)
+ * Description: getter for the 'one' field of a TreeNode (a pointer to the "right" child)
  * Arguments: TreeNode *treeNode - pointer to the node from which we want the pointer to its "right" child
  * Return value: TreeNode * - pointer to the "right" child of the parent we called the function on
 */
@@ -87,9 +84,14 @@ void TreeNode_setOne(TreeNode *treeNode, TreeNode *nextOne);
 void freeTree(TreeNode *tree_root);
 
 // TODO: Document the basic functionality functions in this header file.
+/* PrefixTree
+ * Description: reads a prefix table from memory and returns a prefix tree representation of that table;
+ * Arguments: TableEntry *table_head - pointer to the first element (row) of the prefix table
+ * Return value: TreeNode * - pointer to the root of the prefix tree created from the table.
+*/
+TreeNode * PrefixTree(TableEntry *table_head);
 
-/* Basic functionality functions */
-TreeNode * PrefixTree(TableEntry *tree_root);
+//Recusive function, needs to be called with the tree_root and an empty string
 void PrintTable(TreeNode *tree_root, char address[PREFIX_SIZE]);
 int LookUp(TreeNode *tree_root, char address[PREFIX_SIZE]);
 TreeNode * InsertPrefix(TreeNode *tree_root, char address[PREFIX_SIZE], int nextHop);
