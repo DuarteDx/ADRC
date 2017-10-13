@@ -83,7 +83,6 @@ void TreeNode_setOne(TreeNode *treeNode, TreeNode *nextOne);
 */
 void freeTree(TreeNode *tree_root);
 
-// TODO: Document the basic functionality functions in this header file.
 /* PrefixTree
  * Description: reads a prefix table from memory and returns a prefix tree representation of that table;
  * Arguments: TableEntry *table_head - pointer to the first element (row) of the prefix table

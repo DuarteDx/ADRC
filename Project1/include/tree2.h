@@ -104,15 +104,12 @@ void TreeNode_2_setThree(TreeNode_2 *treeNode_2, TreeNode_2 *nextThree);
 */
 void freeTree2(TreeNode_2 *tree_root_2);
 
-// TODO: Document all the functions in this header file.
 /* Extra functionality functions */
-
+// This function just sets up the required auxiliary variables for the recursion in BinaryToTwoBit_recursive
 TreeNode_2 * BinaryToTwoBit(TreeNode *tree_root);
 // support for BinaryToTwoBit
 void BinaryToTwoBit_recursive(TreeNode *tree_root, TreeNode_2 **tree_root_2, char** address);
 void TreeNode_2_buildNode(TreeNode_2 **tree_root_2, char two_bit_address[PREFIX_SIZE], int nextHop);
-
-
 void PrintTableEven();
 
 #endif

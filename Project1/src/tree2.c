@@ -282,6 +282,7 @@ void TreeNode_2_buildNode(TreeNode_2 **tree_root_2, char two_bit_address[PREFIX_
 
         aux = tree_root_2;
 
+        // we must firgure out how deep we must go each iteration for the specified address
         address_legth = strnlen(two_bit_address, PREFIX_SIZE);
         even_odd = address_legth/2 + 1;
         if((even_odd % 2) == 0) // even
@@ -293,6 +294,7 @@ void TreeNode_2_buildNode(TreeNode_2 **tree_root_2, char two_bit_address[PREFIX_
             for_control = even_odd;
         }
 
+        // traverse the path to the address, building it along the way it doesn't exist already
         for(i = 0; i < for_control; i += 2)
         {
             if((two_bit_address[i] == '0') && (two_bit_address[i+1] == '0'))
