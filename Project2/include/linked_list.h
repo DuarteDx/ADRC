@@ -217,6 +217,8 @@ bool SinglyLinkedList_nodeExistsWithItem(SinglyLinkedList* head, Item item, bool
 SinglyLinkedList* SinglyLinkedList_findAndRetrieveNodeWithItem(SinglyLinkedList* head, Item item, bool(*Item_Compare)(Item, Item));
 Item SinglyLinkedList_findAndRetrieveItem(SinglyLinkedList* head, Item item, bool(*Item_Compare)(Item, Item));
 
+SinglyLinkedList* SinglyLinkedList_insertAtHead(SinglyLinkedList* head, SinglyLinkedList* aux);
+
 // TODO: Implement and check if more are needed
 DoublyLinkedList* DoublyLinkedList_newNode(Item);
 void DoublyLinkedList_freeNode(DoublyLinkedList*, void(*)(Item));

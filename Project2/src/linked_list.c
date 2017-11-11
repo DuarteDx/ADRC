@@ -53,6 +53,12 @@ void SinglyLinkedList_insertNext(SinglyLinkedList* node1, SinglyLinkedList* node
     return;
 }
 
+SinglyLinkedList* SinglyLinkedList_insertAtHead(SinglyLinkedList* head, SinglyLinkedList* aux)
+{
+    aux->next = head;
+    return aux;
+}
+
 void SinglyLinkedList_insertAtEnd(SinglyLinkedList* head, SinglyLinkedList* node)
 {
     SinglyLinkedList* aux;

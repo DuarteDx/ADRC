@@ -2,29 +2,28 @@
 #define _GRAPH_H_
 #endif
 
-typedef struct _edge_ {
-    int v;
-    int w;
-} Edge;
+#ifndef _DEFS_H_
+#include "./defs.h"
+#endif
 
-Edge EDGE(int, int);
+#ifndef _EDGE_H
+#include "./edge.h"
+#endif
 
-typedef struct node *link;
+#ifndef _LINKED_LIST_H
+#include "./linked_list.h"
+#endif
 
-struct node
-{
-    int v;
-    link next;
-};
-
-link NEW(int v, link next);
+/* Edge relationships:
+ * -1 - no relationship
+ * 1 - tail is a provider of head;
+ * 2 - tail is a peer of head;
+ * 3 - tail is a costumer of head;
+ */
 
 /* Adjacency list representation of a graph */
-typedef struct {
-    int V;
-    int E;
-    link *adj;
-} *Graph;
+typedef struct graph_ Graph;
+
 
 Graph GRAPHinit(int);
 

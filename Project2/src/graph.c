@@ -1,9 +1,7 @@
-#include <stdio.h>
-#include <stdlib.h>
+#include "../include/graph.h"
 
-int main(int argc, char const *argv[])
-{
-    fprintf(stdout, "Hello World\n");
-
-    return 0;
-}
+struct graph_ {
+    int V;
+    int E;
+    Node **adj;
+};

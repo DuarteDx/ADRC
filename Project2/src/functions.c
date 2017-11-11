@@ -33,3 +33,40 @@ int showMenu(void)
 
     return option;
 }
+
+SinglyLinkedList * readFile(FILE *fp)
+{
+    SinglyLinkedList *edge_list_head = NULL;
+    SinglyLinkedList *aux = NULL;
+    Edge *edge = NULL;
+    long int head = 0;
+    long int tail = 0;
+    int relationship = 0;
+    char buffer[CHAR_BUFFER_SIZE];
+    int ret_val_sscanf = 0;
+
+        while(NULL != fgets(buffer, PREFIX_SIZE, fp))
+        {
+            ret_val_sscanf = sscanf(buffer, "%ld %ld %d", &tail, &head, &relationship);
+            if(ret_val_sscanf != 2)
+            {
+                continue;
+            }
+
+            edge = newEdge();
+            Edge_setHead(edge, head);
+            Edge_setTail(edge, tail);
+            Edge_setRelationship(edge, relationship);
+
+            aux = SinglyLinkedList_newNode(edge);
+
+            aux = SinglyLinkedList_insertAtHead(edge_list_head, aux);
+
+
+        }
+
+        //free(aux_table_entry);
+        //aux_table_entry3->next = NULL;
+
+    return edge_list_head;
+}
