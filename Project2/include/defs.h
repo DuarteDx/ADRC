@@ -6,6 +6,13 @@
 #include <string.h>
 #include <stdbool.h>
 
+/**
+ * @brief Generic pointer type Item
+ *
+ * Saves the pain of always writing the *, making the code easier to read
+ */
+typedef void *Item;
+
 /* CHAR_BUFFER_SIZE
  * Description: generic text input buffer size limit
 */
