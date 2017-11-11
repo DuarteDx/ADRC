@@ -141,7 +141,8 @@ void SinglyLinkedList_printListItems(SinglyLinkedList* head, void(*Item_Print)(I
 {
     SinglyLinkedList* aux = NULL;
 
-    for (aux = head; aux != NULL; aux = aux->next){
+    for (aux = head; aux != NULL; aux = aux->next)
+    {
         (*Item_Print)(aux->item);
     }
 

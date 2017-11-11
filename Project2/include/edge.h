@@ -13,3 +13,4 @@ Edge * newEdge();
 void Edge_setHead(Edge *edge, int head);
 void Edge_setTail(Edge *edge, int tail);
 void Edge_setRelationship(Edge *edge, int relationship);
+void printEdge(Edge* edge);

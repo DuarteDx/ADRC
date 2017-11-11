@@ -41,23 +41,23 @@ int main(int argc, char const *argv[])
                     if(NULL == edge_list_head)
                     {
                         edge_list_head = readFile(fp);
-                        tree_root = PrefixTree(table_head);
+                        // TODO: create graph from edge list
                     }
                     else
                     {
-                        fprintf(stdout, "The file was already read and the tree is in memory!\n");
+                        fprintf(stdout, "The file was already read and the edges are in memory\n");
                     }
                     break;
                 }
-                case 2:
+                /*case 2:
                 {
-                    if(NULL == tree_root)
+                    if(NULL == edge_list_head)
                     {
                         fprintf(stdout, "No tree to print! Use option 1 first.\n");
                     }
                     else
                     {
-                        PrintTable(tree_root, address);
+                        //PrintTable(tree_root, address);
                     }
                     break;
                 }
@@ -196,7 +196,7 @@ int main(int argc, char const *argv[])
                         PrintTableEven(tree_root_2, address);
                     }
                     break;
-                }
+                }*/
                 default:
                 {
                     keepRunning = false;
@@ -206,22 +206,7 @@ int main(int argc, char const *argv[])
         }
 
         free(char_buffer);
-        if(NULL != table_head)
-        {
-            freeTable(table_head);
-        }
-        if(NULL != tree_root)
-        {
-            freeTree(tree_root);
-        }
-        if(NULL != tree_root_2)
-        {
-            freeTree2(tree_root_2);
-        }
-
         fclose(fp);
-
-
 
     return 0;
 }

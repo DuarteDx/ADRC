@@ -10,13 +10,7 @@ int showMenu(void)
         char_buffer = (char *)malloc(CHAR_BUFFER_SIZE * sizeof(char));
 
         fprintf(stdout, "\nChoose a function to call (number); any other number exits the program:\n");
-        fprintf(stdout, "1 - PrefixTree: reads a prefix tree from a text file and returns a prefix tree representation of that table.\n");
-        fprintf(stdout, "2 - PrintTable: receives as input a prefix tree and prints to screen the corresponding table.\n");
-        fprintf(stdout, "3 - LookUp: receives as input a prefix tree and an address and returns the next-hop for that address\n");
-        fprintf(stdout, "4 - InsertPrefix: that receives as input a prefix tree, a prefix and the associated next-hop, and returns a prefix tree with the prefix included.\n");
-        fprintf(stdout, "5 - DeletePrefix: receives as input a prefix tree and a prefix and returns a prefix tree with the prefix withdrawn.\n");
-        fprintf(stdout, "6 - BONUS - BinaryToTwoBit: receives as input a prefix tree and returns and equivalent two-bit prefix tree.\n");
-        fprintf(stdout, "7 - BONUS - PrintTableEven: receives as input a two-bit prefix table and prints to screen the corresponding prfix table of even length prefixes.\n");
+        fprintf(stdout, "1 - Reads a file into an edge list.\n");
 
         ret_val_fgets = fgets(char_buffer, sizeof(char_buffer), stdin);
         if(NULL == ret_val_fgets)
@@ -60,13 +54,15 @@ SinglyLinkedList * readFile(FILE *fp)
 
             aux = SinglyLinkedList_newNode(edge);
 
-            aux = SinglyLinkedList_insertAtHead(edge_list_head, aux);
-
-
+            edge_list_head = SinglyLinkedList_insertAtHead(edge_list_head, aux);
         }
 
-        //free(aux_table_entry);
-        //aux_table_entry3->next = NULL;
-
     return edge_list_head;
+}
+
+void printEdges(SinglyLinkedList *edge_list_head)
+{
+    SinglyLinkedList_printListItems(edge_list_head, &printEdge);
+
+    return;
 }

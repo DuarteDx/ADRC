@@ -40,3 +40,10 @@ void Edge_setRelationship(Edge *edge, int relationship)
 
     return;
 }
+
+void printEdge(Edge* edge)
+{
+    fprintf(stdout, "Tail: %ld | Head: %ld | Relationship: %d\n", edge->tail, edge->head, edge->relationship);
+
+    return;
+}
