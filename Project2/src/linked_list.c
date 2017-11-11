@@ -2,6 +2,18 @@
 #include "../include/linked_list.h"
 #endif
 
+
+struct listnode
+{
+    Item this;
+    struct listnode * next;
+};
+
+ListNode * ListInit()
+{
+    return NULL;
+}
+
 struct SinglyLinkedList_ {
     Item item;                  /**< A pointer to the payload of the node */
     SinglyLinkedList* next;     /**< A pointer to the next node on the list */

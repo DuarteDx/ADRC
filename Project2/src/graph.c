@@ -1,7 +1,12 @@
 #include "../include/graph.h"
 
 struct graph_ {
-    int V;
-    int E;
+    int v;
+    int e;
     Node **adj;
 };
+
+int GetGraphVertices(Graph *g)
+{
+    return g->v;
+}

@@ -14,6 +14,10 @@
 #include "./linked_list.h"
 #endif
 
+#ifndef _HEAP_H
+#include "./heap.h"
+#endif
+
 /* Edge relationships:
  * -1 - no relationship
  * 1 - tail is a provider of head;
@@ -38,3 +42,5 @@ int randV(Graph);
 Graph GRAPHrandE(int, int);
 
 Graph GRAPHrandp(int, int);
+
+int GetGraphVertices(Graph *);
