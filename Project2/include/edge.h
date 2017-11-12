@@ -10,7 +10,14 @@ typedef struct edge_ Edge;
 
 Edge * newEdge();
 
-void Edge_setHead(Edge *edge, int head);
-void Edge_setTail(Edge *edge, int tail);
+void Edge_setHead(Edge *edge, long int head);
+void Edge_setTail(Edge *edge, long int tail);
 void Edge_setRelationship(Edge *edge, int relationship);
-void printEdge(Edge* edge);
+
+long int Edge_getHead(Edge *edge);
+long int Edge_getTail(Edge *edge);
+int Edge_getRelationship(Edge *edge);
+
+void printEdge(Edge *edge);
+
+void freeEdge(Edge *edge);

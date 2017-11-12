@@ -20,14 +20,14 @@ Edge * newEdge()
     return edge;
 }
 
-void Edge_setHead(Edge *edge, int head)
+void Edge_setHead(Edge *edge, long int head)
 {
     edge->head = head;
 
     return;
 }
 
-void Edge_setTail(Edge *edge, int tail)
+void Edge_setTail(Edge *edge, long int tail)
 {
     edge->tail = tail;
 
@@ -41,9 +41,31 @@ void Edge_setRelationship(Edge *edge, int relationship)
     return;
 }
 
+long int Edge_getHead(Edge *edge)
+{
+    return edge->head;
+}
+
+long int Edge_getTail(Edge *edge)
+{
+    return edge->tail;
+}
+
+int Edge_getRelationship(Edge *edge)
+{
+    return edge->relationship;
+}
+
 void printEdge(Edge* edge)
 {
-    fprintf(stdout, "Tail: %ld | Head: %ld | Relationship: %d\n", edge->tail, edge->head, edge->relationship);
+    fprintf(stdout, "Tail: %7ld | Head: %7ld | Relationship: %d\n", edge->tail, edge->head, edge->relationship);
+
+    return;
+}
+
+void freeEdge(Edge* edge)
+{
+    free(edge);
 
     return;
 }

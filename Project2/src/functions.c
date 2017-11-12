@@ -11,6 +11,7 @@ int showMenu(void)
 
         fprintf(stdout, "\nChoose a function to call (number); any other number exits the program:\n");
         fprintf(stdout, "1 - Reads a file into an edge list.\n");
+        fprintf(stdout, "2 - Prints the edge list.\n");
 
         ret_val_fgets = fgets(char_buffer, sizeof(char_buffer), stdin);
         if(NULL == ret_val_fgets)
@@ -28,6 +29,8 @@ int showMenu(void)
     return option;
 }
 
+// reads file contents into an edge list in heap memory
+// list is in reverse order of text file lines.
 SinglyLinkedList * readFile(FILE *fp)
 {
     SinglyLinkedList *edge_list_head = NULL;
@@ -42,7 +45,7 @@ SinglyLinkedList * readFile(FILE *fp)
         while(NULL != fgets(buffer, PREFIX_SIZE, fp))
         {
             ret_val_sscanf = sscanf(buffer, "%ld %ld %d", &tail, &head, &relationship);
-            if(ret_val_sscanf != 2)
+            if(ret_val_sscanf != 3)
             {
                 continue;
             }
@@ -60,8 +63,10 @@ SinglyLinkedList * readFile(FILE *fp)
     return edge_list_head;
 }
 
+// prints the whole list of edges
 void printEdges(SinglyLinkedList *edge_list_head)
 {
+    fprintf(stdout, "Edge list:\n");
     SinglyLinkedList_printListItems(edge_list_head, (void (*)(Item))printEdge);
 
     return;

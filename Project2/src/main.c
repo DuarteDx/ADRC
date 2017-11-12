@@ -41,8 +41,6 @@ int main(int argc, char const *argv[])
                     if(NULL == edge_list_head)
                     {
                         edge_list_head = readFile(fp);
-                        printEdges(edge_list_head);
-                        // TODO: create graph from edge list
                     }
                     else
                     {
@@ -50,19 +48,19 @@ int main(int argc, char const *argv[])
                     }
                     break;
                 }
-                /*case 2:
+                case 2:
                 {
                     if(NULL == edge_list_head)
                     {
-                        fprintf(stdout, "No tree to print! Use option 1 first.\n");
+                        fprintf(stdout, "No edge list to print! Use option 1 first.\n");
                     }
                     else
                     {
-                        //PrintTable(tree_root, address);
+                        printEdges(edge_list_head);
                     }
                     break;
                 }
-                case 3:
+                /*case 3:
                 {
                     if(NULL == tree_root)
                     {
@@ -205,6 +203,8 @@ int main(int argc, char const *argv[])
                 }
             }
         }
+
+        SinglyLinkedList_freeList(edge_list_head, (void (*)(Item))freeEdge);
 
         free(char_buffer);
         fclose(fp);
