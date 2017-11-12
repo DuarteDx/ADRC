@@ -21,13 +21,13 @@ CFLAGSDBG_2 = -Wall \
               -g \
               -fno-omit-frame-pointer \
 
-CFILES = src/main.c
+CFILES = src/*
 
 # include directoryy
 IDIR = include/
 
 # header files
-IFILES = $(IDIR)defs.h
+IFILES = $(IDIR)*
 
 # executable name
 EXEC_NAME_REL = inter_domain_routing

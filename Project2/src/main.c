@@ -41,6 +41,7 @@ int main(int argc, char const *argv[])
                     if(NULL == edge_list_head)
                     {
                         edge_list_head = readFile(fp);
+                        printEdges(edge_list_head);
                         // TODO: create graph from edge list
                     }
                     else

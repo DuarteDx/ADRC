@@ -62,7 +62,7 @@ SinglyLinkedList * readFile(FILE *fp)
 
 void printEdges(SinglyLinkedList *edge_list_head)
 {
-    SinglyLinkedList_printListItems(edge_list_head, &printEdge);
+    SinglyLinkedList_printListItems(edge_list_head, (void (*)(Item))printEdge);
 
     return;
 }

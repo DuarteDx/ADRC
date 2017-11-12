@@ -12,5 +12,6 @@
 */
 int showMenu(void);
 SinglyLinkedList * readFile(FILE *fp);
+void printEdges(SinglyLinkedList *edge_list_head);
 
 #endif

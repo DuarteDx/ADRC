@@ -10,6 +10,10 @@
 #include "./edge.h"
 #endif
 
+#ifndef _NODE_H_
+#include "./node.h"
+#endif
+
 #ifndef _LINKED_LIST_H
 #include "./linked_list.h"
 #endif
