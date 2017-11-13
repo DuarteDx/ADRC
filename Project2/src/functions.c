@@ -12,6 +12,8 @@ int showMenu(void)
         fprintf(stdout, "\nChoose a function to call (number); any other number exits the program:\n");
         fprintf(stdout, "1 - Reads a file into an edge list.\n");
         fprintf(stdout, "2 - Prints the edge list.\n");
+        fprintf(stdout, "3 - Makes graph from edge list.\n");
+        fprintf(stdout, "4 - Prints adjacencies list of graph\n");
 
         ret_val_fgets = fgets(char_buffer, sizeof(char_buffer), stdin);
         if(NULL == ret_val_fgets)

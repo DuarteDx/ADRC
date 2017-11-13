@@ -1,5 +1,5 @@
 #include "../include/defs.h"
-#include "../include/edge.h"
+#include "../include/graph.h"
 #include "../include/linked_list.h"
 #include "../include/functions.h"
 
@@ -13,6 +13,7 @@ int main(int argc, char const *argv[])
     int ret_val_sscanf = 0;
 
     SinglyLinkedList *edge_list_head = NULL;
+    Graph *graph = NULL;
 
         // Check for correct number of arguments
         if(argc != 2)
@@ -57,6 +58,35 @@ int main(int argc, char const *argv[])
                     else
                     {
                         printEdges(edge_list_head);
+                    }
+                    break;
+                }
+                case 3:
+                {
+                    if(NULL == edge_list_head)
+                    {
+                        fprintf(stdout, "No edge list to convert to graph. Use option 1 first.\n");
+                    }
+                    else if(graph != NULL)
+                    {
+                        fprintf(stdout, "Graph already constructed!\n");
+                    }
+                    else
+                    {
+                        graph = GRAPHinit(65355);
+                        GraphFromEdgeList(graph, edge_list_head);
+                    }
+                    break;
+                }
+                case 4:
+                {
+                    if(NULL == graph)
+                    {
+                        fprintf(stdout, "No graph.\n");
+                    }
+                    else
+                    {
+                        GRAPHPrintAdjacenciesList(graph);
                     }
                     break;
                 }

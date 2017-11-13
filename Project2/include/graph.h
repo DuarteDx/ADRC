@@ -28,7 +28,6 @@
 /* Adjacency list representation of a graph */
 typedef struct graph_ Graph;
 
-
 Graph * GRAPHinit(long int);
 
 void GRAPHinsertEdge(Graph *, Edge *);
@@ -42,3 +41,7 @@ int randV(Graph *);
 Graph GRAPHrandE(int, int);
 
 Graph GRAPHrandp(int, int);
+
+void GraphFromEdgeList(Graph *graph, SinglyLinkedList *edge_list_head);
+
+void GRAPHPrintAdjacenciesList(Graph *graph);
