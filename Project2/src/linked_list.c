@@ -2,7 +2,7 @@
 #include "../include/linked_list.h"
 #endif
 
-ListNode * ListInit()
+SinglyLinkedList * ListInit()
 {
     return NULL;
 }

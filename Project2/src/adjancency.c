@@ -18,7 +18,7 @@ struct adjacency
  *
  *****************************************************************************/
 
-ListNode * InsertAdjacency(int vertices, int x, int y, int z, char type, ListNode* listhead, Array decoder)
+SinglyLinkedList * InsertAdjacency(int vertices, int x, int y, int z, char type, SinglyLinkedList* listhead, Array decoder)
 {
     Adjacency* adjacencynode = (Adjacency *) malloc(sizeof(Adjacency) );
 
