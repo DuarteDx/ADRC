@@ -6,7 +6,16 @@ struct node_
     int relationship;
 };
 
-Node * newNode(long int v, int relationship)
+Node * newNode()
+{
+    Node *node = NULL;
+
+        node = malloc(sizeof(Node));
+
+    return node;
+}
+
+Node * newNodeWithInit(long int v, int relationship)
 {
     Node *node = NULL;
 

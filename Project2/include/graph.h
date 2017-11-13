@@ -29,15 +29,15 @@
 typedef struct graph_ Graph;
 
 
-Graph GRAPHinit(int);
+Graph * GRAPHinit(long int);
 
-void GRAPHinsertE(Graph, Edge);
+void GRAPHinsertEdge(Graph *, Edge *);
 
-void GRAPHshow(Graph);
+void GRAPHshow(Graph *);
 
-void GRAPHplot(Graph, char *);
+void GRAPHplot(Graph *, char *);
 
-int randV(Graph);
+int randV(Graph *);
 
 Graph GRAPHrandE(int, int);
 

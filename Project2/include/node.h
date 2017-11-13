@@ -12,3 +12,6 @@
 #endif
 
 typedef struct node_ Node;
+
+Node * newNode();
+Node * newNodeWithInit(long int v, int relationship);
