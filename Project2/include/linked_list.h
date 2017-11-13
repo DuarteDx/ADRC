@@ -17,8 +17,6 @@
 #ifndef LINKED_LIST_H
 #define LINKED_LIST_H
 
-typedef struct listnode ListNode;
-
 /**
  * Include stdlib.h header because of malloc and related functionality
  */

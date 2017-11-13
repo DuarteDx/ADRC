@@ -2,13 +2,6 @@
 #include "../include/linked_list.h"
 #endif
 
-
-struct listnode
-{
-    Item this;
-    struct listnode * next;
-};
-
 ListNode * ListInit()
 {
     return NULL;

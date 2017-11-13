@@ -51,7 +51,7 @@ void findRoute(Graph *G, int s, int* st, int* wt)
 
             for (t = GetGraphAdjHead(G, v); t != NULL; t=getNextNodeLinkedList(t))
             {
-                adjacency = (Adjacency*) getItemLinkedList(t);
+                adjacency = (Adjacency*) SinglyLinkedList_getItem(t);
                 w = GetAdjacencyVertice (adjacency);
                 weight = GetAdjacencyWeight(adjacency);
 
