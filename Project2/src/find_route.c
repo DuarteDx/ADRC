@@ -1,4 +1,4 @@
-#include "../include/graph.h"
+#include "../include/find_route.h"
 
 #define MAX_DISTANCE 10000
 
@@ -15,7 +15,7 @@ int Comparison(Item a, Item b)
 void findRoute(Graph *G, int s, int* st, int* wt)
 {
     int v, w, vertices, *newint, weight;
-    ListNode * t;
+    SinglyLinkedList * t;
     Heap* heap;
     vertices = GetGraphVertices(G);
     heap = NewHeap(vertices, Comparison);

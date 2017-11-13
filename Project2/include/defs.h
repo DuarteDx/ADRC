@@ -13,6 +13,22 @@
  */
 typedef void *Item;
 
+#ifndef LINKED_LIST_H
+#include "linked_list.h"
+#endif
+
+#ifndef HEAP_H
+#include "heap.h"
+#endif
+
+#ifndef GRAPH_H
+#include "graph.h"
+#endif
+
+#ifndef _EDGE_H
+#include "./edge.h"
+#endif
+
 /* CHAR_BUFFER_SIZE
  * Description: generic text input buffer size limit
 */
