@@ -41,7 +41,11 @@ Heap *NewHeap(int size, int (*comparison) (Item, Item))
   Heap *h;
 
   h = (Heap *) malloc(sizeof(Heap));
-  VerifyMalloc((Item) h);
+  if(h == NULL)
+    {
+        printf("Error allocating memory");
+        exit(0);
+    }
   if (h == ((Heap *) NULL)) {
     fprintf(stderr, "Error in malloc of heap\n");
     exit(1);
@@ -51,7 +55,11 @@ Heap *NewHeap(int size, int (*comparison) (Item, Item))
   h->comparison = comparison;
   h->size = size;
   h->heapdata = (Item *) malloc(size * sizeof(Item));
-  VerifyMalloc((Item) h->heapdata);
+  if(h->heapdata == NULL)
+    {
+        printf("Error allocating memory");
+        exit(0);
+    }
   if (h->heapdata == ((Item *) NULL)) {
     fprintf(stderr, "Error in malloc of heap data\n");
     exit(1);
