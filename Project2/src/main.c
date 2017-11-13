@@ -235,6 +235,7 @@ int main(int argc, char const *argv[])
         }
 
         SinglyLinkedList_freeList(edge_list_head, (void (*)(Item))freeEdge);
+        GRAPHfree(graph);
 
         free(char_buffer);
         fclose(fp);

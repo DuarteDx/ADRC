@@ -45,3 +45,5 @@ Graph GRAPHrandp(int, int);
 void GraphFromEdgeList(Graph *graph, SinglyLinkedList *edge_list_head);
 
 void GRAPHPrintAdjacenciesList(Graph *graph);
+
+void GRAPHfree(Graph *graph);

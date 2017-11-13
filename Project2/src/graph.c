@@ -66,14 +66,14 @@ void GRAPHinsertEdge(Graph *graph, Edge *edge)
         w = Edge_getTail(edge);
         r = Edge_getRelationship(edge);
 
-        node_v = newNodeWithInit(v, r);
+        //node_v = newNodeWithInit(v, r);
         node_w = newNodeWithInit(w, r);
 
-        list_element_v = SinglyLinkedList_newNode(node_v);
+        //list_element_v = SinglyLinkedList_newNode(node_v);
         list_element_w = SinglyLinkedList_newNode(node_w);
 
         graph->adj[v] = SinglyLinkedList_insertAtHead(graph->adj[v], list_element_w);
-        graph->adj[w] = SinglyLinkedList_insertAtHead(graph->adj[w], list_element_v);
+        //graph->adj[w] = SinglyLinkedList_insertAtHead(graph->adj[w], list_element_v);
 
         graph->E += 1;
 
@@ -88,6 +88,9 @@ void GraphFromEdgeList(Graph *graph, SinglyLinkedList *edge_list_head)
     {
         GRAPHinsertEdge(graph, (Edge *)SinglyLinkedList_getItem(aux));
     }
+
+    // dirty fix for edge count
+    graph->E /= 2;
 
     return;
 }
@@ -110,8 +113,27 @@ void GRAPHPrintAdjacenciesList(Graph *graph)
                 // FIXME: this will print a huge spam of no Adjacency nodes
                 //fprintf(stdout, "No adjencencies for node %7ld\n", i);
             }
-
         }
+
+        fprintf(stdout, "Number of edges: %7ld\n", graph->E);
+
+    return;
+}
+
+void GRAPHfree(Graph *graph)
+{
+    long int i = 0;
+
+        for(i = 0; i < graph->V; i += 1)
+        {
+            if(graph->adj[i] != NULL)
+            {
+                SinglyLinkedList_freeList(graph->adj[i], (void (*)(Item))&Node_free);
+            }
+        }
+
+        free(graph->adj);
+        free(graph);
 
     return;
 }

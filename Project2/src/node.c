@@ -32,3 +32,10 @@ void Node_printNode(Node *node)
 
     return;
 }
+
+void Node_free(Node *node)
+{
+    free(node);
+
+    return;
+}
