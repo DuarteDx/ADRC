@@ -25,6 +25,17 @@
  * 3 - tail is a costumer of head;
  */
 
+#ifndef PROVIDER
+#define PROVIDER 1
+#endif
+#ifndef PEER
+#define PEER 2
+#endif
+
+#ifndef CUSTOMER
+#define CUSTOMER 3
+#endif
+
 /* Adjacency list representation of a graph */
 typedef struct graph_ Graph;
 
@@ -47,3 +58,11 @@ void GraphFromEdgeList(Graph *graph, SinglyLinkedList *edge_list_head);
 void GRAPHPrintAdjacenciesList(Graph *graph);
 
 void GRAPHfree(Graph *graph);
+
+long int Graph_getV(Graph *graph);
+
+long int Graph_getE(Graph *graph);
+
+SinglyLinkedList ** Graph_getAdjList(Graph *graph);
+
+SinglyLinkedList * Graph_getAdjOfV(Graph * graph, long int v);

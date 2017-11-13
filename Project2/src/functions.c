@@ -14,6 +14,7 @@ int showMenu(void)
         fprintf(stdout, "2 - Prints the edge list.\n");
         fprintf(stdout, "3 - Makes graph from edge list.\n");
         fprintf(stdout, "4 - Prints adjacencies list of graph\n");
+        fprintf(stdout, "5 - Is it commercially connected? Find out now!\n");
 
         ret_val_fgets = fgets(char_buffer, sizeof(char_buffer), stdin);
         if(NULL == ret_val_fgets)
@@ -72,4 +73,174 @@ void printEdges(SinglyLinkedList *edge_list_head)
     SinglyLinkedList_printListItems(edge_list_head, (void (*)(Item))&printEdge);
 
     return;
+}
+
+
+
+// TODO: SHITSTORM
+/*
+Computes the elected routes for a certain destination in a network.
+Returns the elected routes
+*/
+//TODO: FIRST CHECK IF IT'S COMMERCIALLY CONNECTED. IF NOT WE RUN THIS ALGO. IF IT IS WE RUN ANOTHER ALGO.
+/*
+int* computeElectedRoutes(Graph *graph, long int destination)
+{
+    int * routes = NULL;
+    int i = 0;
+    int node = -1;
+    int tail = -1;
+    int head = -1;
+    int relationship = -1;
+    int head_route = -1;
+    SinglyLinkedList* nodeAdjs = NULL;
+    SinglyLinkedList* aux = NULL;
+
+    //Get memory for the routes array
+    routes = (int*)malloc(sizeof(int) * GRAPH_getV(graph));
+
+    //Initialize routes array
+    for(i = 0; i < GRAPH_getV(graph); i++)
+    {
+        routes[i] = -1;
+    }
+
+    //Initialize destination Node
+    routes[destination] = 10;
+
+    //Precisamos de inicializar o Heap com o numero de nos e tudo a 0.
+    HEAP_init(0);
+
+    //Add destination to Heap
+    HEAP_changeNode(destination, 10);
+    HEAP_fixUp();
+
+    while(!HEAP_isEmpty())
+    {
+        //Ir buscar a maior prioridade do Heap, a ordem de prioridades, da maior para a menor é: source(10) - customer link(3) - peer link(2) - provider link(1) - not linked(0)
+        head = HEAP_getHighestPriority(heap) //Precisa de condição caso a prioridade seja 0. Nesse caso teremos de descartar esse nó, returnar -1 e chegar à conclusão que a rede não é commercially linked.
+
+        //Get the adjancency list for this node
+        nodeAdj = GRAPH_getAdj(head);
+
+        while(nodeAdj != NULL)
+        {
+            tail = Edge_getHead((Edge)SinglyLinkedList_getItem(nodeAdj));
+            relationship = Edge_getRelationship((Edge)SinglyLinkedList_getItem(nodeAdj));
+
+            //If the tail is a provider and we're source or our elected route is a customer link we export our route
+            if(relationship == 1 && (routes[head] == 10 || routes[head] == 3))
+            {
+                //Change the elected route of the Tail if the existing one is worse
+                if(routes[tail] < 3)
+                {
+                    //Change the prioriy of the node in the heap
+                    HEAP_changeNode(tail, 3);
+                    HEAP_fixUp();
+                    routes[tail] = 3;
+                }
+            }
+            }
+            //If the tail is a peer and we're source or have a customer link our elected route is a customer link and we export our route
+            else if (relationship == 2 && (routes[head] == 10 || routes[head] == 3))
+            {
+                //Change the prioriy of the node in the heap
+                HEAP_changeNode(tail, 2);
+
+                //Change the elected route of the Tail if the existing one is worse
+                if(routes[tail] < 2)
+                {
+                    //Change the prioriy of the node in the heap
+                    HEAP_changeNode(tail, 2);
+                    HEAP_fixUp();
+
+                    routes[tail] = 2;
+                }
+            }
+            //If the tail is a customer we export our route
+            else if (relationship == 3 && routes[head] != -1)
+
+            {
+                //Change the elected route of the Tail if the existing one is worse
+                if(routes[tail] < 1)
+                {
+                    //Change the prioriy of the node in the heap
+                    HEAP_changeNode(tail, 1);
+                    HEAP_fixUp();
+
+                    routes[tail] = 1;
+                }
+            }
+
+
+            //Get the next node in the adjencencies list
+            nodeAdj = SinglyLinkedList_getNextNode(nodeAdj);
+        }
+
+        //Remove the node we just treated from the heap and fix it
+        HEAP_remove(head);
+        HEAP_fixUp();
+    }
+
+    return routes;
+}
+*/
+
+
+bool isCommerciallyConnected(Graph *graph)
+{
+    long int i = 0;
+    long int *tier_one = NULL;
+    SinglyLinkedList *aux = NULL;
+    bool isTierOne = true;
+    int tier_one_count = 0;
+    int tier_one_connections = 0;
+
+        // find all tier ones (and their count) and put them in an array
+        for(i = 0; i < Graph_getV(graph); i += 1)
+        {
+            for(aux = Graph_getAdjOfV(graph, i); aux != NULL; aux = SinglyLinkedList_getNextNode(aux))
+            {
+                if(Node_getRelationship((Node *)SinglyLinkedList_getItem(aux)) == PROVIDER)
+                {
+                    isTierOne = false;
+                    break;
+                }
+            }
+
+            if(true == isTierOne)
+            {
+                tier_one_count += 1;
+                tier_one = realloc(tier_one, tier_one_count * sizeof(long int));
+                tier_one[tier_one_count-1] = i;
+            }
+            else
+            {
+                isTierOne = true;
+            }
+        }
+
+        // iterate through the array of tier ones to find if they are all connected to each other
+        // if they are, then the network is commercially connected.
+        // if at least one of the tier_ones is not connected to ALL of the others, then the network is not commercially connected.
+        for(i = 0; i < tier_one_count; i += 1)
+        {
+            for(aux = Graph_getAdjOfV(graph, tier_one[i]); aux != NULL; aux = SinglyLinkedList_getNextNode(aux))
+            {
+                if(Node_getRelationship((Node *)SinglyLinkedList_getItem(aux)) == PEER)
+                {
+                    tier_one_connections += 1;
+                }
+            }
+            if(tier_one_connections == tier_one_count - 1)
+            {
+                tier_one_connections = 0;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+    return true;
 }

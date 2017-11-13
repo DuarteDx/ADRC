@@ -15,5 +15,6 @@ typedef struct node_ Node;
 
 Node * newNode();
 Node * newNodeWithInit(long int v, int relationship);
+int Node_getRelationship(Node* node);
 void Node_printNode(Node *node);
 void Node_free(Node *node);

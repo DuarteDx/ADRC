@@ -26,6 +26,12 @@ Node * newNodeWithInit(long int v, int relationship)
     return node;
 }
 
+int Node_getRelationship(Node* node)
+{
+    return node->relationship;
+}
+
+
 void Node_printNode(Node *node)
 {
     fprintf(stdout, "Number: %7ld | relationship: %d\n", node->v, node->relationship);

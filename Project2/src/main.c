@@ -90,120 +90,26 @@ int main(int argc, char const *argv[])
                     }
                     break;
                 }
-                /*case 3:
-                {
-                    if(NULL == tree_root)
-                    {
-                        fprintf(stdout, "No tree to lookup! Use option 1 first.\n");
-                    }
-                    else
-                    {
-                        fprintf(stdout, "Insert address for which to retrieve the next hop:\n");
-                        ret_val_fgets = fgets(char_buffer, PREFIX_SIZE, stdin);
-                        if(NULL == ret_val_fgets)
-                        {
-                            fprintf(stdout, "Error reading input, try again.\n");
-                            break;
-                        }
-                        ret_val_sscanf = sscanf(char_buffer, "%s\n", lookupPrefix);
-                        if(ret_val_sscanf != 1)
-                        {
-                            fprintf(stdout, "Error reading option, try again.\n");
-                            break;
-                        }
-                        if(!checkValidPrefix(lookupPrefix))
-                        {
-                            fprintf(stdout, "Wrong type of prefix. Must be a string of 0 and 1.\n");
-                            break;
-                        }
-
-                        lookUpResult = LookUp(tree_root, lookupPrefix);
-
-                        fprintf(stdout, "Next-Hop: %d\n", lookUpResult);
-                    }
-                    break;
-                }
-                case 4:
-                {
-                    if(NULL == tree_root)
-                    {
-                        fprintf(stdout, "No tree to insert prefix in! Use option 1 first.\n");
-                    }
-                    else
-                    {
-                        fprintf(stdout, "Insert the new address:\n");
-                        ret_val_fgets = fgets(char_buffer, PREFIX_SIZE, stdin);
-                        if(NULL == ret_val_fgets)
-                        {
-                            fprintf(stdout, "Error reading input, try again.\n");
-                            break;
-                        }
-                        ret_val_sscanf = sscanf(char_buffer, "%s\n", insertPrefix);
-                        if(ret_val_sscanf != 1)
-                        {
-                            fprintf(stdout, "Error reading input, try again.\n");
-                            break;
-                        }
-                        if(!checkValidPrefix(insertPrefix))
-                        {
-                            fprintf(stdout, "Wrong type of prefix. Must be a string of 0 and 1.\n");
-                            break;
-                        }
-
-                        fprintf(stdout, "Insert the next hop associated with the new address:\n");
-                        ret_val_fgets = fgets(char_buffer, PREFIX_SIZE, stdin);
-                        if(NULL == ret_val_fgets)
-                        {
-                            fprintf(stdout, "Error reading input, try again.\n");
-                            break;
-                        }
-                        ret_val_sscanf = sscanf(char_buffer, "%d\n", &insertNextHop);
-                        if(ret_val_sscanf != 1)
-                        {
-                            fprintf(stdout, "Error reading input, try again.\n");
-                            break;
-                        }
-
-                        tree_root = InsertPrefix(tree_root, insertPrefix, insertNextHop);
-
-                        fprintf(stdout, "New Prefix added!\n");
-                    }
-                    break;
-                }
                 case 5:
                 {
-                    if(NULL == tree_root)
+                    if(NULL == graph)
                     {
-                        fprintf(stdout, "No tree to delete prefix from! Use option 1 first.\n");
+                        fprintf(stdout, "No graph. Use 1\n");
                     }
                     else
                     {
-                        fprintf(stdout, "Insert prefix to delete from tree:\n");
-                        ret_val_fgets = fgets(char_buffer, PREFIX_SIZE, stdin);
-                        if(NULL == ret_val_fgets)
+                        if(isCommerciallyConnected(graph))
                         {
-                            fprintf(stdout, "Error reading input, try again.\n");
-                            break;
+                            fprintf(stdout, "The network is commercially connected\n");
                         }
-                        ret_val_sscanf = sscanf(char_buffer, "%s\n", deletePrefix);
-                        if(ret_val_sscanf != 1)
+                        else
                         {
-                            fprintf(stdout, "Error reading option, try again.\n");
-                            break;
+                            fprintf(stdout, "The network is not commercially connected\n");
                         }
-                        if(!checkValidPrefix(deletePrefix))
-                        {
-                            fprintf(stdout, "Wrong type of prefix. Must be a string of 0 and 1.\n");
-                            break;
-                        }
-
-                        tree_root = DeletePrefix(tree_root, deletePrefix);
-
-                        fprintf(stdout, "Delete operation completed!\n");
                     }
                     break;
                 }
-                case 6:
+                /*case 6:
                 {
                     if(NULL == tree_root)
                     {
