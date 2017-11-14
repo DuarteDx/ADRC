@@ -230,7 +230,7 @@ bool hasCustomerCycles(Graph *graph)
                     {
                         number = malloc(sizeof(long int));
                         *number = Node_getV((Node *)SinglyLinkedList_getItem(aux2));
-                        SinglyLinkedList_insertAtHead(head, SinglyLinkedList_newNode(number));
+                        head = SinglyLinkedList_insertAtHead(head, SinglyLinkedList_newNode(number));
                     }
 
                 }
@@ -241,7 +241,7 @@ bool hasCustomerCycles(Graph *graph)
             SinglyLinkedList_freeNode(aux, (void (*)(Item))&Int_free);
         }
 
-        if(counter == node_to_process)
+        if(counter == number_of_nodes)
         {
             return false;
         }
