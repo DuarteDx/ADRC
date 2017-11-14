@@ -168,6 +168,7 @@ void Int_free(int *number)
     return;
 }
 
+// figure out if there are customer cycles by ordering topologically
 bool hasCustomerCycles(Graph *graph)
 {
     long int i = 0;
@@ -182,7 +183,7 @@ bool hasCustomerCycles(Graph *graph)
 
         memset(in_neighbours, 0, 65536*sizeof(int));
 
-        // populate array of inbount neighbours. Node i has an inbound neighbours, each corresponding to a provider
+        // populate array of inbound neighbours. Node i has an inbound neighbours, each corresponding to a provider
         for(i = 0; i < Graph_getV(graph); i += 1)
         {
             if(Graph_getAdjOfV(graph, i) != NULL)
@@ -213,7 +214,7 @@ bool hasCustomerCycles(Graph *graph)
             }
         }
 
-        aux = head;
+        // start removing nodes and remove inbound neighbours accordingly
         while(head != NULL)
         {
             aux = head;
