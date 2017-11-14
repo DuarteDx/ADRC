@@ -15,6 +15,7 @@ int showMenu(void)
         fprintf(stdout, "3 - Makes graph from edge list.\n");
         fprintf(stdout, "4 - Prints adjacencies list of graph\n");
         fprintf(stdout, "5 - Is it commercially connected? Find out now!\n");
+        fprintf(stdout, "6 - Does it have customer cycles? Find out now!\n");
 
         ret_val_fgets = fgets(char_buffer, sizeof(char_buffer), stdin);
         if(NULL == ret_val_fgets)
@@ -177,7 +178,7 @@ bool hasCustomerCycles(Graph *graph)
     long int *number = NULL;
     long int node_to_process = 0;
     long int counter = 0;
-    long int nodes_with_inbound_neighbour = 0;
+    long int number_of_nodes = 0;
 
         memset(in_neighbours, 0, 65536*sizeof(int));
 
@@ -193,6 +194,7 @@ bool hasCustomerCycles(Graph *graph)
                         in_neighbours[i] += 1;
                     }
                 }
+                number_of_nodes += 1;
             }
             else
             {
@@ -200,6 +202,7 @@ bool hasCustomerCycles(Graph *graph)
             }
         }
 
+        // make list of nodes to process
         for(i = 0; i < Graph_getV(graph); i += 1)
         {
             if(in_neighbours[i] == 0)
@@ -214,20 +217,36 @@ bool hasCustomerCycles(Graph *graph)
         while(head != NULL)
         {
             aux = head;
+            head = SinglyLinkedList_getNextNode(head);
 
             node_to_process = *((long int *)SinglyLinkedList_getItem(aux));
 
             for(aux2 = Graph_getAdjOfV(graph, node_to_process); aux2 != NULL; aux2 = SinglyLinkedList_getNextNode(aux2))
             {
-                if(Node_getRelationship((Node *)SinglyLinkedList_getItem(aux)) == CUSTOMER)
+                if(Node_getRelationship((Node *)SinglyLinkedList_getItem(aux2)) == CUSTOMER)
                 {
-                    in_neighbours[i] += 1;
+                    in_neighbours[Node_getV((Node *)SinglyLinkedList_getItem(aux2))] -= 1;
+                    if(in_neighbours[Node_getV((Node *)SinglyLinkedList_getItem(aux2))] == 0)
+                    {
+                        number = malloc(sizeof(long int));
+                        *number = Node_getV((Node *)SinglyLinkedList_getItem(aux2));
+                        SinglyLinkedList_insertAtHead(head, SinglyLinkedList_newNode(number));
+                    }
+
                 }
             }
 
-            SinglyLinkedList_getNextNode(head);
+            counter += 1;
+
             SinglyLinkedList_freeNode(aux, (void (*)(Item))&Int_free);
         }
+
+        if(counter == node_to_process)
+        {
+            return false;
+        }
+
+    return true;
 }
 
 // TODO: SHITSTORM

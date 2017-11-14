@@ -109,6 +109,25 @@ int main(int argc, char const *argv[])
                     }
                     break;
                 }
+                case 6:
+                {
+                    if(NULL == graph)
+                    {
+                        fprintf(stdout, "No graph. Use 1\n");
+                    }
+                    else
+                    {
+                        if(hasCustomerCycles(graph))
+                        {
+                            fprintf(stdout, "The network has customer cycles.\n");
+                        }
+                        else
+                        {
+                            fprintf(stdout, "The network does not have customer cycles.\n");
+                        }
+                    }
+                    break;
+                }
                 /*case 6:
                 {
                     if(NULL == tree_root)
