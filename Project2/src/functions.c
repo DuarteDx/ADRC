@@ -75,7 +75,160 @@ void printEdges(SinglyLinkedList *edge_list_head)
     return;
 }
 
+bool isATierOne(long int *tier_one_array, int array_size, long int element)
+{
+    int i = 0;
 
+        for(i = 0; i < array_size; i += 1)
+        {
+            if(tier_one_array[i] == element)
+            {
+                return true;
+            }
+        }
+
+    return false;
+}
+
+bool isCommerciallyConnected(Graph *graph)
+{
+    long int i = 0;
+    long int *tier_one = NULL;
+    SinglyLinkedList *aux = NULL;
+    bool isTierOne = true;
+    int tier_one_count = 0;
+    int tier_one_connections = 0;
+
+        // find all tier ones (and their count) and put them in an array
+        for(i = 0; i < Graph_getV(graph); i += 1)
+        {
+            if(Graph_getAdjOfV(graph, i) != NULL)
+            {
+                for(aux = Graph_getAdjOfV(graph, i); aux != NULL; aux = SinglyLinkedList_getNextNode(aux))
+                {
+                    if(Node_getRelationship((Node *)SinglyLinkedList_getItem(aux)) == PROVIDER)
+                    {
+                        isTierOne = false;
+                        break;
+                    }
+                }
+
+                if(true == isTierOne)
+                {
+                    tier_one_count += 1;
+                    tier_one = realloc(tier_one, tier_one_count * sizeof(long int));
+                    tier_one[tier_one_count-1] = i;
+                }
+                else
+                {
+                    isTierOne = true;
+                }
+            }
+        }
+
+        fprintf(stdout, "TIER ONES ARE:\n");
+        for(i = 0; i < tier_one_count; i += 1)
+        {
+            fprintf(stdout, "%7ld\n", tier_one[i]);
+        }
+
+        // iterate through the array of tier ones to find if they are all connected to each other
+        // if they are, then the network is commercially connected.
+        // if at least one of the tier_ones is not connected to ALL of the others, then the network is not commercially connected.
+        for(i = 0; i < tier_one_count; i += 1)
+        {
+            for(aux = Graph_getAdjOfV(graph, tier_one[i]); aux != NULL; aux = SinglyLinkedList_getNextNode(aux))
+            {
+                // A tier 1 can have relationships with other piers that are themselves NOT tier 1
+                if(isATierOne(tier_one, tier_one_count, Node_getV((Node *)SinglyLinkedList_getItem(aux))))
+                {
+                    tier_one_connections += 1;
+                }
+            }
+            if(tier_one_connections == (tier_one_count - 1))
+            {
+                tier_one_connections = 0;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        free(tier_one);
+
+    return true;
+}
+
+void Int_free(int *number)
+{
+    free(number);
+
+    return;
+}
+
+bool hasCustomerCycles(Graph *graph)
+{
+    long int i = 0;
+    SinglyLinkedList *head = NULL;
+    SinglyLinkedList *aux = NULL;
+    SinglyLinkedList *aux2 = NULL;
+    int in_neighbours[65536];
+    long int *number = NULL;
+    long int node_to_process = 0;
+    long int counter = 0;
+    long int nodes_with_inbound_neighbour = 0;
+
+        memset(in_neighbours, 0, 65536*sizeof(int));
+
+        // populate array of inbount neighbours. Node i has an inbound neighbours, each corresponding to a provider
+        for(i = 0; i < Graph_getV(graph); i += 1)
+        {
+            if(Graph_getAdjOfV(graph, i) != NULL)
+            {
+                for(aux = Graph_getAdjOfV(graph, i); aux != NULL; aux = SinglyLinkedList_getNextNode(aux))
+                {
+                    if(Node_getRelationship((Node *)SinglyLinkedList_getItem(aux)) == PROVIDER)
+                    {
+                        in_neighbours[i] += 1;
+                    }
+                }
+            }
+            else
+            {
+                in_neighbours[i] = -1;
+            }
+        }
+
+        for(i = 0; i < Graph_getV(graph); i += 1)
+        {
+            if(in_neighbours[i] == 0)
+            {
+                number = malloc(sizeof(long int));
+                *number = i;
+                head = SinglyLinkedList_insertAtHead(head, SinglyLinkedList_newNode(number));
+            }
+        }
+
+        aux = head;
+        while(head != NULL)
+        {
+            aux = head;
+
+            node_to_process = *((long int *)SinglyLinkedList_getItem(aux));
+
+            for(aux2 = Graph_getAdjOfV(graph, node_to_process); aux2 != NULL; aux2 = SinglyLinkedList_getNextNode(aux2))
+            {
+                if(Node_getRelationship((Node *)SinglyLinkedList_getItem(aux)) == CUSTOMER)
+                {
+                    in_neighbours[i] += 1;
+                }
+            }
+
+            SinglyLinkedList_getNextNode(head);
+            SinglyLinkedList_freeNode(aux, (void (*)(Item))&Int_free);
+        }
+}
 
 // TODO: SHITSTORM
 /*
@@ -185,88 +338,3 @@ int* computeElectedRoutes(Graph *graph, long int destination)
     return routes;
 }
 */
-
-bool isATierOne(long int *tier_one_array, int array_size, long int element)
-{
-    int i = 0;
-
-        for(i = 0; i < array_size; i += 1)
-        {
-            if(tier_one_array[i] == element)
-            {
-                return true;
-            }
-        }
-
-    return false;
-}
-
-bool isCommerciallyConnected(Graph *graph)
-{
-    long int i = 0;
-    long int *tier_one = NULL;
-    SinglyLinkedList *aux = NULL;
-    bool isTierOne = true;
-    int tier_one_count = 0;
-    int tier_one_connections = 0;
-
-        // find all tier ones (and their count) and put them in an array
-        for(i = 0; i < Graph_getV(graph); i += 1)
-        {
-            if(Graph_getAdjOfV(graph, i) != NULL)
-            {
-                for(aux = Graph_getAdjOfV(graph, i); aux != NULL; aux = SinglyLinkedList_getNextNode(aux))
-                {
-                    if(Node_getRelationship((Node *)SinglyLinkedList_getItem(aux)) == PROVIDER)
-                    {
-                        isTierOne = false;
-                        break;
-                    }
-                }
-
-                if(true == isTierOne)
-                {
-                    tier_one_count += 1;
-                    tier_one = realloc(tier_one, tier_one_count * sizeof(long int));
-                    tier_one[tier_one_count-1] = i;
-                }
-                else
-                {
-                    isTierOne = true;
-                }
-            }
-        }
-
-        fprintf(stdout, "TIER ONES ARE:\n");
-        for(i = 0; i < tier_one_count; i += 1)
-        {
-            fprintf(stdout, "%7ld\n", tier_one[i]);
-        }
-
-        // iterate through the array of tier ones to find if they are all connected to each other
-        // if they are, then the network is commercially connected.
-        // if at least one of the tier_ones is not connected to ALL of the others, then the network is not commercially connected.
-        for(i = 0; i < tier_one_count; i += 1)
-        {
-            for(aux = Graph_getAdjOfV(graph, tier_one[i]); aux != NULL; aux = SinglyLinkedList_getNextNode(aux))
-            {
-                // A tier 1 can have relationships with other piers that are themselves NOT tier 1
-                if(isATierOne(tier_one, tier_one_count, Node_getV((Node *)SinglyLinkedList_getItem(aux))))
-                {
-                    tier_one_connections += 1;
-                }
-            }
-            if(tier_one_connections == (tier_one_count - 1))
-            {
-                tier_one_connections = 0;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        free(tier_one);
-
-    return true;
-}
