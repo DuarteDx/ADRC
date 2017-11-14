@@ -20,7 +20,6 @@ CFLAGSDBG_1 = -Wall \
 CFLAGSDBG_2 = -Wall \
               -Wextra \
               -g \
-              -pg \
               -fno-omit-frame-pointer \
 
 CFILES = src/*

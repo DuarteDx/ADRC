@@ -251,7 +251,7 @@ bool isCommerciallyConnected(Graph *graph)
             for(aux = Graph_getAdjOfV(graph, tier_one[i]); aux != NULL; aux = SinglyLinkedList_getNextNode(aux))
             {
                 // A tier 1 can have relationships with other piers that are themselves NOT tier 1
-                if((isATierOne(tier_one, tier_one_count, Node_getV((Node *)SinglyLinkedList_getItem(aux)))))
+                if(isATierOne(tier_one, tier_one_count, Node_getV((Node *)SinglyLinkedList_getItem(aux))))
                 {
                     tier_one_connections += 1;
                 }

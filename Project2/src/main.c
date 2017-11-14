@@ -73,7 +73,7 @@ int main(int argc, char const *argv[])
                     }
                     else
                     {
-                        graph = GRAPHinit(65355);
+                        graph = GRAPHinit(65536);
                         GraphFromEdgeList(graph, edge_list_head);
                     }
                     break;

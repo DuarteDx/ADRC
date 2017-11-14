@@ -57,23 +57,18 @@ void GRAPHinsertEdge(Graph *graph, Edge *edge)
     int v = 0;
     int w = 0;
     int r = 0;
-    Node * node_v = NULL;
     Node * node_w = NULL;
-    SinglyLinkedList *list_element_v = NULL;
     SinglyLinkedList *list_element_w = NULL;
 
         v = Edge_getHead(edge);
         w = Edge_getTail(edge);
         r = Edge_getRelationship(edge);
 
-        //node_v = newNodeWithInit(v, r);
         node_w = newNodeWithInit(w, r);
 
-        //list_element_v = SinglyLinkedList_newNode(node_v);
         list_element_w = SinglyLinkedList_newNode(node_w);
 
         graph->adj[v] = SinglyLinkedList_insertAtHead(graph->adj[v], list_element_w);
-        //graph->adj[w] = SinglyLinkedList_insertAtHead(graph->adj[w], list_element_v);
 
         graph->E += 1;
 
