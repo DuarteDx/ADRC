@@ -192,7 +192,7 @@ bool isTrueTierOne(long int *tier_one_array, int array_size, long int element)
 
         for(i = 0; i < array_size; i += 1)
         {
-            if (tier_one_array[i] == element)
+            if(tier_one_array[i] == element)
             {
                 return true;
             }
