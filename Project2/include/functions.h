@@ -21,6 +21,7 @@
 int showMenu(void);
 SinglyLinkedList * readFile(FILE *fp);
 void printEdges(SinglyLinkedList *edge_list_head);
+bool isTrueTierOne(long int *tier_one_array, int array_size, long int element);
 bool isCommerciallyConnected(Graph *graph);
 
 #endif

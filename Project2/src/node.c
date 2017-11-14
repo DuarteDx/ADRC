@@ -26,11 +26,15 @@ Node * newNodeWithInit(long int v, int relationship)
     return node;
 }
 
-int Node_getRelationship(Node* node)
+int Node_getRelationship(Node *node)
 {
     return node->relationship;
 }
 
+long int Node_getV(Node *node)
+{
+    return node->v;
+}
 
 void Node_printNode(Node *node)
 {

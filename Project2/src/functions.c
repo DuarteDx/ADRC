@@ -186,6 +186,20 @@ int* computeElectedRoutes(Graph *graph, long int destination)
 }
 */
 
+bool isTrueTierOne(long int *tier_one_array, int array_size, long int element)
+{
+    int i = 0;
+
+        for(i = 0; i < array_size; i += 1)
+        {
+            if (tier_one_array[i] == element)
+            {
+                return true;
+            }
+        }
+
+    return false;
+}
 
 bool isCommerciallyConnected(Graph *graph)
 {
@@ -233,7 +247,8 @@ bool isCommerciallyConnected(Graph *graph)
         {
             for(aux = Graph_getAdjOfV(graph, tier_one[i]); aux != NULL; aux = SinglyLinkedList_getNextNode(aux))
             {
-                if(Node_getRelationship((Node *)SinglyLinkedList_getItem(aux)) == PEER)
+                // A tier 1 can have relationships with other piers that are themselves NOT tier 1
+                if((Node_getRelationship((Node *)SinglyLinkedList_getItem(aux)) == PEER) && (isTrueTierOne(tier_one,tier_one_count, Node_getV((Node *)SinglyLinkedList_getItem(aux)))))
                 {
                     tier_one_connections += 1;
                 }
