@@ -7,3 +7,7 @@ build/
 
 # Valgrind outputs
 valgrind_output.val
+
+# Runtime artifacts
+core
+gmon.out
