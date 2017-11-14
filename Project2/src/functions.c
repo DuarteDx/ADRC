@@ -186,7 +186,7 @@ int* computeElectedRoutes(Graph *graph, long int destination)
 }
 */
 
-bool isTrueTierOne(long int *tier_one_array, int array_size, long int element)
+bool isATierOne(long int *tier_one_array, int array_size, long int element)
 {
     int i = 0;
 
@@ -213,24 +213,27 @@ bool isCommerciallyConnected(Graph *graph)
         // find all tier ones (and their count) and put them in an array
         for(i = 0; i < Graph_getV(graph); i += 1)
         {
-            for(aux = Graph_getAdjOfV(graph, i); aux != NULL; aux = SinglyLinkedList_getNextNode(aux))
+            if(Graph_getAdjOfV(graph, i) != NULL)
             {
-                if(Node_getRelationship((Node *)SinglyLinkedList_getItem(aux)) == PROVIDER)
+                for(aux = Graph_getAdjOfV(graph, i); aux != NULL; aux = SinglyLinkedList_getNextNode(aux))
                 {
-                    isTierOne = false;
-                    break;
+                    if(Node_getRelationship((Node *)SinglyLinkedList_getItem(aux)) == PROVIDER)
+                    {
+                        isTierOne = false;
+                        break;
+                    }
                 }
-            }
 
-            if(true == isTierOne && (Graph_getAdjOfV(graph, i) != NULL))
-            {
-                tier_one_count += 1;
-                tier_one = realloc(tier_one, tier_one_count * sizeof(long int));
-                tier_one[tier_one_count-1] = i;
-            }
-            else
-            {
-                isTierOne = true;
+                if(true == isTierOne)
+                {
+                    tier_one_count += 1;
+                    tier_one = realloc(tier_one, tier_one_count * sizeof(long int));
+                    tier_one[tier_one_count-1] = i;
+                }
+                else
+                {
+                    isTierOne = true;
+                }
             }
         }
 
@@ -248,12 +251,12 @@ bool isCommerciallyConnected(Graph *graph)
             for(aux = Graph_getAdjOfV(graph, tier_one[i]); aux != NULL; aux = SinglyLinkedList_getNextNode(aux))
             {
                 // A tier 1 can have relationships with other piers that are themselves NOT tier 1
-                if((Node_getRelationship((Node *)SinglyLinkedList_getItem(aux)) == PEER) && (isTrueTierOne(tier_one,tier_one_count, Node_getV((Node *)SinglyLinkedList_getItem(aux)))))
+                if((isATierOne(tier_one, tier_one_count, Node_getV((Node *)SinglyLinkedList_getItem(aux)))))
                 {
                     tier_one_connections += 1;
                 }
             }
-            if(tier_one_connections == tier_one_count - 1)
+            if(tier_one_connections == (tier_one_count - 1))
             {
                 tier_one_connections = 0;
             }
