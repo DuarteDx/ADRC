@@ -208,7 +208,7 @@ bool isCommerciallyConnected(Graph *graph)
                 }
             }
 
-            if(true == isTierOne)
+            if(true == isTierOne && (Graph_getAdjOfV(graph, i) != NULL))
             {
                 tier_one_count += 1;
                 tier_one = realloc(tier_one, tier_one_count * sizeof(long int));
@@ -218,6 +218,12 @@ bool isCommerciallyConnected(Graph *graph)
             {
                 isTierOne = true;
             }
+        }
+
+        fprintf(stdout, "TIER ONES ARE:\n");
+        for(i = 0; i < tier_one_count; i += 1)
+        {
+            fprintf(stdout, "%7ld\n", tier_one[i]);
         }
 
         // iterate through the array of tier ones to find if they are all connected to each other
@@ -241,6 +247,8 @@ bool isCommerciallyConnected(Graph *graph)
                 return false;
             }
         }
+
+        free(tier_one);
 
     return true;
 }
