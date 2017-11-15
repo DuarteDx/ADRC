@@ -9,5 +9,5 @@ void FixDown(Heap *, int, int*);
 int HeapInit(Heap *, Item);
 int HeapEmpty(Heap*);
 Item RemoveMin(Heap * h, int *);
-void FreeHeap(Heap * , int);
+void FreeHeap(Heap * , long int);
 void PrintMe(Heap* h);

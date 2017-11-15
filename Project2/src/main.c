@@ -14,6 +14,7 @@ int main(int argc, char const *argv[])
 
     SinglyLinkedList *edge_list_head = NULL;
     Graph *graph = NULL;
+    int* routes = NULL;
 
         // Check for correct number of arguments
         if(argc != 2)
@@ -136,7 +137,6 @@ int main(int argc, char const *argv[])
                     }
                     else
                     {
-                        int* routes = (int*)malloc(sizeof(int) * Graph_getV(graph));
                         routes = computeElectedRoutes(graph, 4);
                     }
                     break;
@@ -161,6 +161,11 @@ int main(int argc, char const *argv[])
 
         SinglyLinkedList_freeList(edge_list_head, (void (*)(Item))freeEdge);
         GRAPHfree(graph);
+
+        if(routes != NULL)
+        {
+            free(routes);
+        }
 
         free(char_buffer);
         fclose(fp);
