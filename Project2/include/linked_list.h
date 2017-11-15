@@ -218,6 +218,7 @@ SinglyLinkedList* SinglyLinkedList_findAndRetrieveNodeWithItem(SinglyLinkedList*
 Item SinglyLinkedList_findAndRetrieveItem(SinglyLinkedList* head, Item item, bool(*Item_Compare)(Item, Item));
 
 SinglyLinkedList* SinglyLinkedList_insertAtHead(SinglyLinkedList* head, SinglyLinkedList* aux);
+long int SinglyLinkedList_length(SinglyLinkedList* head);
 
 // TODO: Implement and check if more are needed
 DoublyLinkedList* DoublyLinkedList_newNode(Item);

@@ -16,6 +16,9 @@ int main(int argc, char const *argv[])
     Graph *graph = NULL;
     int* routes = NULL;
 
+    bool flag_comercially_connected = false;
+    bool flag_check_cc = false;
+
         // Check for correct number of arguments
         if(argc != 2)
         {
@@ -99,7 +102,8 @@ int main(int argc, char const *argv[])
                     }
                     else
                     {
-                        if(isCommerciallyConnected(graph))
+                        flag_comercially_connected = isCommerciallyConnected(graph);
+                        if(flag_comercially_connected)
                         {
                             fprintf(stdout, "The network is commercially connected\n");
                         }
@@ -107,6 +111,7 @@ int main(int argc, char const *argv[])
                         {
                             fprintf(stdout, "The network is not commercially connected\n");
                         }
+                        flag_check_cc = true;
                     }
                     break;
                 }
@@ -137,7 +142,21 @@ int main(int argc, char const *argv[])
                     }
                     else
                     {
-                        routes = computeElectedRoutes(graph, 4);
+                        if(!flag_check_cc)
+                        {
+                            fprintf(stdout, "Must check if network is commercially connected first.\n");
+                            break;
+                        }else
+                        {
+                            if(flag_comercially_connected)
+                            {
+                                routes = computeElectedRoutes_fast(graph, 4);
+                            }
+                            else
+                            {
+                                routes = computeElectedRoutes(graph, 4);
+                            }
+                        }
                     }
                     break;
                 }

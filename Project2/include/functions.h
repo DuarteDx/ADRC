@@ -31,5 +31,6 @@ bool hasCustomerCycles(Graph *graph);
 
 // TODO
 int* computeElectedRoutes(Graph *graph, long int destination);
+int* computeElectedRoutes_fast(Graph *graph, long int destination);
 
 #endif

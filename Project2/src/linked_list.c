@@ -199,11 +199,15 @@ Item SinglyLinkedList_findAndRetrieveItem(SinglyLinkedList* head, Item item, boo
 
 SinglyLinkedList* SinglyLinkedList_reverseList(SinglyLinkedList* head)
 {
-    SinglyLinkedList* next = head;
-    SinglyLinkedList* cur = head;
+    SinglyLinkedList* next = NULL;
+    SinglyLinkedList* cur = NULL;
     SinglyLinkedList* res = NULL;
 
-        while(cur != NULL){
+        next = head;
+        cur = head;
+
+        while(cur != NULL)
+        {
             next = cur->next;
             cur->next = res;
             res = cur;
@@ -211,4 +215,17 @@ SinglyLinkedList* SinglyLinkedList_reverseList(SinglyLinkedList* head)
         }
 
     return res;
+}
+
+long int SinglyLinkedList_length(SinglyLinkedList* head)
+{
+    long int i = 0;
+
+        while(head != NULL)
+        {
+            i += 1;
+            head = head->next;
+        }
+
+    return i;
 }
