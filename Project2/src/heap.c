@@ -40,7 +40,7 @@ void PrintMe(Heap* h)
  *
  *****************************************************************************/
 
-Heap *NewHeap(long int size, int (*comparison) (Item, Item))
+Heap * NewHeap(long int size, int (*comparison) (Item, Item))
 {
     Heap *h = NULL;
 
@@ -174,7 +174,7 @@ void FixDown(Heap * h, int k, int* wt)
 }
 
 /******************************************************************************
- * RemoveMin
+ * RemovePriority
  *
  * Arguments: h - pointer to heap
  *
@@ -183,7 +183,7 @@ void FixDown(Heap * h, int k, int* wt)
  *
  *****************************************************************************/
 
-Item RemoveMin(Heap *h, int *wt)
+Item RemoveRoot(Heap *h, int *wt)
 {
     Item t;
 

@@ -254,6 +254,7 @@ bool hasCustomerCycles(Graph *graph)
 
 //TODO: FIRST CHECK IF IT'S COMMERCIALLY CONNECTED. IF NOT WE RUN THIS ALGO. IF IT IS WE RUN ANOTHER ALGO.
 
+// maxHeap (greatest value at root)
 int comparison(Item a, Item b)
 {
     int aa, bb;
@@ -272,17 +273,21 @@ Returns the elected routes
 */
 //TODO: FIRST CHECK IF IT'S COMMERCIALLY CONNECTED. IF NOT WE RUN THIS ALGO. IF IT IS WE RUN ANOTHER ALGO.
 
+
+// NETWORK MUST BE COMMERCIALLY CONNECTED TO CALL THIS ONE!
+
+// priorities: SOURCE > CUSTOMER > PEER > PROVIDER > NO ROUTE > NULL
+
 int* computeElectedRoutes(Graph *graph, long int destination)
 {
     int *routes = NULL;
-    long int *dest_ptr = NULL;
-    long int *tail_ptr = NULL;
+    long int *num_ptr = NULL;
     long int tail = -1;
     long int i = 0;
     long int head = -1;
     int relationship = -1;
     Heap *heap = NULL;
-    SinglyLinkedList* adjHead = NULL;
+    SinglyLinkedList *adjHead = NULL;
     long int num_nodes = 0;
 
         num_nodes = Graph_getV(graph);
@@ -292,56 +297,50 @@ int* computeElectedRoutes(Graph *graph, long int destination)
         memset(routes, -1, sizeof(int) * num_nodes);
 
         //Initialize destination Node
-        routes[destination] = 3;
+        routes[destination] = SOURCE;
 
         //Precisamos de inicializar o Heap
         heap = NewHeap(num_nodes, comparison);
 
-        dest_ptr = malloc(sizeof(long int));
-        *dest_ptr = destination;
+        for(i = 0; i < num_nodes; i += 1)
+        {
+            if(Graph_getAdjOfV(graph, i) != NULL)
+            {
+                num_ptr = malloc(sizeof(long int));
+                *num_ptr = i;
 
-        //Add destination to Heap
-        HeapInit(heap, (Item)dest_ptr);
+                HeapInit(heap, (Item)num_ptr);
+                FixUp(heap, i, routes);
+            }
+        }
 
         while(!HeapEmpty(heap))
         {
             //Ir buscar a maior prioridade do Heap, a ordem de prioridades, da maior para a menor é: source(10) - customer link(3) - peer link(2) - provider link(1) - not linked(0)
-            head = *(int*)RemoveMin(heap, routes);
+            head = *(int*)RemoveRoot(heap, routes);
 
-            //Get the adjancency head for this node's adj list
-            adjHead = Graph_getAdjOfV(graph, head);
-
-            while(adjHead != NULL)
+            // for each neighbour v of u
+            for(adjHead = Graph_getAdjOfV(graph, head); adjHead != NULL; adjHead = SinglyLinkedList_getNextNode(adjHead))
             {
                 tail = Node_getV((Node*)SinglyLinkedList_getItem(adjHead));
                 relationship = Node_getRelationship((Node*)SinglyLinkedList_getItem(adjHead));
 
                 //If the tail is a provider and our elected route is a customer link we export our route
-                if(relationship == PROVIDER && routes[head] == CUSTOMER)
+                if(relationship == PROVIDER && (routes[head] == CUSTOMER || routes[head] == SOURCE))
                 {
                     //Change the elected route of the Tail if the existing one is worse
                     if(routes[tail] < CUSTOMER)
                     {
-                        tail_ptr = malloc(sizeof(long int));
-                        *tail_ptr = tail;
-
-                        //Change the prioriy of the node in the heap
-                        HeapInit(heap, tail_ptr);
                         routes[tail] = CUSTOMER;
                         FixUp(heap, tail, routes);
                     }
                 }
                 //If the tail is a peer and we're source or have a customer link our elected route is a customer link and we export our route
-                else if((relationship == PEER) && (routes[head] == CUSTOMER))
+                else if((relationship == PEER) && (routes[head] == CUSTOMER || routes[head] == SOURCE))
                 {
                     //Change the elected route of the Tail if the existing one is worse
                     if(routes[tail] < PEER)
                     {
-                        tail_ptr = malloc(sizeof(long int));
-                        *tail_ptr = tail;
-
-                        //Change the prioriy of the node in the heap
-                        HeapInit(heap, tail_ptr);
                         routes[tail] = PEER;
                         FixUp(heap, tail, routes);
                     }
@@ -352,19 +351,10 @@ int* computeElectedRoutes(Graph *graph, long int destination)
                     //Change the elected route of the Tail if the existing one is worse
                     if(routes[tail] < PROVIDER)
                     {
-                        tail_ptr = malloc(sizeof(long int));
-                        *tail_ptr = tail;
-
-                        //Change the prioriy of the node in the heap
-                        HeapInit(heap, tail_ptr);
                         routes[tail] = PROVIDER;
                         FixUp(heap, tail, routes);
                     }
                 }
-
-
-                //Get the next node in the adjencencies list
-                adjHead = SinglyLinkedList_getNextNode(adjHead);
             }
         }
 
@@ -376,121 +366,6 @@ int* computeElectedRoutes(Graph *graph, long int destination)
             }
         }
 
-        free(dest_ptr);
-        FreeHeap(heap, num_nodes);
-
-    return routes;
-}
-
-// NETWORK MUST BE COMMERCIALLY CONNECTED TO CALL THIS ONE!
-int* computeElectedRoutes_fast(Graph *graph, long int destination)
-{
-    int *routes = NULL;
-    long int *dest_ptr = NULL;
-    long int *tail_ptr = NULL;
-    long int tail = -1;
-    long int i = 0;
-    long int head = -1;
-    int relationship = -1;
-    Heap *heap = NULL;
-    SinglyLinkedList* adjHead = NULL;
-    long int num_nodes = 0;
-
-        num_nodes = Graph_getV(graph);
-
-        //Allocate and initialize routes array
-        routes = (int*)malloc(sizeof(int) * num_nodes);
-        memset(routes, -1, sizeof(int) * num_nodes);
-
-        //Initialize destination Node
-        routes[destination] = 3;
-
-        //Precisamos de inicializar o Heap
-        heap = NewHeap(num_nodes, comparison);
-
-        dest_ptr = malloc(sizeof(long int));
-        *dest_ptr = destination;
-
-        //Add destination to Heap
-        HeapInit(heap, (Item)dest_ptr);
-
-        long int adj_count = 0;
-
-        while(!HeapEmpty(heap))
-        {
-            //Ir buscar a maior prioridade do Heap, a ordem de prioridades, da maior para a menor é: source(10) - customer link(3) - peer link(2) - provider link(1) - not linked(0)
-            head = *(int*)RemoveMin(heap, routes);
-
-            //Get the adjancency head for this node's adj list
-            adjHead = Graph_getAdjOfV(graph, head);
-            adj_count = SinglyLinkedList_length(adjHead);
-
-            while(adjHead != NULL)
-            {
-                tail = Node_getV((Node*)SinglyLinkedList_getItem(adjHead));
-                relationship = Node_getRelationship((Node*)SinglyLinkedList_getItem(adjHead));
-
-                //If the tail is a provider and our elected route is a customer link we export our route
-                if(relationship == PROVIDER && routes[head] == CUSTOMER)
-                {
-                    //Change the elected route of the Tail if the existing one is worse
-                    if(routes[tail] < CUSTOMER)
-                    {
-                        tail_ptr = malloc(sizeof(long int));
-                        *tail_ptr = tail;
-
-                        //Change the prioriy of the node in the heap
-                        HeapInit(heap, tail_ptr);
-                        routes[tail] = CUSTOMER;
-                        FixUp(heap, tail, routes);
-                    }
-                }
-                //If the tail is a peer and we're source or have a customer link our elected route is a customer link and we export our route
-                else if((relationship == PEER) && (routes[head] == CUSTOMER))
-                {
-                    //Change the elected route of the Tail if the existing one is worse
-                    if(routes[tail] < PEER)
-                    {
-                        tail_ptr = malloc(sizeof(long int));
-                        *tail_ptr = tail;
-
-                        //Change the prioriy of the node in the heap
-                        HeapInit(heap, tail_ptr);
-                        routes[tail] = PEER;
-                        FixUp(heap, tail, routes);
-                    }
-                }
-                //If the tail is a customer we export our route
-                else if(relationship == CUSTOMER)
-                {
-                    //Change the elected route of the Tail if the existing one is worse
-                    if(routes[tail] < PROVIDER)
-                    {
-                        tail_ptr = malloc(sizeof(long int));
-                        *tail_ptr = tail;
-
-                        //Change the prioriy of the node in the heap
-                        HeapInit(heap, tail_ptr);
-                        routes[tail] = PROVIDER;
-                        FixUp(heap, tail, routes);
-                    }
-                }
-
-
-                //Get the next node in the adjencencies list
-                adjHead = SinglyLinkedList_getNextNode(adjHead);
-            }
-        }
-
-        for(i = 0; i < num_nodes; i += 1)
-        {
-            if(routes[i] != -1)
-            {
-                fprintf(stdout, "Node: %7ld | Route: %d\n", i, routes[i]);
-            }
-        }
-
-        free(dest_ptr);
         FreeHeap(heap, num_nodes);
 
     return routes;

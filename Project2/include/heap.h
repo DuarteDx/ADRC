@@ -8,6 +8,6 @@ void FixUp(Heap *, long int, int*);
 void FixDown(Heap *, int, int*);
 int HeapInit(Heap *, Item);
 int HeapEmpty(Heap*);
-Item RemoveMin(Heap * h, int *);
+Item RemoveRoot(Heap * h, int *);
 void FreeHeap(Heap * , long int);
 void PrintMe(Heap* h);

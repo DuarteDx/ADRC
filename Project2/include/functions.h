@@ -17,6 +17,8 @@
 #include "./heap.h"
 #endif
 
+#define SOURCE 100
+
 /* showMenu
  * Description: Shows the user a menu, and returns the slection number to the calling function
  * Arguments: void

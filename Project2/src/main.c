@@ -148,9 +148,10 @@ int main(int argc, char const *argv[])
                             break;
                         }else
                         {
+                            // TODO
                             if(flag_comercially_connected)
                             {
-                                routes = computeElectedRoutes_fast(graph, 4);
+                                routes = computeElectedRoutes(graph, 4);
                             }
                             else
                             {
