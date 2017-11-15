@@ -289,6 +289,7 @@ int* computeElectedRoutes(Graph *graph, long int destination)
     Heap *heap = NULL;
     SinglyLinkedList *adjHead = NULL;
     long int num_nodes = 0;
+    bool allProviderFlag = false;
 
         num_nodes = Graph_getV(graph);
 
@@ -318,6 +319,12 @@ int* computeElectedRoutes(Graph *graph, long int destination)
         {
             //Ir buscar a maior prioridade do Heap, a ordem de prioridades, da maior para a menor é: source(10) - customer link(3) - peer link(2) - provider link(1) - not linked(0)
             head = *(int*)RemoveRoot(heap, routes);
+
+            if(routes[head] == PROVIDER)
+            {
+                allProviderFlag = true;
+                break;
+            }
 
             // for each neighbour v of u
             for(adjHead = Graph_getAdjOfV(graph, head); adjHead != NULL; adjHead = SinglyLinkedList_getNextNode(adjHead))
@@ -353,6 +360,20 @@ int* computeElectedRoutes(Graph *graph, long int destination)
                     {
                         routes[tail] = PROVIDER;
                         FixUp(heap, tail, routes);
+                    }
+                }
+            }
+        }
+
+        if(allProviderFlag)
+        {
+            for(i = 0; i < num_nodes; i += 1)
+            {
+                if(Graph_getAdjOfV(graph, i) != NULL)
+                {
+                    if(routes[i] < PROVIDER)
+                    {
+                        routes[i] = PROVIDER;
                     }
                 }
             }
