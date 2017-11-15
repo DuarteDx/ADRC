@@ -9,8 +9,12 @@
 #include "./linked_list.h"
 #endif
 
-#ifndef _NODE_H_
+#ifndef _GRAPH_H_
 #include "./graph.h"
+#endif
+
+#ifndef _HEAP_H_
+#include "./heap.h"
 #endif
 
 /* showMenu
@@ -24,5 +28,8 @@ void printEdges(SinglyLinkedList *edge_list_head);
 bool isATierOne(long int *tier_one_array, int array_size, long int element);
 bool isCommerciallyConnected(Graph *graph);
 bool hasCustomerCycles(Graph *graph);
+
+// TODO
+int* computeElectedRoutes(Graph *graph, long int destination);
 
 #endif

@@ -7,7 +7,7 @@
 #include "./defs.h"
 #endif
 
-#ifndef _LINKED_LIST_H
+#ifndef _LINKED_LIST_H_
 #include "./linked_list.h"
 #endif
 

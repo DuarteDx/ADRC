@@ -6,11 +6,12 @@
 #define DEMO
 
 /* A heap is represented by a structure: */
-struct _heap {
-  int (*comparison) (Item, Item);     /* Surprise! this field is a function pointer* to elements in the heap. */
-  int n_elements; 	            /* # elements in heap */
-  int size;                     /* max size of the heap. */
-  Item *heapdata;               /* An array of Items. */
+struct _heap
+{
+    int (*comparison) (Item, Item);     /* function pointer to elements in the heap. */
+    long int n_elements; 	            /* # elements in heap */
+    long int size;                     /* max size of the heap. */
+    Item *heapdata;               /* An array of Items. */
 };
 
 void (*PrintItem) (Item);
@@ -18,13 +19,15 @@ void (*PrintItem) (Item);
 
 void PrintMe(Heap* h)
 {
-    int v = h->n_elements;
     int c;
-    for (c=0; c<v; c++ )
-    {
-        printf("%d ", *((int*)(h->heapdata[c])) );
-    }
-    printf("\n");
+
+        for(c = 0; c < h->n_elements; c++)
+        {
+            printf("%d ", *((int*)(h->heapdata[c])) );
+        }
+        printf("\n");
+
+    return;
 }
 
 /******************************************************************************
@@ -36,36 +39,33 @@ void PrintMe(Heap* h)
  *
  *****************************************************************************/
 
-Heap *NewHeap(int size, int (*comparison) (Item, Item))
+Heap *NewHeap(long int size, int (*comparison) (Item, Item))
 {
-  Heap *h;
+    Heap *h = NULL;
 
-  h = (Heap *) malloc(sizeof(Heap));
-  if(h == NULL)
-    {
-        printf("Error allocating memory");
-        exit(0);
-    }
-  if (h == ((Heap *) NULL)) {
-    fprintf(stderr, "Error in malloc of heap\n");
-    exit(1);
-  }
+        h = (Heap *)malloc(sizeof(Heap));
+        if(h == NULL)
+        {
+            fprintf(stderr, "Error in malloc of heap\n");
+            exit(EXIT_FAILURE);
+        }
 
-  h->n_elements = 0;
-  h->comparison = comparison;
-  h->size = size;
-  h->heapdata = (Item *) malloc(size * sizeof(Item));
-  if(h->heapdata == NULL)
-    {
-        printf("Error allocating memory");
-        exit(0);
-    }
-  if (h->heapdata == ((Item *) NULL)) {
-    fprintf(stderr, "Error in malloc of heap data\n");
-    exit(1);
-  }
+        h->n_elements = 0;
+        h->comparison = comparison;
+        h->size = size;
+        h->heapdata = (Item *)malloc(size * sizeof(Item));
+        if(h->heapdata == NULL)
+        {
+            printf("Error allocating memory");
+            exit(EXIT_FAILURE);
+        }
+        if(h->heapdata ==  NULL)
+        {
+            fprintf(stderr, "Error in malloc of heap data\n");
+            exit(EXIT_FAILURE);
+        }
 
-  return (h);
+    return h;
 }
 
 /******************************************************************************
@@ -80,15 +80,15 @@ Heap *NewHeap(int size, int (*comparison) (Item, Item))
  *
  *****************************************************************************/
 
-int HeapInit(Heap * h, Item element)
+int HeapInit(Heap *h, Item element)
 {
   if (h->n_elements == h->size) {
-    printf("Heap full (size = %d) !\n", h->size);
+    printf("Heap full (size = %ld) !\n", h->size);
     return 0;
   }
   h->heapdata[h->n_elements] = element;
 
-  h->n_elements++;
+  h->n_elements += 1;
 
   return 1;
 }
@@ -105,7 +105,7 @@ int HeapInit(Heap * h, Item element)
  *
  *****************************************************************************/
 
-void FixUp(Heap * h, int a, int* wt)
+void FixUp(Heap * h, long int a, int* wt)
 {
   Item t;
   int k;
@@ -164,14 +164,14 @@ void FixDown(Heap * h, int k, int* wt)
     (h->heapdata)[j] = t;
     k = j;
   }
-
+/* TODO: uncomment?
   if ((h->comparison) ((Item) &wt[*((int*)h->heapdata[k])], (Item) &wt[*((int*)h->heapdata[k+1])]))
   {
     t = (h->heapdata)[k];
     (h->heapdata)[k] = (h->heapdata)[k+1];
     (h->heapdata)[k+1] = t;
   }
-
+*/
   return;
 }
 
@@ -213,8 +213,8 @@ void FreeLastHeapPos(Heap* h)
 int HeapEmpty(Heap* h)
 {
     if (h->n_elements == 0)
-        return 0;
-    else return 1;
+        return 1;
+    else return 0;
 }
 
 

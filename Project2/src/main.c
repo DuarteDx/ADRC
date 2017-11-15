@@ -128,20 +128,20 @@ int main(int argc, char const *argv[])
                     }
                     break;
                 }
-                /*case 6:
+                case 7:
                 {
-                    if(NULL == tree_root)
+                    if(NULL == graph)
                     {
-                        fprintf(stdout, "No prefix tree to convert! Use option 1 first.\n");
+                        fprintf(stdout, "No graph. Use 1\n");
                     }
                     else
                     {
-                        tree_root_2 = BinaryToTwoBit(tree_root);
-                        fprintf(stdout, "Convertion complete!\n");
+                        int* routes = (int*)malloc(sizeof(int) * Graph_getV(graph));
+                        routes = computeElectedRoutes(graph, 4);
                     }
                     break;
                 }
-                case 7:
+                /*case 7:
                 {
                     if(NULL == tree_root_2)
                     {
