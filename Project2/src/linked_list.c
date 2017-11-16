@@ -15,7 +15,7 @@ struct DoublyLinkedList_ {
 
 SinglyLinkedList* SinglyLinkedList_newNode(Item item)
 {
-    SinglyLinkedList* new_node = (SinglyLinkedList*)malloc(sizeof(SinglyLinkedList));
+    SinglyLinkedList* new_node = (SinglyLinkedList *)malloc(sizeof(SinglyLinkedList));
     new_node->item = item;
     new_node->next = NULL;
 
@@ -204,11 +204,11 @@ Item SinglyLinkedList_findAndRetrieveItem(SinglyLinkedList* head, Item item, boo
     return NULL;
 }
 
-SinglyLinkedList* SinglyLinkedList_reverseList(SinglyLinkedList* head)
+SinglyLinkedList * SinglyLinkedList_reverseList(SinglyLinkedList *head)
 {
-    SinglyLinkedList* next = NULL;
-    SinglyLinkedList* cur = NULL;
-    SinglyLinkedList* res = NULL;
+    SinglyLinkedList *next = NULL;
+    SinglyLinkedList *cur = NULL;
+    SinglyLinkedList *res = NULL;
 
         next = head;
         cur = head;
@@ -224,7 +224,7 @@ SinglyLinkedList* SinglyLinkedList_reverseList(SinglyLinkedList* head)
     return res;
 }
 
-long int SinglyLinkedList_length(SinglyLinkedList* head)
+long int SinglyLinkedList_length(SinglyLinkedList *head)
 {
     long int i = 0;
 

@@ -2,9 +2,6 @@
 #include <stdio.h>
 #include "../include/heap.h"
 
-/* to remove comments, just delete or comment the next line */
-#define DEMO
-
 /* A heap is represented by a structure: */
 struct _heap
 {

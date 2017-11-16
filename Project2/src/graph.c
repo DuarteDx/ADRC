@@ -104,7 +104,7 @@ void GRAPHPrintAdjacenciesList(Graph *graph)
             }
             else
             {
-                // FIXME: this will print a huge spam of no Adjacency nodes
+                // if this is enabled, it might print a huge spam of no Adjacency nodes
                 //fprintf(stdout, "No adjencencies for node %7ld\n", i);
             }
         }

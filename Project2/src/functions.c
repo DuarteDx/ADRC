@@ -309,7 +309,7 @@ int * computeElectedRoutes(Graph *graph, long int destination, bool flag_comerci
                     }
                 }
                 //If the tail is a customer we export our route
-                else if(relationship == CUSTOMER)
+                else if(relationship == CUSTOMER && routes[head] != NO_ROUTE)
                 {
                     //Change the elected route of the Tail if the existing one is worse
                     if(routes[tail] < PROVIDER)
@@ -318,11 +318,10 @@ int * computeElectedRoutes(Graph *graph, long int destination, bool flag_comerci
                         FixUp(heap, tail, routes);
                     }
                 }
-
-                // TODO: BUG
-                if(routes[tail] < NO_ROUTE)
+                else if(routes[tail] < NO_ROUTE)
                 {
                     routes[tail] = NO_ROUTE;
+                    FixUp(heap, tail, routes);
                 }
             }
         }
