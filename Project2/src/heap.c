@@ -8,25 +8,20 @@
 /* A heap is represented by a structure: */
 struct _heap
 {
-    int (*comparison) (Item, Item);     /* function pointer to elements in the heap. */
+    int (*comparison) (Item, Item);     /* function pointer to comparison function of elements in the heap. */
     long int n_elements; 	            /* # elements in heap */
     long int size;                     /* max size of the heap. */
     Item *heapdata;               /* An array of Items. */
 };
 
-void (*PrintItem) (Item);
-
-
-// FIXME: this only works if heap data is an int
-void PrintMe(Heap* h)
+void PrintHeap(Heap *heap, void (*Item_Print) (Item))
 {
-    int c;
+    long int i;
 
-        for(c = 0; c < h->n_elements; c++)
+        for(i = 0; i < heap->n_elements; i += 1)
         {
-            printf("%d ", *((int*)(h->heapdata[c])) );
+            (*Item_Print)(heap->heapdata[i]);
         }
-        printf("\n");
 
     return;
 }
@@ -42,42 +37,42 @@ void PrintMe(Heap* h)
 
 Heap * NewHeap(long int size, int (*comparison) (Item, Item))
 {
-    Heap *h = NULL;
+    Heap *heap = NULL;
 
-        h = (Heap *)malloc(sizeof(Heap));
-        if(h == NULL)
+        heap = (Heap *)malloc(sizeof(Heap));
+        if(heap == NULL)
         {
             fprintf(stderr, "Error in malloc of heap\n");
             exit(EXIT_FAILURE);
         }
 
-        h->n_elements = 0;
-        h->comparison = comparison;
-        h->size = size;
-        h->heapdata = (Item *)malloc(size * sizeof(Item));
+        heap->n_elements = 0;
+        heap->comparison = comparison;
+        heap->size = size;
+        heap->heapdata = (Item *)malloc(size * sizeof(Item));
         for(long int i = 0; i < size; i += 1)
         {
-            h->heapdata[i] = NULL;
+            heap->heapdata[i] = NULL;
         }
 
-        if(h->heapdata == NULL)
+        if(heap->heapdata == NULL)
         {
             printf("Error allocating memory");
             exit(EXIT_FAILURE);
         }
-        if(h->heapdata ==  NULL)
+        if(heap->heapdata ==  NULL)
         {
             fprintf(stderr, "Error in malloc of heap data\n");
             exit(EXIT_FAILURE);
         }
 
-    return h;
+    return heap;
 }
 
 /******************************************************************************
  * HeapInit()
  *
- * Arguments: h - pointer to heap
+ * Arguments: heap - pointer to heap
  *            element - pointer to new element
  * Returns: vopid
  * Side-Effects: none
@@ -86,15 +81,16 @@ Heap * NewHeap(long int size, int (*comparison) (Item, Item))
  *
  *****************************************************************************/
 
-int HeapInit(Heap *h, Item element)
+int HeapInit(Heap *heap, Item item)
 {
-    if (h->n_elements == h->size) {
-        printf("Heap full (size = %7ld) !\n", h->size);
+    if (heap->n_elements == heap->size)
+    {
+        fprintf(stdout, "Heap full (size = %7ld) !\n", heap->size);
         return 0;
     }
-    h->heapdata[h->n_elements] = element;
+    heap->heapdata[heap->n_elements] = item;
 
-    h->n_elements += 1;
+    heap->n_elements += 1;
 
     return 1;
 }
@@ -102,7 +98,7 @@ int HeapInit(Heap *h, Item element)
 /******************************************************************************
  * FixUp()
  *
- * Arguments: h - pointer to heap structure
+ * Arguments: heap - pointer to heap structure
  *            k - index of element to fixup
  * Returns:
  * Side-Effects: none
@@ -111,18 +107,18 @@ int HeapInit(Heap *h, Item element)
  *
  *****************************************************************************/
 
-void FixUp(Heap *h, long int a, int *wt)
+void FixUp(Heap *heap, long int a, int *weight)
 {
     Item t;
     long int k;
 
-        for(k = 0; a != *((long int *)h->heapdata[k]); k += 1);
+        for(k = 0; a != *((long int *)heap->heapdata[k]); k += 1);
 
-        while((k > 0) && (h->comparison) ((Item) &wt[*((long int*)h->heapdata[(k - 1) / 2])], (Item) &wt[*((long int*)h->heapdata[k])]))
+        while((k > 0) && (heap->comparison) ((Item) &weight[*((long int*)heap->heapdata[(k - 1) / 2])], (Item) &weight[*((long int*)heap->heapdata[k])]))
         {
-            t = (h->heapdata)[k];
-            (h->heapdata)[k] = (h->heapdata)[(k - 1) / 2];
-            (h->heapdata)[(k - 1) / 2] = t;
+            t = (heap->heapdata)[k];
+            (heap->heapdata)[k] = (heap->heapdata)[(k - 1) / 2];
+            (heap->heapdata)[(k - 1) / 2] = t;
 
             k = (k - 1) / 2;
         }
@@ -133,7 +129,7 @@ void FixUp(Heap *h, long int a, int *wt)
 /******************************************************************************
  * FixDown()
  *
- * Arguments: h - pointer to heap structure
+ * Arguments: heap - pointer to heap structure
  *            k - index of element to fixdown
  * Returns:
  * Side-Effects: none
@@ -142,21 +138,21 @@ void FixUp(Heap *h, long int a, int *wt)
  *
  *****************************************************************************/
 
-void FixDown(Heap * h, int k, int* wt)
+void FixDown(Heap * heap, int k, int *weight)
 {
     long int j;
     Item t;
 
-        while ((2 * k + 1) < h->n_elements)
+        while ((2 * k + 1) < heap->n_elements)
         {
             j = 2 * k + 1;
-            if(((j + 1) < h->n_elements) && (h->comparison) ((Item) &wt[*((long int    *)h->heapdata[j])], (Item) &wt[*((long int *)h->heapdata[j+1])]))
+            if(((j + 1) < heap->n_elements) && (heap->comparison) ((Item) &weight[*((long int    *)heap->heapdata[j])], (Item) &weight[*((long int *)heap->heapdata[j+1])]))
             {
                 /* second offspring is smaller than its brother */
                 j++;
             }
 
-            if (!(h->comparison) ((Item) &wt[*((long int *)h->heapdata[k])], (Item) &wt[*((long int *)h->heapdata[j])]))
+            if (!(heap->comparison) ((Item) &weight[*((long int *)heap->heapdata[k])], (Item) &weight[*((long int *)heap->heapdata[j])]))
             {
                 /* Elements are already in correct order. */
                 break;
@@ -164,9 +160,9 @@ void FixDown(Heap * h, int k, int* wt)
 
             /* the 2 elements are not correctly sorted, it is
             necessary to exchange them */
-            t = (h->heapdata)[k];
-            (h->heapdata)[k] = (h->heapdata)[j];
-            (h->heapdata)[j] = t;
+            t = (heap->heapdata)[k];
+            (heap->heapdata)[k] = (heap->heapdata)[j];
+            (heap->heapdata)[j] = t;
             k = j;
         }
 
@@ -176,41 +172,33 @@ void FixDown(Heap * h, int k, int* wt)
 /******************************************************************************
  * RemovePriority
  *
- * Arguments: h - pointer to heap
+ * Arguments: heap - pointer to heap
  *
  * Returns: Item inse the min value of the heap
  *
  *
  *****************************************************************************/
 
-Item RemoveRoot(Heap *h, int *wt)
+Item RemoveRoot(Heap *heap, int *weight)
 {
     Item t;
 
-        if (h->n_elements > 0)
+        if (heap->n_elements > 0)
         {
-            t = (h->heapdata)[0];
-            (h->heapdata)[0] = (h->heapdata)[h->n_elements - 1];
-            (h->heapdata)[h->n_elements - 1] = t;
-            h->n_elements -= 1;
-            FixDown(h, 0, wt);
+            t = (heap->heapdata)[0];
+            (heap->heapdata)[0] = (heap->heapdata)[heap->n_elements - 1];
+            (heap->heapdata)[heap->n_elements - 1] = t;
+            heap->n_elements -= 1;
+            FixDown(heap, 0, weight);
             return t;
         }
 
     return NULL;
 }
 
-void FreeLastHeapPos(Heap* h)
+int HeapEmpty(Heap* heap)
 {
-    free(h->heapdata[h->n_elements - 1]);
-    h->n_elements--;
-    return;
-}
-
-
-int HeapEmpty(Heap* h)
-{
-    if(h->n_elements == 0)
+    if(heap->n_elements == 0)
     {
         return 1;
     }
@@ -221,30 +209,10 @@ int HeapEmpty(Heap* h)
 }
 
 
-int GetHeapN_Elements(Heap* h)
+int GetHeapN_Elements(Heap *heap)
 {
-    return (h->n_elements);
+    return (heap->n_elements);
 }
-
-int GetFirstElement(Heap* h)
-{
-    return ( *((int*) h->heapdata[0]) );
-}
-
-int IsAllInfinity(Heap* h)
-{
-    int i;
-    for(i=0;i<h->n_elements;i++)
-    {
-        if( *( (int*) h->heapdata[i]) != 10000)
-        {
-            return 0;
-        }
-    }
-    return 1;
-}
-
-
 
 
 /******************************************************************************
@@ -259,19 +227,19 @@ int IsAllInfinity(Heap* h)
  *
  *****************************************************************************/
 
-void FreeHeap(Heap *h, long int vertices)
+void FreeHeap(Heap *heap, long int vertices)
 {
     long int c;
 
     for(c = 0; c < vertices; c += 1)
     {
-        if(h->heapdata[c] != NULL)
+        if(heap->heapdata[c] != NULL)
         {
-            free(h->heapdata[c]);
+            free(heap->heapdata[c]);
         }
     }
-    free(h->heapdata);
-    free (h);
+    free(heap->heapdata);
+    free (heap);
 
     return;
 }

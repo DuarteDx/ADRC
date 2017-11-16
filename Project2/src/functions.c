@@ -252,9 +252,7 @@ bool hasCustomerCycles(Graph *graph)
     return true;
 }
 
-
-//TODO: FIRST CHECK IF IT'S COMMERCIALLY CONNECTED. IF NOT WE RUN THIS ALGO. IF IT IS WE RUN ANOTHER ALGO.
-
+// priorities: SOURCE > CUSTOMER > PEER > PROVIDER > NO ROUTE > NULL
 // maxHeap (greatest value at root)
 int comparison(Item a, Item b)
 {
@@ -266,19 +264,12 @@ int comparison(Item a, Item b)
     return (aa <= bb);
 }
 
-
-// TODO: SHITSTORM
+//TODO: FIRST CHECK IF IT'S COMMERCIALLY CONNECTED. IF NOT WE RUN THIS ALGO. IF IT IS WE RUN ANOTHER ALGO.
+// NETWORK MUST BE COMMERCIALLY CONNECTED TO CALL THIS ONE!
 /*
 Computes the elected routes for a certain destination in a network.
 Returns the elected routes
 */
-//TODO: FIRST CHECK IF IT'S COMMERCIALLY CONNECTED. IF NOT WE RUN THIS ALGO. IF IT IS WE RUN ANOTHER ALGO.
-
-
-// NETWORK MUST BE COMMERCIALLY CONNECTED TO CALL THIS ONE!
-
-// priorities: SOURCE > CUSTOMER > PEER > PROVIDER > NO ROUTE > NULL
-
 int* computeElectedRoutes(Graph *graph, long int destination)
 {
     int *routes = NULL;
@@ -304,6 +295,7 @@ int* computeElectedRoutes(Graph *graph, long int destination)
         //Precisamos de inicializar o Heap
         heap = NewHeap(num_nodes, comparison);
 
+        // Put all nodes in the heap
         for(i = 0; i < num_nodes; i += 1)
         {
             if(Graph_getAdjOfV(graph, i) != NULL)
@@ -319,7 +311,7 @@ int* computeElectedRoutes(Graph *graph, long int destination)
         while(!HeapEmpty(heap))
         {
             //Ir buscar a maior prioridade do Heap, a ordem de prioridades, da maior para a menor é: source(10) - customer link(3) - peer link(2) - provider link(1) - not linked(0)
-            head = *(int*)RemoveRoot(heap, routes);
+            head = *(int *)RemoveRoot(heap, routes);
 
             if(routes[head] == PROVIDER)
             {
@@ -389,12 +381,14 @@ void printRoutes(int *routes, long int num_nodes)
 {
     long int i = 0;
 
-    for(i = 0; i < num_nodes; i += 1)
-    {
-        if(routes[i] != -1)
+        for(i = 0; i < num_nodes; i += 1)
         {
-            fprintf(stdout, "Node: %7ld | Route: %d\n", i, routes[i]);
+            if(routes[i] != -1)
+            {
+                fprintf(stdout, "Node: %7ld | Route: %d\n", i, routes[i]);
+            }
         }
-    }
-    fprintf(stdout, "\n");
+        fprintf(stdout, "\n");
+
+    return;
 }
