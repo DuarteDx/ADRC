@@ -1,40 +1,5 @@
 #include "../include/functions.h"
 
-int showMenu(void)
-{
-    int option = 0;
-    int ret_val_sscanf = 0;
-    char *ret_val_fgets = NULL;
-    char *char_buffer = NULL;
-
-        char_buffer = (char *)malloc(CHAR_BUFFER_SIZE * sizeof(char));
-
-        fprintf(stdout, "\nChoose a function to call (number); any other number exits the program:\n");
-        fprintf(stdout, "1 - Reads a file into an edge list.\n");
-        fprintf(stdout, "2 - Prints the edge list.\n");
-        fprintf(stdout, "3 - Makes graph from edge list.\n");
-        fprintf(stdout, "4 - Prints adjacencies list of graph\n");
-        fprintf(stdout, "5 - Is it commercially connected? Find out now!\n");
-        fprintf(stdout, "6 - Does it have customer cycles? Find out now!\n");
-        fprintf(stdout, "7 - Compute type of routes for (CURRENTLY HARDCODED) destination\n");
-        fprintf(stdout, "8 - Compute type of routes for all destinations\n");
-
-        ret_val_fgets = fgets(char_buffer, sizeof(char_buffer), stdin);
-        if(NULL == ret_val_fgets)
-        {
-            fprintf(stdout, "Error reading option, try again.\n");
-        }
-        ret_val_sscanf = sscanf(char_buffer, "%d\n", &option);
-        if(1 != ret_val_sscanf)
-        {
-            fprintf(stdout, "Error reading option, try again.\n");
-        }
-
-        free(char_buffer);
-
-    return option;
-}
-
 // reads file contents into an edge list in heap memory
 // list is in reverse order of text file lines.
 SinglyLinkedList * readFile(FILE *fp)
@@ -270,7 +235,7 @@ int comparison(Item a, Item b)
 Computes the elected routes for a certain destination in a network.
 Returns the elected routes
 */
-int* computeElectedRoutes(Graph *graph, long int destination)
+int * computeElectedRoutes(Graph *graph, long int destination, bool flag_comercially_connected)
 {
     int *routes = NULL;
     long int *num_ptr = NULL;
@@ -286,7 +251,7 @@ int* computeElectedRoutes(Graph *graph, long int destination)
         num_nodes = Graph_getV(graph);
 
         //Allocate and initialize routes array
-        routes = (int*)malloc(sizeof(int) * num_nodes);
+        routes = (int *)malloc(sizeof(int) * num_nodes);
         memset(routes, -1, sizeof(int) * num_nodes);
 
         //Initialize destination Node
@@ -313,10 +278,13 @@ int* computeElectedRoutes(Graph *graph, long int destination)
             //Ir buscar a maior prioridade do Heap, a ordem de prioridades, da maior para a menor é: source(10) - customer link(3) - peer link(2) - provider link(1) - not linked(0)
             head = *(int *)RemoveRoot(heap, routes);
 
-            if(routes[head] == PROVIDER)
+            if(flag_comercially_connected)
             {
-                allProviderFlag = true;
-                break;
+                if(routes[head] == PROVIDER)
+                {
+                    allProviderFlag = true;
+                    break;
+                }
             }
 
             // for each neighbour v of u

@@ -5,19 +5,17 @@
 
 int main(int argc, char const *argv[])
 {
-    int choice = 0;
-    bool keepRunning = true;
+    long int i = 0;
     FILE *fp = NULL;
-    char *char_buffer = NULL;
-    char *ret_val_fgets = NULL;
-    int ret_val_sscanf = 0;
 
     SinglyLinkedList *edge_list_head = NULL;
     Graph *graph = NULL;
-    int* routes = NULL;
+    int *routes = NULL;
 
     bool flag_comercially_connected = false;
-    bool flag_check_cc = false;
+    bool flag_customer_cycle = false;
+
+    SinglyLinkedList *routes_head = NULL;
 
         // Check for correct number of arguments
         if(argc != 2)
@@ -34,190 +32,30 @@ int main(int argc, char const *argv[])
             exit(EXIT_FAILURE);
         }
 
-        char_buffer = (char *)malloc(CHAR_BUFFER_SIZE * sizeof(char));
+        edge_list_head = readFile(fp);
+        graph = GRAPHinit(65536);
+        GraphFromEdgeList(graph, edge_list_head);
+        flag_customer_cycle = hasCustomerCycles(graph);
+        flag_comercially_connected = isCommerciallyConnected(graph);
 
-        while(true == keepRunning)
+
+        for(i = 0; i < Graph_getV(graph); i += 1)
         {
-            choice = showMenu();
-            switch(choice)
+            // if exists
+            if(Graph_getAdjOfV(graph, i) != NULL)
             {
-                case 1:
-                {
-                    if(NULL == edge_list_head)
-                    {
-                        edge_list_head = readFile(fp);
-                    }
-                    else
-                    {
-                        fprintf(stdout, "The file was already read and the edges are in memory\n");
-                    }
-                    break;
-                }
-                case 2:
-                {
-                    if(NULL == edge_list_head)
-                    {
-                        fprintf(stdout, "No edge list to print! Use option 1 first.\n");
-                    }
-                    else
-                    {
-                        printEdges(edge_list_head);
-                    }
-                    break;
-                }
-                case 3:
-                {
-                    if(NULL == edge_list_head)
-                    {
-                        fprintf(stdout, "No edge list to convert to graph. Use option 1 first.\n");
-                    }
-                    else if(graph != NULL)
-                    {
-                        fprintf(stdout, "Graph already constructed!\n");
-                    }
-                    else
-                    {
-                        graph = GRAPHinit(65536);
-                        GraphFromEdgeList(graph, edge_list_head);
-                    }
-                    break;
-                }
-                case 4:
-                {
-                    if(NULL == graph)
-                    {
-                        fprintf(stdout, "No graph.\n");
-                    }
-                    else
-                    {
-                        GRAPHPrintAdjacenciesList(graph);
-                    }
-                    break;
-                }
-                case 5:
-                {
-                    if(NULL == graph)
-                    {
-                        fprintf(stdout, "No graph. Use 1\n");
-                    }
-                    else
-                    {
-                        flag_comercially_connected = isCommerciallyConnected(graph);
-                        if(flag_comercially_connected)
-                        {
-                            fprintf(stdout, "The network is commercially connected\n");
-                        }
-                        else
-                        {
-                            fprintf(stdout, "The network is not commercially connected\n");
-                        }
-                        flag_check_cc = true;
-                    }
-                    break;
-                }
-                case 6:
-                {
-                    if(NULL == graph)
-                    {
-                        fprintf(stdout, "No graph. Use 1\n");
-                    }
-                    else
-                    {
-                        if(hasCustomerCycles(graph))
-                        {
-                            fprintf(stdout, "The network has customer cycles.\n");
-                        }
-                        else
-                        {
-                            fprintf(stdout, "The network does not have customer cycles.\n");
-                        }
-                    }
-                    break;
-                }
-                case 7:
-                {
-                    if(NULL == graph)
-                    {
-                        fprintf(stdout, "No graph. Use 1\n");
-                    }
-                    else
-                    {
-                        if(!flag_check_cc)
-                        {
-                            fprintf(stdout, "Must check if network is commercially connected first.\n");
-                            break;
-                        }else
-                        {
-                            // TODO
-                            if(flag_comercially_connected)
-                            {
-                                routes = computeElectedRoutes(graph, 4);
-                                printRoutes(routes, Graph_getV(graph));
-                            }
-                            else
-                            {
-                                routes = computeElectedRoutes(graph, 4);
-                                printRoutes(routes, Graph_getV(graph));
-                            }
-                        }
-                    }
-                    break;
-                }
-                case 8:
-                {
-                    if(NULL == graph)
-                    {
-                        fprintf(stdout, "No graph. Use 1\n");
-                    }
-                    else
-                    {
-                        if(!flag_check_cc)
-                        {
-                            fprintf(stdout, "Must check if network is commercially connected first.\n");
-                            break;
-                        }else
-                        {
-                            // TODO
-                            if(flag_comercially_connected)
-                            {
-                                long int k = 0;
-                                for(k = 0; k < Graph_getV(graph); k += 1)
-                                {
-                                    if(Graph_getAdjOfV(graph, k) != NULL)
-                                    {
-                                        routes = computeElectedRoutes(graph, Node_getV((Node*)SinglyLinkedList_getItem(Graph_getAdjOfV(graph, k))));
-                                        printRoutes(routes, Graph_getV(graph));
-                                    }
-
-                                }
-
-
-                            }
-                            else
-                            {
-                                routes = computeElectedRoutes(graph, 4);
-                            }
-                        }
-                    }
-                    break;
-                }
-                default:
-                {
-                    keepRunning = false;
-                    break;
-                }
+                routes = computeElectedRoutes(graph, i, flag_comercially_connected);
+                routes_head = SinglyLinkedList_insertAtHead(routes_head, SinglyLinkedList_newNode(routes));
+                printRoutes(routes, Graph_getV(graph));
             }
         }
 
+        printRoutes(routes, Graph_getV(graph));
+
         SinglyLinkedList_freeList(edge_list_head, (void (*)(Item))freeEdge);
         GRAPHfree(graph);
+        SinglyLinkedList_freeList(routes_head, NULL);
 
-        if(routes != NULL)
-        {
-            free(routes);
-        }
-
-        free(char_buffer);
         fclose(fp);
 
     return 0;
