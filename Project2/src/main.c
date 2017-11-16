@@ -63,7 +63,6 @@ int main(int argc, char const *argv[])
             {
                 routes = computeElectedRoutes(graph, i, flag_comercially_connected);
                 routes_head = SinglyLinkedList_insertAtHead(routes_head, SinglyLinkedList_newNode(routes));
-                printRoutes(routes, Graph_getV(graph)); // TODO: remove after testing
             }
         }
 
@@ -120,7 +119,7 @@ int main(int argc, char const *argv[])
             fprintf(stdout, "This network is not commercially connected.\n");
         }
 
-        fprintf(stdout, "Percentage of:\nCustomer routes: %2.2lf\nPeer routes: %2.2lf\nProvider routes: %2.2lf\nNo routes: %2.2lf\n\nTotal routes: %.0lf\n", percent_customer_routes, percent_peer_routes, percent_provider_routes, percent_no_routes, total_routes);
+        fprintf(stdout, "Customer routes: %.0lf (%2.2lf %%)\nPeer routes: %.0lf (%2.2lf %%)\nProvider routes: %.0lf (%2.2lf %%)\nNo routes: %.0lf (%2.2lf %%)\nTotal routes: %.0lf\n", customer_routes, percent_customer_routes, peer_routes, percent_peer_routes, provider_routes, percent_provider_routes, no_routes, percent_no_routes, total_routes);
 
         SinglyLinkedList_freeList(edge_list_head, (void (*)(Item))freeEdge);
         GRAPHfree(graph);

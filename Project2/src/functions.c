@@ -94,11 +94,20 @@ bool isCommerciallyConnected(Graph *graph)
             }
         }
 
-        fprintf(stdout, "TIER ONES ARE:\n");
-        for(i = 0; i < tier_one_count; i += 1)
+
+        if(tier_one_count != 0)
         {
-            fprintf(stdout, "%7ld\n", tier_one[i]);
+            fprintf(stdout, "Tier 1 nodes:\n");
+            for(i = 0; i < tier_one_count; i += 1)
+            {
+                fprintf(stdout, "%ld\n", tier_one[i]);
+            }
         }
+        else
+        {
+            fprintf(stdout, "There are no tier 1 nodes in this network\n");
+        }
+
 
         // iterate through the array of tier ones to find if they are all connected to each other
         // if they are, then the network is commercially connected.
