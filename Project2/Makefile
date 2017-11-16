@@ -36,7 +36,7 @@ EXEC_NAME_DBG_1 = inter_domain_routing_dbg_1
 EXEC_NAME_DBG_2 = inter_domain_routing_dbg_2
 
 # default test file
-DEFAULT_TEST_FILE = test_files/MediumNetwork.txt
+DEFAULT_TEST_FILE = test_files/LargeNetwork.txt
 
 run: all
 	@echo "\n>>>>>>>>>> EXECUTING RELEASE TARGET. EXECUTION COMMAND:"

@@ -128,11 +128,18 @@ bool isCommerciallyConnected(Graph *graph)
             }
             else
             {
+                if(tier_one != NULL)
+                {
+                    free(tier_one);
+                }
                 return false;
             }
         }
 
-        free(tier_one);
+        if(tier_one != NULL)
+        {
+            free(tier_one);
+        }
 
     return true;
 }
