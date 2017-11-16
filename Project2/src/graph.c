@@ -51,7 +51,6 @@ Graph * GRAPHinit(long int v)
     return graph;
 }
 
-// FIXME: probably wrong, or print function is wrong
 void GRAPHinsertEdge(Graph *graph, Edge *edge)
 {
     int v = 0;

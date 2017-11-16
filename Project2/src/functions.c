@@ -17,6 +17,7 @@ int showMenu(void)
         fprintf(stdout, "5 - Is it commercially connected? Find out now!\n");
         fprintf(stdout, "6 - Does it have customer cycles? Find out now!\n");
         fprintf(stdout, "7 - Compute type of routes for (CURRENTLY HARDCODED) destination\n");
+        fprintf(stdout, "8 - Compute type of routes for all destinations\n");
 
         ret_val_fgets = fgets(char_buffer, sizeof(char_buffer), stdin);
         if(NULL == ret_val_fgets)
@@ -379,15 +380,21 @@ int* computeElectedRoutes(Graph *graph, long int destination)
             }
         }
 
-        for(i = 0; i < num_nodes; i += 1)
-        {
-            if(routes[i] != -1)
-            {
-                fprintf(stdout, "Node: %7ld | Route: %d\n", i, routes[i]);
-            }
-        }
-
         FreeHeap(heap, num_nodes);
 
     return routes;
+}
+
+void printRoutes(int *routes, long int num_nodes)
+{
+    long int i = 0;
+
+    for(i = 0; i < num_nodes; i += 1)
+    {
+        if(routes[i] != -1)
+        {
+            fprintf(stdout, "Node: %7ld | Route: %d\n", i, routes[i]);
+        }
+    }
+    fprintf(stdout, "\n");
 }

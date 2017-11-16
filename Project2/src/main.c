@@ -152,6 +152,46 @@ int main(int argc, char const *argv[])
                             if(flag_comercially_connected)
                             {
                                 routes = computeElectedRoutes(graph, 4);
+                                printRoutes(routes, Graph_getV(graph));
+                            }
+                            else
+                            {
+                                routes = computeElectedRoutes(graph, 4);
+                                printRoutes(routes, Graph_getV(graph));
+                            }
+                        }
+                    }
+                    break;
+                }
+                case 8:
+                {
+                    if(NULL == graph)
+                    {
+                        fprintf(stdout, "No graph. Use 1\n");
+                    }
+                    else
+                    {
+                        if(!flag_check_cc)
+                        {
+                            fprintf(stdout, "Must check if network is commercially connected first.\n");
+                            break;
+                        }else
+                        {
+                            // TODO
+                            if(flag_comercially_connected)
+                            {
+                                long int k = 0;
+                                for(k = 0; k < Graph_getV(graph); k += 1)
+                                {
+                                    if(Graph_getAdjOfV(graph, k) != NULL)
+                                    {
+                                        routes = computeElectedRoutes(graph, Node_getV((Node*)SinglyLinkedList_getItem(Graph_getAdjOfV(graph, k))));
+                                        printRoutes(routes, Graph_getV(graph));
+                                    }
+
+                                }
+
+
                             }
                             else
                             {
@@ -161,16 +201,6 @@ int main(int argc, char const *argv[])
                     }
                     break;
                 }
-                /*case 7:
-                {
-                    if(NULL == tree_root_2)
-                    {
-                        fprintf(stdout, "No tree to print! Use option 6 first.\n");
-                    }else{
-                        PrintTableEven(tree_root_2, address);
-                    }
-                    break;
-                }*/
                 default:
                 {
                     keepRunning = false;

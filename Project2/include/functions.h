@@ -31,8 +31,10 @@ bool isATierOne(long int *tier_one_array, int array_size, long int element);
 bool isCommerciallyConnected(Graph *graph);
 bool hasCustomerCycles(Graph *graph);
 
-// TODO
 int* computeElectedRoutes(Graph *graph, long int destination);
 int* computeElectedRoutes_fast(Graph *graph, long int destination);
+
+// TODO
+void printRoutes(int *routes, long int num_nodes);
 
 #endif
