@@ -18,6 +18,7 @@
 #endif
 
 #define SOURCE 100
+#define NO_ROUTE 0
 
 SinglyLinkedList * readFile(FILE *fp);
 void printEdges(SinglyLinkedList *edge_list_head);
@@ -26,8 +27,6 @@ bool isCommerciallyConnected(Graph *graph);
 bool hasCustomerCycles(Graph *graph);
 
 int * computeElectedRoutes(Graph *graph, long int destination, bool flag_comercially_connected);
-
-// TODO
 void printRoutes(int *routes, long int num_nodes);
 
 #endif

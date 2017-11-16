@@ -20,11 +20,8 @@ typedef void *Item;
 #define  CHAR_BUFFER_SIZE 512
 #endif
 
-/* PREFIX_SIZE
- * Description: IPv6 addresses are 128 bits in length, so prefixes will never exceed 128 bits
- */
-#ifndef PREFIX_SIZE
-#define PREFIX_SIZE 128
+#ifndef HUGE_GRAPH_SIZE
+#define  HUGE_GRAPH_SIZE 65536
 #endif
 
 #endif

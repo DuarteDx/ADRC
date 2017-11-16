@@ -13,7 +13,7 @@ SinglyLinkedList * readFile(FILE *fp)
     char buffer[CHAR_BUFFER_SIZE];
     int ret_val_sscanf = 0;
 
-        while(NULL != fgets(buffer, PREFIX_SIZE, fp))
+        while(NULL != fgets(buffer, CHAR_BUFFER_SIZE, fp))
         {
             ret_val_sscanf = sscanf(buffer, "%ld %ld %d", &tail, &head, &relationship);
             if(ret_val_sscanf != 3)
@@ -142,13 +142,13 @@ bool hasCustomerCycles(Graph *graph)
     SinglyLinkedList *head = NULL;
     SinglyLinkedList *aux = NULL;
     SinglyLinkedList *aux2 = NULL;
-    int in_neighbours[65536];
+    int in_neighbours[HUGE_GRAPH_SIZE];
     long int *number = NULL;
     long int node_to_process = 0;
     long int counter = 0;
     long int number_of_nodes = 0;
 
-        memset(in_neighbours, 0, 65536*sizeof(int));
+        memset(in_neighbours, 0, HUGE_GRAPH_SIZE*sizeof(int));
 
         // populate array of inbound neighbours. Node i has an inbound neighbours, each corresponding to a provider
         for(i = 0; i < Graph_getV(graph); i += 1)
@@ -229,12 +229,7 @@ int comparison(Item a, Item b)
     return (aa <= bb);
 }
 
-//TODO: FIRST CHECK IF IT'S COMMERCIALLY CONNECTED. IF NOT WE RUN THIS ALGO. IF IT IS WE RUN ANOTHER ALGO.
-// NETWORK MUST BE COMMERCIALLY CONNECTED TO CALL THIS ONE!
-/*
-Computes the elected routes for a certain destination in a network.
-Returns the elected routes
-*/
+// Computes the elected routes for a certain destination in a network. Returns the elected routes
 int * computeElectedRoutes(Graph *graph, long int destination, bool flag_comercially_connected)
 {
     int *routes = NULL;
@@ -322,6 +317,12 @@ int * computeElectedRoutes(Graph *graph, long int destination, bool flag_comerci
                         routes[tail] = PROVIDER;
                         FixUp(heap, tail, routes);
                     }
+                }
+
+                // TODO: BUG
+                if(routes[tail] < NO_ROUTE)
+                {
+                    routes[tail] = NO_ROUTE;
                 }
             }
         }
