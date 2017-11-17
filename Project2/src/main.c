@@ -6,6 +6,7 @@
 int main(int argc, char const *argv[])
 {
     long int i = 0;
+    long int j = 0;
 
     FILE *fp = NULL;
 
@@ -17,8 +18,6 @@ int main(int argc, char const *argv[])
     bool flag_customer_cycle = false;
 
     SinglyLinkedList *edge_list_head = NULL;
-    SinglyLinkedList *routes_head = NULL;
-    SinglyLinkedList *aux = NULL;
 
     double customer_routes = 0;
     double peer_routes = 0;
@@ -62,36 +61,28 @@ int main(int argc, char const *argv[])
             if(Graph_getAdjOfV(graph, i) != NULL)
             {
                 routes = computeElectedRoutes(graph, i, flag_comercially_connected);
-                routes_head = SinglyLinkedList_insertAtHead(routes_head, SinglyLinkedList_newNode(routes));
-            }
-            fprintf(stdout, "Progress: %7ld\n", i);
-        }
-
-        for(aux = routes_head; aux != NULL; aux = SinglyLinkedList_getNextNode(aux))
-        {
-            routes = ((int *)SinglyLinkedList_getItem(aux));
-
-            for(i = 0; i < Graph_getV(graph); i += 1)
-            {
-                if(Graph_getAdjOfV(graph, i) != NULL)
+                for(j = 0; j < Graph_getV(graph); j += 1)
                 {
-                    if(routes[i] == CUSTOMER)
+
+                    if(routes[j] == CUSTOMER)
                     {
                         customer_routes += 1;
                     }
-                    else if(routes[i] == PEER)
+                    else if(routes[j] == PEER)
                     {
                         peer_routes += 1;
                     }
-                    else if(routes[i] == PROVIDER)
+                    else if(routes[j] == PROVIDER)
                     {
                         provider_routes += 1;
                     }
-                    else if(routes[i] == NO_ROUTE)
+                    else if(routes[j] == NO_ROUTE)
                     {
                         no_routes += 1;
                     }
+
                 }
+                free(routes);
             }
         }
 
@@ -124,7 +115,6 @@ int main(int argc, char const *argv[])
 
         SinglyLinkedList_freeList(edge_list_head, (void (*)(Item))freeEdge);
         GRAPHfree(graph);
-        SinglyLinkedList_freeList(routes_head, NULL);
 
         fclose(fp);
 
