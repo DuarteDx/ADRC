@@ -116,7 +116,7 @@ bool isCommerciallyConnected(Graph *graph)
         {
             for(aux = Graph_getAdjOfV(graph, tier_one[i]); aux != NULL; aux = SinglyLinkedList_getNextNode(aux))
             {
-                // A tier 1 can have relationships with other piers that are themselves NOT tier 1
+                // A tier 1 can have relationships with other peers that are themselves NOT tier 1
                 if(isATierOne(tier_one, tier_one_count, Node_getV((Node *)SinglyLinkedList_getItem(aux))))
                 {
                     tier_one_connections += 1;
@@ -144,7 +144,7 @@ bool isCommerciallyConnected(Graph *graph)
     return true;
 }
 
-void Int_free(int *number)
+void Long_Int_free(long int *number)
 {
     free(number);
 
@@ -222,7 +222,7 @@ bool hasCustomerCycles(Graph *graph)
 
             counter += 1;
 
-            SinglyLinkedList_freeNode(aux, (void (*)(Item))&Int_free);
+            SinglyLinkedList_freeNode(aux, (void (*)(Item))&Long_Int_free);
         }
 
         if(counter == number_of_nodes)
@@ -287,7 +287,7 @@ int * computeElectedRoutes(Graph *graph, long int destination, bool flag_comerci
         while(!HeapEmpty(heap))
         {
             //Ir buscar a maior prioridade do Heap, a ordem de prioridades, da maior para a menor é: source(10) - customer link(3) - peer link(2) - provider link(1) - not linked(0)
-            head = *(int *)RemoveRoot(heap, routes);
+            head = *((long int *)RemoveRoot(heap, routes));
 
             if(flag_comercially_connected)
             {
