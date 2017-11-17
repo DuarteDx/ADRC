@@ -250,6 +250,7 @@ int * computeElectedRoutes(Graph *graph, long int destination, bool flag_comerci
 {
     int *routes = NULL;
     long int *num_ptr = NULL;
+    long int *heap_positions = NULL;
     long int tail = -1;
     long int i = 0;
     long int head = -1;
@@ -264,6 +265,7 @@ int * computeElectedRoutes(Graph *graph, long int destination, bool flag_comerci
         //Allocate and initialize routes array
         routes = (int *)malloc(sizeof(int) * num_nodes);
         memset(routes, -1, sizeof(int) * num_nodes);
+        heap_positions = (long int *)malloc(sizeof(long int) * num_nodes);
 
         //Initialize destination Node
         routes[destination] = SOURCE;
@@ -278,16 +280,15 @@ int * computeElectedRoutes(Graph *graph, long int destination, bool flag_comerci
             {
                 num_ptr = malloc(sizeof(long int));
                 *num_ptr = i;
-
-                HeapInit(heap, (Item)num_ptr);
-                FixUp(heap, i, routes);
+                HeapInit(heap, (Item)num_ptr, heap_positions);
+                FixUp(heap, i, routes, heap_positions);
             }
         }
 
         while(!HeapEmpty(heap))
         {
             //Ir buscar a maior prioridade do Heap, a ordem de prioridades, da maior para a menor é: source(10) - customer link(3) - peer link(2) - provider link(1) - not linked(0)
-            head = *((long int *)RemoveRoot(heap, routes));
+            head = *((long int *)RemoveRoot(heap, routes, heap_positions));
 
             if(flag_comercially_connected)
             {
@@ -311,7 +312,7 @@ int * computeElectedRoutes(Graph *graph, long int destination, bool flag_comerci
                     if(routes[tail] < CUSTOMER)
                     {
                         routes[tail] = CUSTOMER;
-                        FixUp(heap, tail, routes);
+                        FixUp(heap, tail, routes, heap_positions);
                     }
                 }
                 //If the tail is a peer and we're source or have a customer link our elected route is a customer link and we export our route
@@ -321,7 +322,7 @@ int * computeElectedRoutes(Graph *graph, long int destination, bool flag_comerci
                     if(routes[tail] < PEER)
                     {
                         routes[tail] = PEER;
-                        FixUp(heap, tail, routes);
+                        FixUp(heap, tail, routes, heap_positions);
                     }
                 }
                 //If the tail is a customer we export our route
@@ -331,13 +332,13 @@ int * computeElectedRoutes(Graph *graph, long int destination, bool flag_comerci
                     if(routes[tail] < PROVIDER)
                     {
                         routes[tail] = PROVIDER;
-                        FixUp(heap, tail, routes);
+                        FixUp(heap, tail, routes, heap_positions);
                     }
                 }
                 else if(routes[tail] < NO_ROUTE)
                 {
                     routes[tail] = NO_ROUTE;
-                    FixUp(heap, tail, routes);
+                    FixUp(heap, tail, routes, heap_positions);
                 }
             }
         }
@@ -357,6 +358,7 @@ int * computeElectedRoutes(Graph *graph, long int destination, bool flag_comerci
         }
 
         FreeHeap(heap, num_nodes);
+        free(heap_positions);
 
     return routes;
 }

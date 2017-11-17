@@ -78,13 +78,16 @@ Heap * NewHeap(long int size, int (*comparison) (Item, Item))
  *
  *****************************************************************************/
 
-int HeapInit(Heap *heap, Item item)
+int HeapInit(Heap *heap, Item item, long int *heap_positions)
 {
     if (heap->n_elements == heap->size)
     {
         fprintf(stdout, "Heap full (size = %7ld) !\n", heap->size);
         return 0;
     }
+
+    heap_positions[*((long int *)item)] = heap -> n_elements;
+
     heap->heapdata[heap->n_elements] = item;
 
     heap->n_elements += 1;
@@ -104,18 +107,22 @@ int HeapInit(Heap *heap, Item item)
  *
  *****************************************************************************/
 
-void FixUp(Heap *heap, long int a, int *weight)
+void FixUp(Heap *heap, long int a, int *weight, long int *heap_positions)
 {
-    Item t;
+    Item s, t;
     long int k;
 
-        for(k = 0; a != *((long int *)heap->heapdata[k]); k += 1);
+        k = heap_positions[a];
 
         while((k > 0) && (heap->comparison) ((Item) &weight[*((long int*)heap->heapdata[(k - 1) / 2])], (Item) &weight[*((long int*)heap->heapdata[k])]))
         {
             t = (heap->heapdata)[k];
+            s = (heap->heapdata)[(k - 1) / 2];
             (heap->heapdata)[k] = (heap->heapdata)[(k - 1) / 2];
             (heap->heapdata)[(k - 1) / 2] = t;
+
+            heap_positions[*((long int *)s)] = k;
+            heap_positions[*((long int *)t)] = (k - 1) / 2;
 
             k = (k - 1) / 2;
         }
@@ -135,10 +142,10 @@ void FixUp(Heap *heap, long int a, int *weight)
  *
  *****************************************************************************/
 
-void FixDown(Heap * heap, int k, int *weight)
+void FixDown(Heap * heap, int k, int *weight, long int *heap_positions)
 {
     long int j;
-    Item t;
+    Item s, t;
 
         while ((2 * k + 1) < heap->n_elements)
         {
@@ -158,8 +165,11 @@ void FixDown(Heap * heap, int k, int *weight)
             /* the 2 elements are not correctly sorted, it is
             necessary to exchange them */
             t = (heap->heapdata)[k];
+            s = (heap->heapdata)[j];
             (heap->heapdata)[k] = (heap->heapdata)[j];
+            heap_positions[*((long int *)s)] = k;
             (heap->heapdata)[j] = t;
+            heap_positions[*((long int *)t)] = j;
             k = j;
         }
 
@@ -176,17 +186,20 @@ void FixDown(Heap * heap, int k, int *weight)
  *
  *****************************************************************************/
 
-Item RemoveRoot(Heap *heap, int *weight)
+Item RemoveRoot(Heap *heap, int *weight, long int *heap_positions)
 {
-    Item t;
+    Item s, t;
 
         if (heap->n_elements > 0)
         {
             t = (heap->heapdata)[0];
+            s = (heap->heapdata)[heap->n_elements - 1];
             (heap->heapdata)[0] = (heap->heapdata)[heap->n_elements - 1];
+            heap_positions[*((long int *)s)] = 0;
             (heap->heapdata)[heap->n_elements - 1] = t;
+            heap_positions[*((long int *)t)] = heap->n_elements - 1;
             heap->n_elements -= 1;
-            FixDown(heap, 0, weight);
+            FixDown(heap, 0, weight, heap_positions);
             return t;
         }
 

@@ -64,6 +64,7 @@ int main(int argc, char const *argv[])
                 routes = computeElectedRoutes(graph, i, flag_comercially_connected);
                 routes_head = SinglyLinkedList_insertAtHead(routes_head, SinglyLinkedList_newNode(routes));
             }
+            fprintf(stdout, "Progress: %7ld\n", i);
         }
 
         for(aux = routes_head; aux != NULL; aux = SinglyLinkedList_getNextNode(aux))
